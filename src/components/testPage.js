@@ -11,13 +11,13 @@ const headers = {
 const TestPage = (props) => {
 
     const deezer = DeezerCredentials();
-
+    let params = useParams()
 
     const [results, setResults] = useState([]);
 
 
     const GetAlbum = () => {
-        axios.get(`https://api.deezer.com/search?q=artist:"eminem" track:"rap god"`).then(res => {
+        axios.get(`https://api.deezer.com/search/album/?q=album:"${params.album}"`).then(res => {
             setResults(res.data.data)
             console.log(res.data.data[0]);
 
@@ -34,8 +34,9 @@ const TestPage = (props) => {
             <p>Search: Eminem rap god</p>
             {results.map((item, key) => (
                 <>
-                    <p> {item.title} {item.artist.name} {item.album.title}</p> 
-                    <img src= {item.album.cover}/> 
+                    <p> {item.title} {item.artist.name}</p> 
+
+                    <img src= {item.cover}/> 
                 </>
             ))}
         </header>

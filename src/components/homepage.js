@@ -8,9 +8,25 @@ import logo from '../album_logo.png';
 const HomePage = (props) => {
     const [albums, setAlbums] = useState([]);
     const [album, setAlbum] = useState("");
+    const [search, setSearch] = useState("");
+
+
 
     //get access to the URL
     let params = useParams()
+
+
+
+    const onChangeSearch = (e) => {
+        const search = e.target.value;
+        setSearch(search)
+    }
+
+    const handleSearch = (e) => {
+        window.location.href = `/testpage/${search}`
+    }
+
+
 
     const GetAlbums = () =>{
         axios.get(`/album/${params.profile}`).then(res => {
@@ -33,7 +49,16 @@ const HomePage = (props) => {
                 {albums.map((item, key) => (
                     <p>{item.title}</p>
                 ))}
-                <a className="App-link" href="/testpage" >Search: Eminem rap god</a>
+                <form onSubmit={handleSearch}>
+                    <input 
+                        type="text" 
+                        className="input"
+                        placeholder="Enter Album" 
+                        name="email" 
+                        onChange={onChangeSearch}
+                        autoComplete="on"/><br />
+                </form>
+                <a className="App-link" href={`/testpage/${search}`} >Search</a>
 
             </header>
         </div>
