@@ -33,7 +33,7 @@ const HomePage = (props) => {
                 {albums.map((item, key) => (
                     <p>{item.title}</p>
                 ))}
-                <a className="App-link" href="/testpage" >test page</a>
+                <a className="App-link" href="/testpage" >Search: Eminem rap god</a>
 
             </header>
         </div>

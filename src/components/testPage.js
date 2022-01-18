@@ -3,43 +3,45 @@ import React from "react";
 import axios from "../services/backendApi.js";
 import { Link, useParams  } from 'react-router-dom';
 import { DeezerCredentials } from '../deezerCred'
+const headers = {
+    "Access-Control-Allow-Origins": "*"
+}
 
 
-const Genres = (props) => {
+const TestPage = (props) => {
 
     const deezer = DeezerCredentials();
 
-    const data = [
-        {value: 1, name: 'A'},
-        {value: 2, name: 'B'},
-        {value: 3, name: 'C'},
-    ]
 
-    const [token, setToken] = useState('');
-    const [code, setCode] = useState('');
-    const [genres, setGenres] = useState([]);
+    const [results, setResults] = useState([]);
+
+
+    const GetAlbum = () => {
+        axios.get(`https://api.deezer.com/search?q=artist:"eminem" track:"rap god"`).then(res => {
+            setResults(res.data.data)
+            console.log(res.data.data[0]);
+
+    })}
 
     useEffect(() => {
-        axios.post(`https://connect.deezer.com/oauth/auth.php?app_id=${deezer.DeezerId}&redirect_uri=https://albumrater.herokuapp.com/&perms=basic_access,email`)
-        .then(res => {
-            console.log(res.data.code);
-            setCode(res.data.code);
-        })
-        axios.post(`https://connect.deezer.com/oauth/access_token.php?app_id=${deezer.DeezerId}&secret=${deezer.DeezerSecret}&code=${code}`)
-
-        .then(tokenResponse => {
-            console.log("tokennnnnn" + tokenResponse.data.access_token);
-            setToken(tokenResponse.data.access_token);
-
-        });
+        GetAlbum();
+        
     }, []);
 
     return (
-        <form onSubmit={() => {}}>
-            <p>test page</p>
-        </form>
+    <div className="App">
+        <header className="App-header">
+            <p>Search: Eminem rap god</p>
+            {results.map((item, key) => (
+                <>
+                    <p> {item.title} {item.artist.name} {item.album.title}</p> 
+                    <img src= {item.album.cover}/> 
+                </>
+            ))}
+        </header>
+    </div>
     )
 }
 
 
-export default Genres;
+export default TestPage;
