@@ -5,7 +5,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/login';
 import HomePage from './components/homepage';
 import Genres from './SpotifyAPITutorial/SpotifyGenres';
-import TestPage from './components/testPage';
+import NewAlbum from './components/newAlbum';
+import AddAlbum from './components/addAlbum';
 
 
 class App extends Component {
@@ -15,7 +16,8 @@ class App extends Component {
         <Routes>
           <Route path="/" element={<Login/>} />
           <Route path="/homepage/:profile" element={<HomePage/>} />
-          <Route path="/testpage/:album" element={<TestPage/>} />
+          <Route path="/newalbum/:album" element={<NewAlbum/>} />
+          <Route path="/addalbum/:albumId" element={<AddAlbum/>} />
         </Routes>
       </Router>
     );

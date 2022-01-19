@@ -22,12 +22,6 @@ const HomePage = (props) => {
         setSearch(search)
     }
 
-    const handleSearch = (e) => {
-        window.location.href = `/testpage/${search}`
-    }
-
-
-
     const GetAlbums = () =>{
         axios.get(`/album/${params.profile}`).then(res => {
         setAlbums(res.data);
@@ -49,7 +43,7 @@ const HomePage = (props) => {
                 {albums.map((item, key) => (
                     <p>{item.title}</p>
                 ))}
-                <form onSubmit={handleSearch}>
+                <form>
                     <input 
                         type="text" 
                         className="input"
@@ -58,7 +52,7 @@ const HomePage = (props) => {
                         onChange={onChangeSearch}
                         autoComplete="on"/><br />
                 </form>
-                <a className="App-link" href={`/testpage/${search}`} >Search</a>
+                <a className="App-link" href={`/newalbum/${search}`} >Search</a>
 
             </header>
         </div>

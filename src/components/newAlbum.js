@@ -8,7 +8,7 @@ const headers = {
 }
 
 
-const TestPage = (props) => {
+const NewAlbum = (props) => {
 
     const deezer = DeezerCredentials();
     let params = useParams()
@@ -20,8 +20,8 @@ const TestPage = (props) => {
         axios.get(`https://api.deezer.com/search/album/?q=album:"${params.album}"`).then(res => {
             setResults(res.data.data)
             console.log(res.data.data[0]);
-
-    })}
+        }
+    )}
 
     useEffect(() => {
         GetAlbum();
@@ -31,12 +31,12 @@ const TestPage = (props) => {
     return (
     <div className="App">
         <header className="App-header">
-            <p>Search: Eminem rap god</p>
+            <h2>{params.album}</h2>
             {results.map((item, key) => (
                 <>
                     <p> {item.title} {item.artist.name}</p> 
 
-                    <img src= {item.cover}/> 
+                    <a href={`/addalbum/${item.id}`}><img src= {item.cover}/> </a>
                 </>
             ))}
         </header>
@@ -45,4 +45,4 @@ const TestPage = (props) => {
 }
 
 
-export default TestPage;
+export default NewAlbum;
