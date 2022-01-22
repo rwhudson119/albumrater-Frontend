@@ -10,11 +10,12 @@ const HomePage = (props) => {
     const [album, setAlbum] = useState("");
     const [search, setSearch] = useState("");
 
-
+    
 
     //get access to the URL
     let params = useParams()
-
+    var profile = params.profile
+    localStorage.profile = profile
 
 
     const onChangeSearch = (e) => {
