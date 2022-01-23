@@ -9,6 +9,10 @@ const HomePage = (props) => {
     const [albums, setAlbums] = useState([]);
     const [album, setAlbum] = useState("");
     const [search, setSearch] = useState("");
+    const [albumData, setAlbumData] = useState([]);
+    const [sortType, setSortType] = useState('');
+    const [sortTypeType, setSortTypeType] = useState('');
+
 
     
 
@@ -23,16 +27,60 @@ const HomePage = (props) => {
         setSearch(search)
     }
 
+    const types = {
+        title: 'title',
+        artist: 'artist',
+        flow: 'flow',
+        lyrics: 'lyrics',
+        how_captivating: 'how_captivating',
+        originality: 'originality',
+        timelessness: 'timelessness',
+    };
+
     const GetAlbums = () =>{
         axios.get(`/album/${params.profile}`).then(res => {
         setAlbums(res.data);
         setAlbum(res.data[0]);
-        //console.log(res.data);
+        setSortType('title')
+        setSortTypeType(types[sortType])
+        console.log(res.data);
         });
     }
+
     useEffect(() => {
         GetAlbums();
     }, [])
+
+
+    useEffect(() => {
+        const sortArray = type => {
+            const types = {
+                title: 'title',
+                artist: 'artist',
+                flow: 'flow',
+                lyrics: 'lyrics',
+                how_captivating: 'how_captivating',
+                originality: 'originality',
+                timelessness: 'timelessness',
+            };
+            const sortProperty = types[type];
+            const sorted = [...albums].sort((a, b) => {
+                if(sortProperty === 'title'){
+                    return a.title.localeCompare(b.title);
+                }
+                else if(sortProperty === 'artist') {
+                    return a.artist.localeCompare(b.artist);
+                }else {
+                    return b[sortProperty] - a[sortProperty];
+                }
+            });
+            console.log(sorted);
+            setAlbumData(sorted);
+          };
+
+          sortArray(sortType);
+
+    }, [sortType]) 
 
     return (
         <div className="App">
@@ -41,8 +89,30 @@ const HomePage = (props) => {
                 Welcome
                 </h1>
                 <h2>Albums</h2>
-                {albums.map((item, key) => (
-                    <p>{item.title}</p>
+                <select onChange={(e) => setSortType(e.target.value)}>
+                    <option value="title">Title</option>
+                    <option value="artist">Artist</option>
+                    <option value="flow">Flow</option>
+                    <option value="lyrics">Lyrics</option>
+                    <option value="how_captivating">How Captivating</option>
+                    <option value="originality">Originality</option>
+                    <option value="timelessness">Timelessness</option>
+
+
+    
+                </select> 
+                {albumData.map((item, key) => (
+                    <div className="album_display">
+                        <img src= {item.cover_photo}/>
+                        <p>{item.title}</p>
+                        <p>{item.artist}</p>
+                        <div className="scores">
+                        <p>Flow: {item.flow} Lyrics: {item.lyrics}</p>
+                        <p>How Captivating: {item.how_captivating}   Originality: {item.originality}</p>
+                        <p>Timelessness: {item.timelessness}</p>
+                        </div>
+
+                    </div>
                 ))}
                 <form>
                     <input 

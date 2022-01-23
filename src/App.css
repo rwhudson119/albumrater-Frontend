@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+.scores {
+  font-size: 16px;
+}
+
+.album_display {
+  padding: 3% 0% 7% 0%;
+}
