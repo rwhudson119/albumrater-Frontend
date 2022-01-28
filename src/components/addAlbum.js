@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../services/backendApi.js";
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Slider from '@mui/material/Slider';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -8,7 +9,7 @@ import Grid from '@mui/material/Grid';
 import MuiInput from '@mui/material/Input';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-
+import TextField from '@mui/material/TextField';
 
 
 
@@ -27,65 +28,79 @@ const AddAlbum = (props) => {
     const [releaseDate, setReleaseDate] = useState("");
     const [coverPhoto, setCoverPhoto] = useState("");
     const [genre, setGenre] = useState("");
-    const [originality, setOriginality] = useState("");
-    const [flow, setFlow] = useState("");
-    const [lyrics, setLyrics] = useState("");
-    const [howCaptivating, setHowCaptivating] = useState("");
-    const [timelessness, setTimelessness] = useState("");
+    const [originality, setOriginality] = useState(50);
+    const [flow, setFlow] = useState(50);
+    const [lyrics, setLyrics] = useState(50);
+    const [howCaptivating, setHowCaptivating] = useState(50);
+    const [timelessness, setTimelessness] = useState(50);
     const [notes, setNotes] = useState("");
 
+    const current = new Date();
+    const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
     const profile = localStorage.profile
+    const navigate  = useNavigate ();
     //const [ratings, setRatings] = useState("");
     //const [songs, setSongs] = useState("");
     
 
     const handleSliderChangeOriginality = (event, newValue) => {
-        setOriginality(newValue);
-      };
-    
-      const handleInputChangeOriginality = (event) => {
-        setOriginality(event.target.value === '' ? '' : Number(event.target.value));
-      };
+            setOriginality(newValue);
+        };
+        
+        const handleInputChangeOriginality = (event) => {
+            setOriginality(event.target.value === '' ? '' : Number(event.target.value));
+        };
 
-      const handleSliderChangeFlow = (event, newValue) => {
-        setFlow(newValue);
-      };
-    
-      const handleInputChangeFlow = (event) => {
-        setFlow(event.target.value === '' ? '' : Number(event.target.value));
-      };
+        const handleSliderChangeFlow = (event, newValue) => {
+            setFlow(newValue);
+        };
+        
+        const handleInputChangeFlow = (event) => {
+            setFlow(event.target.value === '' ? '' : Number(event.target.value));
+        };
 
-      const handleSliderChangeLyrics = (event, newValue) => {
-        setLyrics(newValue);
-      };
-    
-      const handleInputChangeLyrics = (event) => {
-        setLyrics(event.target.value === '' ? '' : Number(event.target.value));
-      };
+        const handleSliderChangeLyrics = (event, newValue) => {
+            setLyrics(newValue);
+        };
+        
+        const handleInputChangeLyrics = (event) => {
+            setLyrics(event.target.value === '' ? '' : Number(event.target.value));
+        };
 
-      const handleSliderChangeHowCaptivating = (event, newValue) => {
-        setHowCaptivating(newValue);
-      };
-    
-      const handleInputChangeHowCaptivating = (event) => {
-        setHowCaptivating(event.target.value === '' ? '' : Number(event.target.value));
-      };
+        const handleSliderChangeHowCaptivating = (event, newValue) => {
+            setHowCaptivating(newValue);
+        };
+        
+        const handleInputChangeHowCaptivating = (event) => {
+            setHowCaptivating(event.target.value === '' ? '' : Number(event.target.value));
+        };
 
-      const handleSliderChangeTimelessness = (event, newValue) => {
-        setTimelessness(newValue);
-      };
-    
-      const handleInputChangeTimelessness = (event) => {
-        setTimelessness(event.target.value === '' ? '' : Number(event.target.value));
-      };
+        const handleSliderChangeTimelessness = (event, newValue) => {
+            setTimelessness(newValue);
+        };
+        
+        const handleInputChangeTimelessness = (event) => {
+            setTimelessness(event.target.value === '' ? '' : Number(event.target.value));
+        };
 
+         const handleInputChangeNotes = (event) => {
+            setNotes(event.target.value);
+        };
 
-      const handleUpdate = (e) => {
-          console.log("title   " + title + "profile   " + profile + "artist   " + artist + "genre   " + genre + "releaseDate   " + releaseDate + "coverPhoto   " + coverPhoto + "originality   " + originality + "flow   " + flow + "lyrics   " + lyrics + "howCaptivating   " + howCaptivating + "timelessness   " + timelessness)
-          e.preventDefault();
-
-          axios.post("/album/add", 
-                {title: title, profile: profile, artist: artist, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness} ).then(res => console.log(res));
+        const handleUpdate = (e) => {
+            console.log("title   " + title + "  profile   " + profile + "  artist   " + artist + "  genre   " + genre + "  releaseDate   " + releaseDate + "  coverPhoto   " + coverPhoto + "  originality   " + originality + "  flow   " + flow + "  lyrics   " + lyrics + "  howCaptivating   " + howCaptivating + "  timelessness   " + timelessness + "  notes  " + notes)
+            e.preventDefault();
+            const totalScore = (originality + flow + lyrics + howCaptivating + timelessness)/5
+            axios.post("/rating/add",
+                {date: date, total_score: totalScore, notes: notes} ).then((res) => {
+                console.log(res)
+            });
+            const ratings = [date]
+            axios.post("/album/add", 
+                {title: title, profile: profile, artist: artist, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, notes: notes, ratings: ratings} ).then((res) => {
+                    console.log(res)
+                    navigate(`/homepage/${profile}`);
+                });
     }
 
 
@@ -109,7 +124,6 @@ const AddAlbum = (props) => {
             setReleaseDate(res.data.release_date)
             setCoverPhoto(res.data.cover)
             console.log(res.data)
-            console.log("hi1")
         };
         GetAlbum();
     }, []);
@@ -293,6 +307,15 @@ const AddAlbum = (props) => {
                                 'aria-labelledby': 'input-slider',
                                 }}
                             />
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </div>
+                <div className="notes">
+                    <Box sx={{ width: 250 }}>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs>
+                            <TextField id="outlined-multiline-flexible" color="info" label="Notes" variant="outlined" multiline onChange={handleInputChangeNotes} />
                             </Grid>
                         </Grid>
                     </Box>
