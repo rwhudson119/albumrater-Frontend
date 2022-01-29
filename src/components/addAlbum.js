@@ -21,6 +21,8 @@ width: 42px;
 const AddAlbum = (props) => {
 
     let params = useParams()
+    const time = new Date().toLocaleString()
+
 
     const [results, setResults] = useState(null);
     const [artist, setArtist] = useState("");
@@ -39,8 +41,8 @@ const AddAlbum = (props) => {
     const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
     const profile = localStorage.profile
     const navigate  = useNavigate ();
+    var arr = [];
     //const [ratings, setRatings] = useState("");
-    //const [songs, setSongs] = useState("");
     
 
     const handleSliderChangeOriginality = (event, newValue) => {
@@ -87,17 +89,29 @@ const AddAlbum = (props) => {
             setNotes(event.target.value);
         };
 
+
+
         const handleUpdate = (e) => {
             console.log("title   " + title + "  profile   " + profile + "  artist   " + artist + "  genre   " + genre + "  releaseDate   " + releaseDate + "  coverPhoto   " + coverPhoto + "  originality   " + originality + "  flow   " + flow + "  lyrics   " + lyrics + "  howCaptivating   " + howCaptivating + "  timelessness   " + timelessness + "  notes  " + notes)
             e.preventDefault();
             const totalScore = (originality + flow + lyrics + howCaptivating + timelessness)/5
+            //console.log("date: " + date + " TS: " + totalScore + " notes: " + notes)
             axios.post("/rating/add",
-                {date: date, total_score: totalScore, notes: notes} ).then((res) => {
+                {date: time, total_score: totalScore, notes: notes} ).then((res) => {
                 console.log(res)
             });
-            const ratings = [date]
+            {results.tracks.data.map((item, key) => (
+                axios.post("/song/add",
+                {title: item.title, artist: results.artist.name, id: item.id} )
+                ))
+            };
+
+            {results.tracks.data.map((item, key) => (
+                arr.push(item.id)
+            ))}
+            const ratings = [time]
             axios.post("/album/add", 
-                {title: title, profile: profile, artist: artist, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, notes: notes, ratings: ratings} ).then((res) => {
+                {title: title, profile: profile, artist: artist, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, notes: notes, ratings: ratings, songs: arr} ).then((res) => {
                     console.log(res)
                     navigate(`/homepage/${profile}`);
                 });
@@ -107,7 +121,7 @@ const AddAlbum = (props) => {
 
     useEffect(() => {
         const URL = `https://api.deezer.com/album/${params.albumId}`
-
+    
         const GetAlbum = async () => {
 
             const res = await axios({
