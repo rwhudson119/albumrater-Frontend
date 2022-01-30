@@ -7,6 +7,7 @@ import HomePage from './components/homepage';
 import Genres from './SpotifyAPITutorial/SpotifyGenres';
 import NewAlbum from './components/newAlbum';
 import AddAlbum from './components/addAlbum';
+import AlbumDetails from './components/albumDetails';
 
 
 class App extends Component {
@@ -18,6 +19,7 @@ class App extends Component {
           <Route path="/homepage/:profile" element={<HomePage/>} />
           <Route path="/newalbum/:album" element={<NewAlbum/>} />
           <Route path="/addalbum/:albumId" element={<AddAlbum/>} />
+          <Route path="/albumdetails/:albumId" element={<AlbumDetails/>} />
         </Routes>
       </Router>
     );

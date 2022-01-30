@@ -14,7 +14,7 @@ const HomePage = (props) => {
     const [sortTypeType, setSortTypeType] = useState('');
 
 
-    
+
 
     //get access to the URL
     let params = useParams()
@@ -103,15 +103,16 @@ const HomePage = (props) => {
                 </select> 
                 {albumData.map((item, key) => (
                     <div className="album_display">
-                        <img src= {item.cover_photo}/>
-                        <p>{item.title}</p>
-                        <p>{item.artist}</p>
-                        <div className="scores">
-                        <p>Flow: {item.flow} Lyrics: {item.lyrics}</p>
-                        <p>How Captivating: {item.how_captivating}   Originality: {item.originality}</p>
-                        <p>Timelessness: {item.timelessness}</p>
-                        </div>
-
+                        <a href={`/albumdetails/${item._id}`}>
+                            <img src= {item.cover_photo}/>
+                            <p>{item.title}</p>
+                            <p>{item.artist}</p>
+                            <div className="scores">
+                            <p>Flow: {item.flow} Lyrics: {item.lyrics}</p>
+                            <p>How Captivating: {item.how_captivating}   Originality: {item.originality}</p>
+                            <p>Timelessness: {item.timelessness}</p>
+                            </div>
+                        </a>
                     </div>
                 ))}
                 <form>
