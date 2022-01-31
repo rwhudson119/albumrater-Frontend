@@ -48,3 +48,34 @@
 .notes {
   padding-top: 8%;
 }
+
+.change_details_items {
+  padding: 5% 0% 5% 0%;
+  color: white;
+}
+
+
+.changeDetails {
+  padding: 5% 0% 5% 0%;
+}
+
+.albumInfo {
+  padding: 5% 0% 5% 0%;
+}
+
+.albumInfo {
+  font-size: large;
+}
+
+.albumInfo p {
+  padding: 2% 0% 0% 0%;
+}
+
+.boxTitle {
+  font-size: small;
+  color: rgba(25,118,210,255);
+}
+
+input[type="text" i] {
+  color: white
+}

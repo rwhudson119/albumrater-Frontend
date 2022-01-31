@@ -20,12 +20,24 @@ width: 42px;
 
 const AlbumDetails = (props) => {
 
+
+
+    const [displayDetails, setDisplayDetails] = useState(false);
+      
+    function toggle() {
+        setDisplayDetails(wasDetails => !wasDetails);
+    }
+
     let params = useParams()
     const time = new Date().toLocaleString()
 
     const [album, setAlbum] = useState(null)
     const [notes, setNotes] = useState("");
 
+    const [artist, setArtist] = useState("");
+    const [title, setTitle] = useState("");
+    const [release_date, setRelease_Date] = useState("");
+    const [genre, setGenre] = useState("");
     const [originality, setOriginality] = useState(50);
     const [flow, setFlow] = useState(50);
     const [lyrics, setLyrics] = useState(50);
@@ -34,6 +46,34 @@ const AlbumDetails = (props) => {
 
     const profile = localStorage.profile
     const navigate  = useNavigate ();
+
+
+
+
+
+    const CssTextField = styled(TextField)({
+            '& label.Mui-focused': {
+                color: 'white',
+            },
+            '& label': {
+                color: 'white',
+            },
+            '& .MuiInput-underline:after': {
+                borderBottomColor: 'white',
+            },
+            '& .MuiOutlinedInput-root': {
+                borderColor: 'white',
+            },
+            '&.MuiInput-input': {
+                color: 'white',
+            }
+      });
+
+
+
+
+
+
     
 
     const handleSliderChangeOriginality = (event, newValue) => {
@@ -79,6 +119,18 @@ const AlbumDetails = (props) => {
          const handleInputChangeNotes = (event) => {
             setNotes(event.target.value);
         };
+        const handleInputChangeTitle = (event) => {
+            setTitle(event.target.value);
+        };
+        const handleInputChangeArtist = (event) => {
+            setArtist(event.target.value);
+        };
+        const handleInputChangeGenre = (event) => {
+            setGenre(event.target.value);
+        };
+        const handleInputChangeRelease_Date = (event) => {
+            setRelease_Date(event.target.value);
+        };
 
 
 
@@ -98,7 +150,7 @@ const AlbumDetails = (props) => {
             ratings.push(time)
             console.log(originality + "   " + flow + "   " + lyrics + "   " + howCaptivating + "   " + timelessness + "   " + ratings)
             axios.post(`/album/update/${params.albumId}`, 
-                {originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, ratings: ratings, notes: notes} ).then((res) => {
+                {title: title, artist: artist, genre: genre, release_date: release_date, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, ratings: ratings, notes: notes} ).then((res) => {
                     console.log(res)
                     navigate(`/homepage/${profile}`);
                 });
@@ -117,19 +169,20 @@ const AlbumDetails = (props) => {
                 },
             }).then((res) => {
                 setAlbum(res.data);
-            setOriginality(res.data.originality)
-            setFlow(res.data.flow)
-            setLyrics(res.data.lyrics)
-            setHowCaptivating(res.data.how_captivating)
-            setTimelessness(res.data.timelessness)
-            console.log(res.data)
-            console.log("TEST")
-            console.log("Album: " + params.albumId)
+                setOriginality(res.data.originality)
+                setFlow(res.data.flow)
+                setLyrics(res.data.lyrics)
+                setHowCaptivating(res.data.how_captivating)
+                setTimelessness(res.data.timelessness)
+                setTitle(res.data.title)
+                setArtist(res.data.artist)
+                setGenre(res.data.genre)
+                setRelease_Date(res.data.release_date)
+                console.log(res.data)
             });
             
         };
         getAlbumData()
-        console.log(album)
     }, []);
 
 
@@ -150,10 +203,43 @@ const AlbumDetails = (props) => {
     <div className="App">
         <header className="App-header">
             <img src= {album.cover_photo}/>
-            <p> {album.title}</p>
-            <p> {album.artist}</p>
-            <p> {album.release_date}</p>
-            <p> {album.genre}</p>
+            {!displayDetails && (
+                <div className="albumInfo">
+                    <p> {album.title}</p>
+                    <p> {album.artist}</p>
+                    <p> {album.release_date}</p>
+                    <p> {album.genre}</p>
+                </div>
+            )}
+            {displayDetails && (
+                <div className="changeDetails">
+                    <div className="change_details_items">
+                        <Grid container spacing={2} alignItems="center">
+                            <TextField id="standard-basic" label="Title" variant="standard" onChange={handleInputChangeTitle} defaultValue={album.title}/>
+                        </Grid>
+                    </div>
+                    <div className="change_details_items">
+                        <Grid container spacing={2} alignItems="center">    
+                            <TextField id="standard-basic" label="Artist" variant="standard" onChange={handleInputChangeArtist} defaultValue={album.artist} />
+                        </Grid>
+                    </div>
+                    <div className="change_details_items">
+                        <Grid container spacing={2} alignItems="center">
+                            <TextField id="standard-basic" label="Release Date" variant="standard" onChange={handleInputChangeRelease_Date} defaultValue={album.release_date}/>
+                        </Grid>
+                    </div>
+                    <div className="change_details_items">
+                        <Grid container spacing={2} alignItems="center">
+                            <TextField id="standard-basic" label="Genre" variant="standard" onChange={handleInputChangeGenre} defaultValue={album.genre}/>
+                        </Grid>
+                    </div>
+                </div>
+            )}
+
+            <div className="boxTitle" onClick={toggle}>
+                Change Details
+            </div>
+
             <div className="rating">
                 <h1>Rate it</h1>
                 <div className="Originality">
@@ -327,5 +413,6 @@ const AlbumDetails = (props) => {
     </div>
     )
 } 
+
 
 export default AlbumDetails
