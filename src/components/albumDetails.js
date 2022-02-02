@@ -28,6 +28,12 @@ const AlbumDetails = (props) => {
         setDisplayDetails(wasDetails => !wasDetails);
     }
 
+    const [displaySongs, setDisplaySongs] = useState(false);
+      
+    function toggleSongs() {
+        setDisplaySongs(wasSongs => !wasSongs);
+    }
+
     let params = useParams()
     const time = new Date().toLocaleString()
 
@@ -240,6 +246,18 @@ const AlbumDetails = (props) => {
                 Change Details
             </div>
 
+            <div className="boxTitle" onClick={toggle}>
+                Show songs
+            </div>
+                
+            {displaySongs && (
+
+                <p>this is where the songs go </p>
+
+            )}
+
+
+            {!displaySongs && (
             <div className="rating">
                 <h1>Rate it</h1>
                 <div className="Originality">
@@ -408,6 +426,7 @@ const AlbumDetails = (props) => {
                 </div>
                 <Button variant="Contained" onClick = {handleUpdate}>Submit Rating</Button>
             </div>
+            )}
                             
         </header>
     </div>

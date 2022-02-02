@@ -23,6 +23,19 @@ const AddAlbum = (props) => {
     let params = useParams()
     const time = new Date().toLocaleString()
 
+    const [displayDetails, setDisplayDetails] = useState(false);
+      
+    function toggle() {
+        setDisplayDetails(wasDetails => !wasDetails);
+    }
+
+    
+    const [displaySongs, setDisplaySongs] = useState(false);
+      
+    function toggleSongs() {
+        setDisplaySongs(wasSongs => !wasSongs);
+    }
+
 
     const [results, setResults] = useState(null);
     const [artist, setArtist] = useState("");
@@ -36,12 +49,16 @@ const AddAlbum = (props) => {
     const [howCaptivating, setHowCaptivating] = useState(50);
     const [timelessness, setTimelessness] = useState(50);
     const [notes, setNotes] = useState("");
+    const [songScores1, setSongScores1] = useState([]);
+    const [songScores, setSongScores] = useState(5);
+
 
     const current = new Date();
     const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
     const profile = localStorage.profile
     const navigate  = useNavigate ();
     var arr = [];
+    var songScoresArr = [];
     //const [ratings, setRatings] = useState("");
     
 
@@ -88,6 +105,37 @@ const AddAlbum = (props) => {
          const handleInputChangeNotes = (event) => {
             setNotes(event.target.value);
         };
+        const handleInputChangeTitle = (event) => {
+            setTitle(event.target.value);
+        };
+        const handleInputChangeArtist = (event) => {
+            setArtist(event.target.value);
+        };
+        const handleInputChangeGenre = (event) => {
+            setGenre(event.target.value);
+        };
+        const handleInputChangeRelease_Date = (event) => {
+            setReleaseDate(event.target.value);
+        };
+
+        const showArray = (event) => {
+            console.log("array" + songScoresArr)
+            console.log("array2" + songScores1)
+        }
+
+
+        const handleInputChangeSong = (event) => {
+            console.log("event "  + event.target.value)
+            /*songScoresArr = songScores
+            songScoresArr[0] = (event.target.value === '' ? '' : Number(event.target.value));
+            console.log("array post " + songScoresArr)
+
+            setSongScores(songScoresArr)
+            console.log("array final " + songScores)*/
+            setSongScores(event.target.value === '' ? '' : Number(event.target.value))
+
+            //console.log("array" + songScoresArr)
+        };
 
 
 
@@ -96,15 +144,25 @@ const AddAlbum = (props) => {
             e.preventDefault();
             const totalScore = (originality + flow + lyrics + howCaptivating + timelessness)/5
             //console.log("date: " + date + " TS: " + totalScore + " notes: " + notes)
+
+            //Post album rating
+
             axios.post("/rating/add",
                 {date: time, total_score: totalScore, notes: notes} ).then((res) => {
                 console.log(res)
             });
+
+            //add tracks to database
+
+            setSongScores1(songScoresArr)
+            console.log(setSongScores1)
             {results.tracks.data.map((item, key) => (
                 axios.post("/song/add",
-                {title: item.title, artist: results.artist.name, id: item.id} )
+                {title: item.title, artist: results.artist.name, id: item.id, score: songScores1[key]} )
                 ))
             };
+
+            //formulate tracks into 
 
             {results.tracks.data.map((item, key) => (
                 arr.push(item.id)
@@ -137,6 +195,11 @@ const AddAlbum = (props) => {
             setGenre(res.data.genres.data[0].name)
             setReleaseDate(res.data.release_date)
             setCoverPhoto(res.data.cover)
+            res.data.tracks.data.map((item,key) => (
+                songScoresArr[key] = 5
+            ))
+            setSongScores1(songScoresArr)
+            console.log("SongScores " + songScores)
             console.log(res.data)
         };
         GetAlbum();
@@ -160,12 +223,92 @@ const AddAlbum = (props) => {
     <div className="App">
         <header className="App-header">
             <img src= {results.cover}/>
-            <p> {results.title}</p>
-            <p> {results.artist.name}</p>
-            <p> {results.release_date}</p>
-            <p> {results.genres.data[0].name}</p>
+            {!displayDetails && (
+                <div className="albumInfo">
+                    <p> {results.title}</p>
+                    <p> {results.artist.name}</p>
+                    <p> {results.release_date}</p>
+                    <p> {results.genres.data[0].name}</p>
+                </div>
+            )}
+
+
+
+            {displayDetails && (
+                <div className="changeDetails">
+                    <div className="change_details_items">
+                        <Grid container spacing={2} alignItems="center">
+                            <TextField id="standard-basic" label="Title" variant="standard" onChange={handleInputChangeTitle} defaultValue={results.title}/>
+                        </Grid>
+                    </div>
+                    <div className="change_details_items">
+                        <Grid container spacing={2} alignItems="center">    
+                            <TextField id="standard-basic" label="Artist" variant="standard" onChange={handleInputChangeArtist} defaultValue={results.artist.name} />
+                        </Grid>
+                    </div>
+                    <div className="change_details_items">
+                        <Grid container spacing={2} alignItems="center">
+                            <TextField id="standard-basic" label="Release Date" variant="standard" onChange={handleInputChangeRelease_Date} defaultValue={results.release_date}/>
+                        </Grid>
+                    </div>
+                    <div className="change_details_items">
+                        <Grid container spacing={2} alignItems="center">
+                            <TextField id="standard-basic" label="Genre" variant="standard" onChange={handleInputChangeGenre} defaultValue={results.genres.data[0].name}/>
+                        </Grid>
+                    </div>
+                </div>
+            )}
+
+            <div className="boxTitle" onClick={toggle}>
+                Change Details
+            </div>
+
+            <div className="boxTitle" onClick={toggleSongs}>
+                Show Songs
+            </div>
+
+            <div className="boxTitle" onClick={showArray}>
+                Show array
+            </div>
+            
+
+            {displaySongs && (
+                <>
+               <h1>Rate Songs</h1>
+               {results.tracks.data.map((item, key) => (
+                    <Box sx={{ width: 250 }}>
+                        <Grid container spacing={2} alignItems="center">
+                                <Grid item xs>
+                                    <Typography id="song-input" gutterBottom>
+                                        {item.title}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs>
+                                    <Input
+                                        defaultValue={songScoresArr[key]}
+                                        //value={songScores[key]}
+                                        size="small"
+                                        onChange= {songScoresArr = songScores1, (e) => songScoresArr[key] = e.target.value}
+                                        inputProps={{
+                                        step: 1,
+                                        min: 0,
+                                        max: 10,
+                                        type: 'number',
+                                        'aria-labelledby': 'input-slider',
+                                        }}
+                                    />
+                                </Grid>
+                        </Grid>
+                   </Box>
+                ))
+                }
+            </>
+            )}
+
+
+            {!displaySongs && (
             <div className="rating">
-                <h1>Rate it</h1>
+                <h1>Rate Album</h1>
                 <div className="Originality">
                     <Typography id="input-slider" gutterBottom>
                         Originality
@@ -336,6 +479,7 @@ const AddAlbum = (props) => {
                 </div>
                 <Button variant="Contained" onClick = {handleUpdate}>Submit Rating</Button>
             </div>
+            )}
         </header>
     </div>
     )

@@ -3,6 +3,8 @@ import React from "react";
 import axios from "../services/backendApi.js";
 import { Link, useParams  } from 'react-router-dom';
 import logo from '../album_logo.png';
+import TextField from '@mui/material/TextField';
+
 
 
 const HomePage = (props) => {
@@ -115,15 +117,7 @@ const HomePage = (props) => {
                         </a>
                     </div>
                 ))}
-                <form>
-                    <input 
-                        type="text" 
-                        className="input"
-                        placeholder="Enter Album" 
-                        name="email" 
-                        onChange={onChangeSearch}
-                        autoComplete="on"/><br />
-                </form>
+                <TextField id="standard-basic" label="Search Album" variant="outlined" onChange={onChangeSearch}/>
                 <a className="App-link" href={`/newalbum/${search}`} >Search</a>
 
             </header>
