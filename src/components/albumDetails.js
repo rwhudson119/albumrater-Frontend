@@ -49,9 +49,12 @@ const AlbumDetails = (props) => {
     const [lyrics, setLyrics] = useState(50);
     const [howCaptivating, setHowCaptivating] = useState(50);
     const [timelessness, setTimelessness] = useState(50);
+    const [songArrayFinal, setSongArrayFinal] = useState([]);
+
 
     const profile = localStorage.profile
     const navigate  = useNavigate ();
+    var songArray = []
 
 
 
@@ -165,6 +168,20 @@ const AlbumDetails = (props) => {
     useEffect(() => {
 
 
+        const getSongData = async (albumSongs) => {
+            console.log(albumSongs)
+            {albumSongs.map((item, key) => (
+                axios.get(`/song/${item}`)
+                .then((res) => {
+                    songArray[key] = res.data
+                    //console.log("song: " + res.data.title + " score: " + res.data.score)
+                })
+
+            ))}
+            console.log(songArray)
+            setSongArrayFinal(songArray)
+        }
+
 
         const getAlbumData = async () => {
             const res = await axios({
@@ -184,10 +201,12 @@ const AlbumDetails = (props) => {
                 setArtist(res.data.artist)
                 setGenre(res.data.genre)
                 setRelease_Date(res.data.release_date)
+                getSongData(res.data.songs)
                 console.log(res.data)
             });
-            
         };
+
+
         getAlbumData()
     }, []);
 
@@ -217,6 +236,7 @@ const AlbumDetails = (props) => {
                     <p> {album.genre}</p>
                 </div>
             )}
+            
             {displayDetails && (
                 <div className="changeDetails">
                     <div className="change_details_items">
@@ -246,13 +266,40 @@ const AlbumDetails = (props) => {
                 Change Details
             </div>
 
-            <div className="boxTitle" onClick={toggle}>
+            <div className="boxTitle" onClick={toggleSongs}>
                 Show songs
             </div>
                 
             {displaySongs && (
-
-                <p>this is where the songs go </p>
+                <>
+                <h1>Rate Songs</h1>
+                {songArrayFinal.map((item, key) => (
+                     <Box sx={{ width: 250 }}>
+                         <Grid container spacing={2} alignItems="center">
+                                 <Grid item xs>
+                                     <Typography id="song-input" gutterBottom>
+                                         {item.title}
+                                     </Typography>
+                                 </Grid>
+                                 <Grid item xs>
+                                     <Input
+                                         defaultValue={item.score}
+                                         size="small"
+                                         inputProps={{
+                                         step: 1,
+                                         min: 0,
+                                         max: 10,
+                                         type: 'number',
+                                         'aria-labelledby': 'input-slider',
+                                         }}
+                                     />
+                                 </Grid>
+                         </Grid>
+                    </Box>
+                 ))
+                }
+             </>
+                
 
             )}
 
