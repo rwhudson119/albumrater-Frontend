@@ -141,6 +141,13 @@ const AlbumDetails = (props) => {
             setRelease_Date(event.target.value);
         };
 
+        const showArray = (event) => {
+            console.log("songArrayFinal")
+            console.log(songArrayFinal)
+            console.log("songArray")
+            console.log(songArray)
+        }
+
 
 
         const handleUpdate = (e) => {
@@ -150,6 +157,16 @@ const AlbumDetails = (props) => {
                 {date: time, total_score: totalScore, notes: notes} ).then((res) => {
                 console.log(res)
             });
+
+            console.log("songs: " + songArrayFinal)
+
+            {songArrayFinal.map((item, key) => (
+                console.log("HELLO"),
+                console.log(item._id),
+                axios.post(`/song/update/${item._id}`, 
+                {score: item.score} ).then((res) => {
+                    console.log(res)
+                })))}
 
 
             var ratings = []
@@ -269,6 +286,10 @@ const AlbumDetails = (props) => {
             <div className="boxTitle" onClick={toggleSongs}>
                 Show songs
             </div>
+
+            <div className="boxTitle" onClick={showArray}>
+                Show array
+            </div>
                 
             {displaySongs && (
                 <>
@@ -285,6 +306,7 @@ const AlbumDetails = (props) => {
                                      <Input
                                          defaultValue={item.score}
                                          size="small"
+                                         onChange={songArray = songArrayFinal, (e) => songArray[key].score = Number(e.target.value)}
                                          inputProps={{
                                          step: 1,
                                          min: 0,
@@ -471,7 +493,7 @@ const AlbumDetails = (props) => {
                         </Grid>
                     </Box>
                 </div>
-                <Button variant="Contained" onClick = {handleUpdate}>Submit Rating</Button>
+                <Button variant="Contained" onClick = {handleUpdate}>Update Rating</Button>
             </div>
             )}
                             
