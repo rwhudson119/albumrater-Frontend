@@ -158,7 +158,7 @@ const AddAlbum = (props) => {
             console.log(setSongScores1)
             {results.tracks.data.map((item, key) => (
                 axios.post("/song/add",
-                {title: item.title, artist: results.artist.name, id: item.id, score: songScores1[key]} )
+                {title: item.title, artist: results.artist.name, id: item.id, score: songScores1[key], profile: profile} )
                 ))
             };
 

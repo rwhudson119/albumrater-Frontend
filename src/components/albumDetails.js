@@ -141,13 +141,6 @@ const AlbumDetails = (props) => {
             setRelease_Date(event.target.value);
         };
 
-        const showArray = (event) => {
-            console.log("songArrayFinal")
-            console.log(songArrayFinal)
-            console.log("songArray")
-            console.log(songArray)
-        }
-
 
 
         const handleUpdate = (e) => {
@@ -285,10 +278,6 @@ const AlbumDetails = (props) => {
 
             <div className="boxTitle" onClick={toggleSongs}>
                 Show songs
-            </div>
-
-            <div className="boxTitle" onClick={showArray}>
-                Show array
             </div>
                 
             {displaySongs && (

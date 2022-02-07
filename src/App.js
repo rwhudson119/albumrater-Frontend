@@ -8,6 +8,8 @@ import Genres from './SpotifyAPITutorial/SpotifyGenres';
 import NewAlbum from './components/newAlbum';
 import AddAlbum from './components/addAlbum';
 import AlbumDetails from './components/albumDetails';
+import SongDetails from './components/songDetails';
+
 
 
 class App extends Component {
@@ -20,6 +22,8 @@ class App extends Component {
           <Route path="/newalbum/:album" element={<NewAlbum/>} />
           <Route path="/addalbum/:albumId" element={<AddAlbum/>} />
           <Route path="/albumdetails/:albumId" element={<AlbumDetails/>} />
+          <Route path="/songdetails/:songId" element={<SongDetails/>} />
+
         </Routes>
       </Router>
     );

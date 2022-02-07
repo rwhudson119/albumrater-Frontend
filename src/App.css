@@ -71,6 +71,10 @@
   padding: 2% 0% 0% 0%;
 }
 
+.songInfo p1 {
+  font-size: 25px;
+}
+
 .boxTitle {
   font-size: small;
   color: rgba(25,118,210,255);
@@ -79,3 +83,13 @@
 input[type="text" i] {
   color: white
 }
+
+a:link { 
+  text-decoration: none; 
+  color: inherit; 
+ }
+
+a:visited { 
+  text-decoration: none; 
+  color: inherit; 
+ }
