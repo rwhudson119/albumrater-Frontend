@@ -6,10 +6,17 @@ import logo from '../album_logo.png';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import urlencode from 'urlencode';
+import Typography from '@mui/material/Typography';
+
+
 
 
 
 const HomePage = (props) => {
+
+    //definitions --------------------------------------------------------------------
+
     const [albums, setAlbums] = useState([]);
     const [album, setAlbum] = useState("");
     const [search, setSearch] = useState("");
@@ -24,29 +31,25 @@ const HomePage = (props) => {
     const [sortTypeSong, setSortTypeSong] = useState('');
     const [sortTypeTypeSong, setSortTypeTypeSong] = useState('');
 
-
-
-
-    //get access to the URL
-    let params = useParams()
-    var profile = params.profile
-    localStorage.profile = profile
-
-
     const [displaySongs, setDisplaySongs] = useState(false);
 
+    //stats
 
-    function toggle() {
-        setDisplaySongs(wasSongs => !wasSongs);
-    }
+    const [trendingUp, setTrendingUp] = useState([]);
+    const [trendingDown, setTrendingDown] = useState([]);
+    const [trends, setTrends] = useState([]);
+    const [artistStat, setArtistStat] = useState('');
+    const [topArtistStat, setTopArtistStat] = useState('');
+    const [genreStat, setGenreStat] = useState('');
+    const [topGenreStat, setTopGenreStat] = useState('');
+    const [topSongs, setTopSongs] = useState([]);
+    const [recentlyChanged, setRecentlyChanged] = useState([]);
 
-    //Functions for search feature
 
 
-    const onChangeSearch = (e) => {
-        const search = e.target.value;
-        setSearch(search)
-    }
+
+
+    //search options
 
     const types = {
         title: 'title',
@@ -64,17 +67,81 @@ const HomePage = (props) => {
         score: 'score',
     };
 
+    //get access to the URL
+    let params = useParams()
+    var profile = params.profile
+    localStorage.profile = profile
+
+    //functions ----------------------------------------------------------------------
+
+    //hidden info
+    function toggle() {
+        setDisplaySongs(wasSongs => !wasSongs);
+    }
+
+    //Functions for search feature
+
+    const onChangeSearch = (e) => {
+        const search = e.target.value;
+        setSearch(search)
+    }
+    const sortArrayTopSongs = () => {
+
+        const topSongsTemp = [...songs].sort((a, b) => {
+            var bTrend
+            var aTrend
+            if(b.score === undefined){
+                bTrend = -1
+                
+            } else{
+                bTrend = b.score
+                
+            } if(a.score === undefined){
+                aTrend = -1
+                
+            } else{
+                aTrend = a.score
+            }
+            return bTrend - aTrend;
+        });
+        setTopSongs(topSongsTemp);
+      };
+
+      const sortArrayTrend = () => {
+
+        const trendingUpTemp = [...trends].sort((a, b) => {
+            return b.trendScore- a.trendScore;
+        });
+        console.log(trendingUpTemp);
+        setTrendingUp(trendingUpTemp);
+
+        const trendingDownTemp = [...trends].sort((a, b) => {
+            return a.trendScore - b.trendScore;
+        });
+        console.log(trendingDownTemp);
+        setTrendingDown(trendingDownTemp);
+      };
+
 
     //axios request to get Albums
 
     const GetAlbums = () =>{
         axios.get(`/album/${params.profile}`).then(res => {
-        setAlbums(res.data);
-        setAlbum(res.data[0]);
-        setSortType('title')
-        setSortTypeType(types[sortType])
-        console.log(res.data);
+            setAlbums(res.data);
+            setAlbum(res.data[0]);
+            setSortType('title')
+            setSortTypeType(types[sortType])
+            console.log(res.data);
+            var sample = []
+
+            res.data.map((item, key) => {
+                GetRankStats(item)
+            })
         });
+    }
+
+    const showArray = () => {
+        console.log(trends)
     }
 
     const GetSongs = () =>{
@@ -87,7 +154,28 @@ const HomePage = (props) => {
         });
     }
 
-    //initial refresh
+    const GetRankStats = (singularAlbum) => {
+        var rating1 = 0
+        var rating2 = 0
+
+        if((singularAlbum.ratings.length) > 1){
+
+            axios.get(`/rating/date/${urlencode(singularAlbum.ratings[singularAlbum.ratings.length - 1])}`).then(res => {
+                rating1 = res.data.total_score  
+                axios.get(`/rating/date/${urlencode(singularAlbum.ratings[singularAlbum.ratings.length - 2])}`).then(res2 => {
+                    rating2 = res2.data.total_score
+                    var arrayTemp = trends
+                    arrayTemp.push({album: singularAlbum, trendScore: (rating1 - rating2)})
+                    setTrends(arrayTemp)
+                    sortArrayTrend()
+                })
+            })
+        }
+
+        
+    }
+
+    //UseEffect ----------------------------------------------------------------------------
 
     useEffect(() => {
         GetAlbums();
@@ -120,9 +208,7 @@ const HomePage = (props) => {
             console.log(sorted);
             setAlbumData(sorted);
           };
-
           sortArray(sortType);
-
     }, [sortType]) 
 
     useEffect(() => {
@@ -146,10 +232,12 @@ const HomePage = (props) => {
             console.log(sorted);
             setSongData(sorted);
           };
-
+          sortArrayTopSongs();
           sortSongArray(sortTypeSong);
 
     }, [sortTypeSong]) 
+
+    //Whats Displaying ----------------------------------------------------------------------------------------
 
     return (
         <div className="App">
@@ -157,6 +245,48 @@ const HomePage = (props) => {
                 <h1>
                 Welcome
                 </h1>
+
+                <div className="trending-up">
+                    <p>Trending Up</p>
+                    {trendingUp.slice(0, 3).map((item, key) => (
+                         
+                        <Box sx={{ width: 300 }}>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs>
+                                <img src= {item.album.cover_photo}/>
+                            </Grid><Grid item xs>
+                                <Typography gutterBottom>
+                                    {item.trendScore.toFixed(2)}
+                                </Typography>
+                    </Grid></Grid></Box>
+                    ))}
+                </div>
+
+                <div className="trending-down">
+                    <p>Trending Down</p>
+                    {trendingDown.slice(0, 3).map((item, key) => (
+                        <Box sx={{ width: 300 }}>
+                            <Grid container spacing={2} alignItems="center">
+                                <Grid item xs>
+                                    <img src= {item.album.cover_photo}/>
+                                </Grid><Grid item xs>
+                                    <Typography gutterBottom>
+                                        {item.trendScore.toFixed(2)}
+                                    </Typography>
+                        </Grid></Grid></Box>
+                    ))}
+                </div>
+
+                <div className="top-songs">
+                    <p>Top Songs</p>
+                    {topSongs.slice(0, 5).map((item, key) => (
+                         <Typography gutterBottom>
+                            {item.title} {item.score}
+                        </Typography>
+                    ))}
+                </div>
+
+
                 {!displaySongs && (
                     <>
                     <select onChange={(e) => setSortType(e.target.value)}>
@@ -169,11 +299,11 @@ const HomePage = (props) => {
                         <option value="timelessness">Timelessness</option>
                     </select> 
                         <Box sx={{ width: 600 }}>
-                        <Grid container spacing={2} alignItems="center">
-                        <Grid item xs>
-                        <h2>Albums</h2>
-                        </Grid><Grid item xs>
-                        <h2><div onClick={toggle}>Songs</div></h2>
+                            <Grid container spacing={2} alignItems="center">
+                                <Grid item xs>
+                                    <h2>Albums</h2>
+                                </Grid><Grid item xs>
+                                    <h2><div onClick={toggle}>Songs</div></h2>
                         </Grid></Grid></Box>
                         {albumData.map((item, key) => (
                             <div className="album_display">
@@ -205,11 +335,11 @@ const HomePage = (props) => {
                             <option value="score">Score</option>
                         </select> 
                         <Box sx={{ width: 600 }}>
-                        <Grid container spacing={2} alignItems="center">
-                        <Grid item xs>
-                        <h2><div onClick={toggle}>Albums</div></h2>
-                        </Grid><Grid item xs>
-                        <h2> Songs</h2>
+                            <Grid container spacing={2} alignItems="center">
+                                <Grid item xs>
+                                    <h2><div onClick={toggle}>Albums</div></h2>
+                            </Grid><Grid item xs>
+                                <h2> Songs</h2>
                         </Grid></Grid></Box>
                         {songData.map((item, key) => (
                             <a href={`/songdetails/${item._id}`}>
