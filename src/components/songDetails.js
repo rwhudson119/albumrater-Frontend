@@ -11,6 +11,8 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { setSelectionRange } from "@testing-library/user-event/dist/utils";
+import NavBar from './navBar';
+
 
 
 
@@ -94,6 +96,7 @@ const SongDetails = (props) => {
 
     return (
     <div className="App">
+        <NavBar />
         <header className="App-header">
             <div className="albumInfo">
                 <p> {song.title}</p>

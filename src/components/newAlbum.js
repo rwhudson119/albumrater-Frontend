@@ -3,6 +3,9 @@ import React from "react";
 import axios from "../services/backendApi.js";
 import { Link, useParams  } from 'react-router-dom';
 import { DeezerCredentials } from '../deezerCred'
+import NavBar from './navBar';
+
+
 const headers = {
     "Access-Control-Allow-Origins": "*"
 }
@@ -30,6 +33,7 @@ const NewAlbum = (props) => {
 
     return (
     <div className="App">
+        <NavBar />
         <header className="App-header">
             <h2>{params.album}</h2>
             {results.map((item, key) => (

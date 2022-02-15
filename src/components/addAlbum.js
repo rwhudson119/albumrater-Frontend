@@ -10,6 +10,8 @@ import MuiInput from '@mui/material/Input';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
+import NavBar from './navBar';
+
 
 
 
@@ -221,6 +223,7 @@ const AddAlbum = (props) => {
 
     return (
     <div className="App">
+        <NavBar />
         <header className="App-header">
             <img src= {results.cover}/>
             {!displayDetails && (

@@ -93,3 +93,38 @@ a:visited {
   text-decoration: none; 
   color: inherit; 
  }
+
+
+
+ /*homepage                                                              */
+
+ .stats-buttonless {
+   height: 520px;
+   width: 630px;
+   padding: 0 100px
+ }
+
+ /* Navbar          */
+
+ 
+nav{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #000000;
+}
+.nav-logo-2{
+  max-width: 100px;
+}
+.nav-links{
+  padding: 28px 20px;
+}
+.nav-links li{
+  display: inline-block;
+  margin: 0 15px;
+}
+.nav-links li a{
+  text-decoration: none;
+  color: #F0F8FF;
+  padding: 5px 0;
+}

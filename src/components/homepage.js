@@ -5,9 +5,28 @@ import { Link, useParams  } from 'react-router-dom';
 import logo from '../album_logo.png';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import urlencode from 'urlencode';
 import Typography from '@mui/material/Typography';
+import MobileStepper from "@material-ui/core/MobileStepper";
+import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
+import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
+import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
+import { useTheme } from "@material-ui/core/styles";
+import NavBar from './navBar';
+//import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import { Carousel } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
+import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
+
+
+
+
+
 
 
 
@@ -40,13 +59,83 @@ const HomePage = (props) => {
     const [trends, setTrends] = useState([]);
     const [artistStat, setArtistStat] = useState('');
     const [topArtistStat, setTopArtistStat] = useState('');
+    const [artistScore, setArtistScore] = useState([]);
     const [genreStat, setGenreStat] = useState('');
     const [topGenreStat, setTopGenreStat] = useState('');
     const [topSongs, setTopSongs] = useState([]);
     const [recentlyChanged, setRecentlyChanged] = useState([]);
 
+    const [index, setActiveStep] = React.useState(0);
+
+    const theme = useTheme();
+
+    const CollectionSize = 3
 
 
+    const goToNextPicture = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+
+    const incrimentIndex = () => {
+        if(index < (CollectionSize - 1)){
+            setActiveStep((index) => index + 1);
+        }else{
+            setActiveStep(0)
+        }
+    };
+
+
+
+    const StatPanelTU = () => (
+          <div className="trending-up">
+                <p>Trending Up</p>
+                {trendingUp.slice(0, 3).map((item, key) => (
+                    <Box sx={{ width: 300 }}>
+                    <Grid container spacing={2} alignItems="center">
+                        <Grid item xs>
+                            <img src= {item.album.cover_photo}/>
+                        </Grid><Grid item xs>
+                            <Typography gutterBottom>
+                                {item.trendScore.toFixed(2)}
+                            </Typography>
+                </Grid></Grid></Box>
+                ))}
+            </div>
+      )
+
+      const StatPanelTD = () => (
+          <div className="trending-down">
+                <p>Trending Down</p>
+                {trendingDown.slice(0, 3).map((item, key) => (
+                    <Box sx={{ width: 300 }}>
+                    <Grid container spacing={2} alignItems="center">
+                        <Grid item xs>
+                            <img src= {item.album.cover_photo}/>
+                        </Grid><Grid item xs>
+                            <Typography gutterBottom>
+                                {item.trendScore.toFixed(2)}
+                            </Typography>
+                </Grid></Grid></Box>
+                ))}
+            </div>
+      )
+
+      const StatPanelTS = () => (
+        <div className="top-songs">
+            <p>Top Songs</p>
+            {topSongs.slice(0, 5).map((item, key) => (
+                    <Typography gutterBottom>
+                    {item.title} {item.score}
+                </Typography>
+            ))}
+        </div>
+      )
+
+      var statPanel = [
+        StatPanelTS,
+        StatPanelTU,
+        StatPanelTD
+    ]
 
 
     //search options
@@ -92,7 +181,6 @@ const HomePage = (props) => {
             var aTrend
             if(b.score === undefined){
                 bTrend = -1
-                
             } else{
                 bTrend = b.score
                 
@@ -105,22 +193,44 @@ const HomePage = (props) => {
             return bTrend - aTrend;
         });
         setTopSongs(topSongsTemp);
-      };
+    };
 
-      const sortArrayTrend = () => {
+    const sortArrayTrend = () => {
 
-        const trendingUpTemp = [...trends].sort((a, b) => {
-            return b.trendScore- a.trendScore;
-        });
-        console.log(trendingUpTemp);
-        setTrendingUp(trendingUpTemp);
+    const trendingUpTemp = [...trends].sort((a, b) => {
+        return b.trendScore- a.trendScore;
+    });
+    console.log(trendingUpTemp);
+    setTrendingUp(trendingUpTemp);
 
-        const trendingDownTemp = [...trends].sort((a, b) => {
-            return a.trendScore - b.trendScore;
-        });
-        console.log(trendingDownTemp);
-        setTrendingDown(trendingDownTemp);
-      };
+    const trendingDownTemp = [...trends].sort((a, b) => {
+        return a.trendScore - b.trendScore;
+    });
+    console.log(trendingDownTemp);
+    setTrendingDown(trendingDownTemp);
+    };
+
+
+
+
+
+
+    
+    const getArtistRank = (singularAlbum) => {
+        var arr = artistScore
+        //albums.map((item, key) => {
+            console.log(arr)
+            console.log(Object.values(arr))
+            console.log("HAS?")
+            console.log(singularAlbum.artist)
+            if(Object.values(arr).includes(singularAlbum.artist)) {
+                arr.indexOf(singularAlbum.artist).score = arr.indexOf(singularAlbum.artist).score + singularAlbum.originality
+            } else {
+                arr.push({name: singularAlbum.artist, score: singularAlbum.originality})
+            }
+        //})
+        setArtistScore(arr)
+    }
 
 
     //axios request to get Albums
@@ -136,12 +246,13 @@ const HomePage = (props) => {
 
             res.data.map((item, key) => {
                 GetRankStats(item)
+                getArtistRank(item)
             })
         });
     }
 
     const showArray = () => {
-        console.log(trends)
+        console.log(artistScore)
     }
 
     const GetSongs = () =>{
@@ -241,50 +352,32 @@ const HomePage = (props) => {
 
     return (
         <div className="App">
+            <NavBar />
             <header className="App-header">
                 <h1>
                 Welcome
                 </h1>
 
-                <div className="trending-up">
-                    <p>Trending Up</p>
-                    {trendingUp.slice(0, 3).map((item, key) => (
-                         
-                        <Box sx={{ width: 300 }}>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs>
-                                <img src= {item.album.cover_photo}/>
-                            </Grid><Grid item xs>
-                                <Typography gutterBottom>
-                                    {item.trendScore.toFixed(2)}
-                                </Typography>
-                    </Grid></Grid></Box>
-                    ))}
-                </div>
 
-                <div className="trending-down">
-                    <p>Trending Down</p>
-                    {trendingDown.slice(0, 3).map((item, key) => (
-                        <Box sx={{ width: 300 }}>
-                            <Grid container spacing={2} alignItems="center">
-                                <Grid item xs>
-                                    <img src= {item.album.cover_photo}/>
-                                </Grid><Grid item xs>
-                                    <Typography gutterBottom>
-                                        {item.trendScore.toFixed(2)}
-                                    </Typography>
-                        </Grid></Grid></Box>
-                    ))}
-                </div>
 
-                <div className="top-songs">
-                    <p>Top Songs</p>
-                    {topSongs.slice(0, 5).map((item, key) => (
-                         <Typography gutterBottom>
-                            {item.title} {item.score}
-                        </Typography>
-                    ))}
-                </div>
+                <Carousel>
+                    <Carousel.Item>
+                    <div className="stats-buttonless">
+                    <StatPanelTU /></div>
+                    </Carousel.Item>
+                    <Carousel.Item>
+                    <div className="stats-buttonless">
+                    <StatPanelTD /></div>
+                    </Carousel.Item>
+                    <Carousel.Item>
+                    <div className="stats-buttonless">
+                    <StatPanelTS /></div>
+                    </Carousel.Item>
+                </Carousel>
+
+
+            
+
 
 
                 {!displaySongs && (
