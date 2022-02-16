@@ -71,6 +71,8 @@ const HomePage = (props) => {
 
     const CollectionSize = 3
 
+    var artistScoreTemp = []
+
 
     const goToNextPicture = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -131,11 +133,32 @@ const HomePage = (props) => {
         </div>
       )
 
-      var statPanel = [
-        StatPanelTS,
-        StatPanelTU,
-        StatPanelTD
-    ]
+    const getMax = (array) => {
+        var max = 0
+        array.map((item, key) => {
+            if(item.score > array[max].score){
+                max = key
+            }
+        })
+        return max;
+    }
+
+
+      const StatPanelTA = () => (
+        <div className="top-artist">
+            <p>Top Artist</p>
+            {artistScore.slice(0, 1).map((item, key) => (
+            <>
+                <Typography gutterBottom>
+                    {artistScore[getMax(artistScore)].name}
+                </Typography>
+                <Typography gutterBottom>
+                    {artistScore[getMax(artistScore)].score}
+                </Typography>
+            </>
+            ))}
+        </div>
+      )
 
 
     //search options
@@ -211,25 +234,39 @@ const HomePage = (props) => {
     };
 
 
+    /*const sortArtistRank = () => {
+
+        const artistScoreTemp2 = [...artistScoreTemp].sort((a, b) => {
+            return b.score - a.score;
+        });
+        setArtistScore(artistScoreTemp2);
+        console.log("here")
+        console.log(artistScore)
+        console.log(artistScoreTemp2)
+        artistScoreTemp = artistScoreTemp2
+        };*/
+
+
 
 
 
 
     
     const getArtistRank = (singularAlbum) => {
-        var arr = artistScore
-        //albums.map((item, key) => {
-            console.log(arr)
-            console.log(Object.values(arr))
-            console.log("HAS?")
-            console.log(singularAlbum.artist)
-            if(Object.values(arr).includes(singularAlbum.artist)) {
-                arr.indexOf(singularAlbum.artist).score = arr.indexOf(singularAlbum.artist).score + singularAlbum.originality
-            } else {
-                arr.push({name: singularAlbum.artist, score: singularAlbum.originality})
+        var bool = -1
+        artistScoreTemp.map((item, key) => {
+            if(item.name === singularAlbum.artist){
+                bool = key
             }
-        //})
-        setArtistScore(arr)
+        })
+        if(bool > -1){
+            artistScoreTemp[bool].score = artistScoreTemp[bool].score + singularAlbum.originality
+        }else{
+            artistScoreTemp.push({name: singularAlbum.artist, score: singularAlbum.originality})
+        }
+        console.log(artistScoreTemp)
+        console.log(singularAlbum.artist)
+        setArtistScore(artistScoreTemp)
     }
 
 
@@ -242,12 +279,11 @@ const HomePage = (props) => {
             setSortType('title')
             setSortTypeType(types[sortType])
             console.log(res.data);
-            var sample = []
-
             res.data.map((item, key) => {
                 GetRankStats(item)
                 getArtistRank(item)
             })
+            //sortArtistRank()
         });
     }
 
@@ -373,11 +409,16 @@ const HomePage = (props) => {
                     <div className="stats-buttonless">
                     <StatPanelTS /></div>
                     </Carousel.Item>
+                    <Carousel.Item>
+                    <div className="stats-buttonless">
+                    <StatPanelTA /></div>
+                    </Carousel.Item>
                 </Carousel>
 
-
+                {/*<div className="boxTitle" onClick={showArray}>
+                    show Array
+    </div> */}
             
-
 
 
                 {!displaySongs && (
