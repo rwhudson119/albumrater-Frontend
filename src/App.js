@@ -9,6 +9,7 @@ import NewAlbum from './components/newAlbum';
 import AddAlbum from './components/addAlbum';
 import AlbumDetails from './components/albumDetails';
 import SongDetails from './components/songDetails';
+import ProfileDetails from './components/profileDetails';
 
 
 
@@ -23,6 +24,7 @@ class App extends Component {
           <Route path="/addalbum/:albumId" element={<AddAlbum/>} />
           <Route path="/albumdetails/:albumId" element={<AlbumDetails/>} />
           <Route path="/songdetails/:songId" element={<SongDetails/>} />
+          <Route path="/profiledetails" element={<ProfileDetails/>} />
 
         </Routes>
       </Router>

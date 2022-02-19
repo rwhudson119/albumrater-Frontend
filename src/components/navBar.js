@@ -15,7 +15,7 @@ function NavBar() {
                 <h1 className = "nav-logo"><a href={`/homepage/${profile}`}><img src={logo} className="nav-logo-2" alt="logo" /></a></h1>
                 <ul class="nav-links">
                     <li><a href={`/homepage/${profile}`}>Home</a></li>
-                    <li><a href={`/homepage/${profile}`}>Profile</a></li>
+                    <li><a href={`/profiledetails/`}>Profile</a></li>
                     <li><a href={`/homepage/${profile}`}>Data</a></li>
                 </ul>
             </nav>

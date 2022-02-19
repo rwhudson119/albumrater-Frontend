@@ -60,7 +60,7 @@ const HomePage = (props) => {
     const [artistStat, setArtistStat] = useState('');
     const [topArtistStat, setTopArtistStat] = useState('');
     const [artistScore, setArtistScore] = useState([]);
-    const [genreStat, setGenreStat] = useState('');
+    const [genreScore, setGenreScore] = useState([]);
     const [topGenreStat, setTopGenreStat] = useState('');
     const [topSongs, setTopSongs] = useState([]);
     const [recentlyChanged, setRecentlyChanged] = useState([]);
@@ -72,6 +72,7 @@ const HomePage = (props) => {
     const CollectionSize = 3
 
     var artistScoreTemp = []
+    var genreScoreTemp = []
 
 
     const goToNextPicture = () => {
@@ -147,7 +148,8 @@ const HomePage = (props) => {
       const StatPanelTA = () => (
         <div className="top-artist">
             <p>Top Artist</p>
-            {artistScore.slice(0, 1).map((item, key) => (
+            {
+            artistScore.slice(0, 1).map((item, key) => (
             <>
                 <Typography gutterBottom>
                     {artistScore[getMax(artistScore)].name}
@@ -156,7 +158,25 @@ const HomePage = (props) => {
                     {artistScore[getMax(artistScore)].score}
                 </Typography>
             </>
-            ))}
+            ))
+        }
+        </div>
+      )
+
+      const StatPanelTG = () => (
+        <div className="top-genre">
+            <p>Top Genre</p>
+            {genreScore.slice(0, 1).map((item, key) => (
+            <>
+                <Typography gutterBottom>
+                    {genreScore[getMax(genreScore)].genre}
+                </Typography>
+                <Typography gutterBottom>
+                    {genreScore[getMax(genreScore)].score}
+                </Typography>
+            </>
+            ))
+        }
         </div>
       )
 
@@ -259,14 +279,34 @@ const HomePage = (props) => {
                 bool = key
             }
         })
+        const totalScore = (singularAlbum.originality + singularAlbum.flow + singularAlbum.lyrics + singularAlbum.how_captivating + singularAlbum.timelessness)/5
         if(bool > -1){
-            artistScoreTemp[bool].score = artistScoreTemp[bool].score + singularAlbum.originality
+            artistScoreTemp[bool].score = artistScoreTemp[bool].score + totalScore
         }else{
-            artistScoreTemp.push({name: singularAlbum.artist, score: singularAlbum.originality})
+            artistScoreTemp.push({name: singularAlbum.artist, score: totalScore})
         }
+        //.log(singularAlbum.originality + " + " + singularAlbum.flow + " + " + singularAlbum.lyrics + " + " + singularAlbum.howCaptivating + " + " + singularAlbum.timelessness)
         console.log(artistScoreTemp)
-        console.log(singularAlbum.artist)
+        //console.log(singularAlbum.artist)
         setArtistScore(artistScoreTemp)
+    }
+
+    const getGenreRank = (singularAlbum) => {
+        var bool = -1
+        genreScoreTemp.map((item, key) => {
+            if(item.genre === singularAlbum.genre){
+                bool = key
+            }
+        })
+        const totalScore = (singularAlbum.originality + singularAlbum.flow + singularAlbum.lyrics + singularAlbum.how_captivating + singularAlbum.timelessness)/5
+        if(bool > -1){
+            genreScoreTemp[bool].score = genreScoreTemp[bool].score + totalScore
+        }else{
+            genreScoreTemp.push({genre: singularAlbum.genre, score: totalScore})
+        }
+        console.log(genreScoreTemp)
+        //console.log(singularAlbum.genre)
+        setGenreScore(genreScoreTemp)
     }
 
 
@@ -282,6 +322,7 @@ const HomePage = (props) => {
             res.data.map((item, key) => {
                 GetRankStats(item)
                 getArtistRank(item)
+                getGenreRank(item)
             })
             //sortArtistRank()
         });
@@ -389,12 +430,11 @@ const HomePage = (props) => {
     return (
         <div className="App">
             <NavBar />
+            
             <header className="App-header">
                 <h1>
                 Welcome
                 </h1>
-
-
 
                 <Carousel>
                     <Carousel.Item>
@@ -413,7 +453,13 @@ const HomePage = (props) => {
                     <div className="stats-buttonless">
                     <StatPanelTA /></div>
                     </Carousel.Item>
+                    <Carousel.Item>
+                    <div className="stats-buttonless">
+                    <StatPanelTG /></div>
+                    </Carousel.Item>
                 </Carousel>
+
+                
 
                 {/*<div className="boxTitle" onClick={showArray}>
                     show Array
