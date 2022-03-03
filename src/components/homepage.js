@@ -22,6 +22,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
+import {Line} from 'react-chartjs-2';
 
 
 
@@ -61,6 +62,7 @@ const HomePage = (props) => {
     const [topArtistStat, setTopArtistStat] = useState('');
     const [artistScore, setArtistScore] = useState([]);
     const [genreScore, setGenreScore] = useState([]);
+    const [topAlbums, setTopAlbums] = useState([]);
     const [topGenreStat, setTopGenreStat] = useState('');
     const [topSongs, setTopSongs] = useState([]);
     const [recentlyChanged, setRecentlyChanged] = useState([]);
@@ -86,6 +88,7 @@ const HomePage = (props) => {
             setActiveStep(0)
         }
     };
+
 
 
 
@@ -202,6 +205,9 @@ const HomePage = (props) => {
     //get access to the URL
     let params = useParams()
     var profile = params.profile
+    console.log("params.profile")
+    console.log(params.profile)
+    localStorage.clear();
     localStorage.profile = profile
 
     //functions ----------------------------------------------------------------------
@@ -236,6 +242,18 @@ const HomePage = (props) => {
             return bTrend - aTrend;
         });
         setTopSongs(topSongsTemp);
+    };
+
+    const sortArrayTopAlbums = () => {
+
+        const topAlbumsTemp = [...albums].sort((a, b) => {
+
+            var aTrend = (a.originality + a.flow + a.lyrics + a.how_captivating + a.timelessness)/5
+            var bTrend = (b.originality + b.flow + b.lyrics + b.how_captivating + b.timelessness)/5
+
+            return bTrend - aTrend;
+        });
+        setTopAlbums(topAlbumsTemp);
     };
 
     const sortArrayTrend = () => {
@@ -420,6 +438,7 @@ const HomePage = (props) => {
             console.log(sorted);
             setSongData(sorted);
           };
+          sortArrayTopAlbums();
           sortArrayTopSongs();
           sortSongArray(sortTypeSong);
 
@@ -435,37 +454,50 @@ const HomePage = (props) => {
                 <h1>
                 Welcome
                 </h1>
+                <div className="album-stats-entire">
+                    <Carousel>
+                        <Carousel.Item>
+                        <div className="stats-buttonless">
+                        <StatPanelTU /></div>
+                        </Carousel.Item>
+                        <Carousel.Item>
+                        <div className="stats-buttonless">
+                        <StatPanelTD /></div>
+                        </Carousel.Item>
+                        <Carousel.Item>
+                        <div className="stats-buttonless">
+                        <StatPanelTS /></div>
+                        </Carousel.Item>
+                        <Carousel.Item>
+                        <div className="stats-buttonless">
+                        <StatPanelTA /></div>
+                        </Carousel.Item>
+                        <Carousel.Item>
+                        <div className="stats-buttonless">
+                        <StatPanelTG /></div>
+                        </Carousel.Item>
+                    </Carousel>
+                </div>
 
-                <Carousel>
-                    <Carousel.Item>
-                    <div className="stats-buttonless">
-                    <StatPanelTU /></div>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                    <div className="stats-buttonless">
-                    <StatPanelTD /></div>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                    <div className="stats-buttonless">
-                    <StatPanelTS /></div>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                    <div className="stats-buttonless">
-                    <StatPanelTA /></div>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                    <div className="stats-buttonless">
-                    <StatPanelTG /></div>
-                    </Carousel.Item>
-                </Carousel>
 
+                <div className="top_Albums_border"></div>
+                <div className="top_Albums">
                 
+                {topAlbums.slice(0, 10).map((item, key) => (
+                    <div className="top_Album_Individual">
+                    <img src= {item.cover_photo}/>
+                    <p>{item.title}</p><br></br>
+                    <p>{key + 1}</p>
+                    </div>
+                ))}
+                </div>
+                <div className="top_Albums_border"></div>
 
-                {/*<div className="boxTitle" onClick={showArray}>
-                    show Array
-    </div> */}
+
+
+                    
             
-
+                <a href={`/homepage/${profile}`}></a>
 
                 {!displaySongs && (
                     <>
@@ -488,7 +520,7 @@ const HomePage = (props) => {
                         {albumData.map((item, key) => (
                             <div className="album_display">
                                 <a href={`/albumdetails/${item._id}`}>
-                                    <Box sx={{ width: 600 }}>
+                                    <Box sx={{ width: 900 }}>
                                         <Grid container spacing={2} alignItems="center">
                                             <Grid item xs>
                                                 <img src= {item.cover_photo}/>
@@ -541,12 +573,6 @@ const HomePage = (props) => {
                         ))}
                     </>
                 )}
-
-
-
-
-                <TextField id="standard-basic" label="Search Album" variant="outlined" onChange={onChangeSearch}/>
-                <a className="App-link" href={`/newalbum/${search}`} >Search</a>
 
             </header>
         </div>
