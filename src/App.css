@@ -42,7 +42,7 @@
 }
 
 .album_display {
-  padding: 3% 0% 7% 0%;
+  padding: 2% 0% 3% 0%;
 }
 
 .notes {
@@ -94,7 +94,9 @@ a:visited {
   color: inherit; 
  }
 
-
+ .album-stats-entire {
+   padding: 0 0 200px 0;
+ }
 
  /*homepage                                                              */
 
@@ -128,3 +130,72 @@ nav{
   color: #F0F8FF;
   padding: 5px 0;
 }
+
+.top_Albums {
+  position: absolute;
+  padding: 10px 10px 10px 10px;
+  width: 80%;
+  top: 770px;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.top_Albums::-webkit-scrollbar {
+  display: none;
+}
+
+
+.top_Album_Individual {
+  position: relative;
+  height:0%;
+}
+
+.top_Album_Individual p {
+  position: relative;
+  top: -275px;
+  display: none;
+  color: white;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+}
+.top_Albums img {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+  min-width: 300px;
+}
+
+
+.top_Album_Individual:hover img {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+  min-width: 300px;
+  opacity: 50%;
+}
+.top_Album_Individual:hover p {
+  position: relative;
+  top: -275px;
+  font-size: calc(15px + 1vmin);
+  display: inline-flex;
+  color: white;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+  opacity: 100%;
+}
+
+.top_Albums_border {
+  padding-top: 140px;
+}
+
+
+
+

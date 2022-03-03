@@ -10,6 +10,7 @@ import AddAlbum from './components/addAlbum';
 import AlbumDetails from './components/albumDetails';
 import SongDetails from './components/songDetails';
 import ProfileDetails from './components/profileDetails';
+import CreateAccount from './components/createAccount'
 
 
 
@@ -25,7 +26,7 @@ class App extends Component {
           <Route path="/albumdetails/:albumId" element={<AlbumDetails/>} />
           <Route path="/songdetails/:songId" element={<SongDetails/>} />
           <Route path="/profiledetails" element={<ProfileDetails/>} />
-
+          <Route path="/createAccount" element={<CreateAccount/>} />
         </Routes>
       </Router>
     );
