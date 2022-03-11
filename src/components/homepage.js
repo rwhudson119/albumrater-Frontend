@@ -22,7 +22,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
-import {Line} from 'react-chartjs-2';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Legend } from 'recharts';
 
 
 
@@ -52,11 +52,19 @@ const HomePage = (props) => {
     const [sortTypeTypeSong, setSortTypeTypeSong] = useState('');
 
     const [displaySongs, setDisplaySongs] = useState(false);
+    const [displayStats, setDisplayStats] = useState(false);
+
+
+
+    const data = [{name: 'Page A', a1: 400, a2: 450, a3: 700},{name: 'Page B', a1: 500, a2: 350, a3: 700}]; 
+
 
     //stats
 
     const [trendingUp, setTrendingUp] = useState([]);
+    const [trendingUpData, setTrendingUpData] = useState([]);
     const [trendingDown, setTrendingDown] = useState([]);
+    const [trendingDownData, setTrendingDownData] = useState([]);
     const [trends, setTrends] = useState([]);
     const [artistStat, setArtistStat] = useState('');
     const [topArtistStat, setTopArtistStat] = useState('');
@@ -95,7 +103,8 @@ const HomePage = (props) => {
     const StatPanelTU = () => (
           <div className="trending-up">
                 <p>Trending Up</p>
-                {trendingUp.slice(0, 3).map((item, key) => (
+                
+                {/*trendingUp.slice(0, 3).map((item, key) => (
                     <Box sx={{ width: 300 }}>
                     <Grid container spacing={2} alignItems="center">
                         <Grid item xs>
@@ -105,14 +114,28 @@ const HomePage = (props) => {
                                 {item.trendScore.toFixed(2)}
                             </Typography>
                 </Grid></Grid></Box>
-                ))}
+
+                ))*/}
+                {displayStats &&
+                <LineChart width={500} height={300} data={trendingUpData}>
+                    <CartesianGrid stroke="#ccc" />
+                    <XAxis dataKey="name" />
+                    <YAxis yAxisId="left" domain={[50, 80]}/>
+                    <Legend />
+                    <Line yAxisId="left" type="monotone" dataKey= {Object.getOwnPropertyNames(trendingUpData[0])[1]} stroke="#8884d8" />
+                    <Line yAxisId="left" type="monotone" dataKey={Object.getOwnPropertyNames(trendingUpData[0])[2]} stroke="#FFA500" />
+                    <Line yAxisId="left" type="monotone" dataKey={Object.getOwnPropertyNames(trendingUpData[0])[3]} stroke="#00FF00" />
+
+
+                </LineChart>
+                }
             </div>
       )
 
       const StatPanelTD = () => (
           <div className="trending-down">
                 <p>Trending Down</p>
-                {trendingDown.slice(0, 3).map((item, key) => (
+                {/*trendingDown.slice(0, 3).map((item, key) => (
                     <Box sx={{ width: 300 }}>
                     <Grid container spacing={2} alignItems="center">
                         <Grid item xs>
@@ -122,7 +145,19 @@ const HomePage = (props) => {
                                 {item.trendScore.toFixed(2)}
                             </Typography>
                 </Grid></Grid></Box>
-                ))}
+                ))*/}
+
+                 {displayStats &&
+                    <LineChart width={500} height={300} data={trendingDownData}>
+                        <CartesianGrid stroke="#ccc" />
+                        <XAxis dataKey="name" />
+                        <YAxis yAxisId="left" domain={[40, 100]}/>
+                        <Legend />
+                        <Line yAxisId="left" type="monotone" dataKey= {Object.getOwnPropertyNames(trendingDownData[0])[1]} stroke="#8884d8" />
+                        <Line yAxisId="left" type="monotone" dataKey={Object.getOwnPropertyNames(trendingDownData[0])[2]} stroke="#FFA500" />
+                        <Line yAxisId="left" type="monotone" dataKey={Object.getOwnPropertyNames(trendingDownData[0])[3]} stroke="#00FF00" />
+                    </LineChart>
+                }
             </div>
       )
 
@@ -261,14 +296,19 @@ const HomePage = (props) => {
     const trendingUpTemp = [...trends].sort((a, b) => {
         return b.trendScore- a.trendScore;
     });
-    console.log(trendingUpTemp);
+    setTrendingUpData([{name: 'Prev', [trendingUpTemp[0].album.title]: ((trendingUpTemp[0].album.how_captivating + trendingUpTemp[0].album.flow + trendingUpTemp[0].album.lyrics + trendingUpTemp[0].album.originality + trendingUpTemp[0].album.timelessness)/5 - trendingUpTemp[0].trendScore), [trendingUpTemp[1].album.title]: ((trendingUpTemp[1].album.how_captivating + trendingUpTemp[1].album.flow + trendingUpTemp[1].album.lyrics + trendingUpTemp[1].album.originality + trendingUpTemp[1].album.timelessness)/5 - trendingUpTemp[1].trendScore), [trendingUpTemp[2].album.title]: ((trendingUpTemp[2].album.how_captivating + trendingUpTemp[2].album.flow + trendingUpTemp[2].album.lyrics + trendingUpTemp[2].album.originality + trendingUpTemp[2].album.timelessness)/5 - trendingUpTemp[2].trendScore)},{name: 'New', [trendingUpTemp[0].album.title]: (trendingUpTemp[0].album.how_captivating + trendingUpTemp[0].album.flow + trendingUpTemp[0].album.lyrics + trendingUpTemp[0].album.originality + trendingUpTemp[0].album.timelessness)/5, [trendingUpTemp[1].album.title]: (trendingUpTemp[1].album.how_captivating + trendingUpTemp[1].album.flow + trendingUpTemp[1].album.lyrics + trendingUpTemp[1].album.originality + trendingUpTemp[1].album.timelessness)/5, [trendingUpTemp[2].album.title]: (trendingUpTemp[2].album.how_captivating + trendingUpTemp[2].album.flow + trendingUpTemp[2].album.lyrics + trendingUpTemp[2].album.originality + trendingUpTemp[2].album.timelessness)/5}]);
     setTrendingUp(trendingUpTemp);
 
     const trendingDownTemp = [...trends].sort((a, b) => {
         return a.trendScore - b.trendScore;
     });
-    console.log(trendingDownTemp);
+    
+    var TDD1 = (trendingDownTemp[0].album.how_captivating + trendingDownTemp[0].album.flow + trendingDownTemp[0].album.lyrics + trendingDownTemp[0].album.originality + trendingDownTemp[0].album.timelessness)/5;
+    var TDD2 = (trendingDownTemp[1].album.how_captivating + trendingDownTemp[1].album.flow + trendingDownTemp[1].album.lyrics + trendingDownTemp[1].album.originality + trendingDownTemp[1].album.timelessness)/5;
+    var TDD3 = (trendingDownTemp[2].album.how_captivating + trendingDownTemp[2].album.flow + trendingDownTemp[2].album.lyrics + trendingDownTemp[2].album.originality + trendingDownTemp[2].album.timelessness)/5;
+    setTrendingDownData([{name: 'Prev', [trendingDownTemp[0].album.title]: (TDD1 - trendingDownTemp[1].trendScore), [trendingDownTemp[1].album.title]: (TDD2 - trendingDownTemp[1].trendScore), [trendingDownTemp[2].album.title]: (TDD3 - trendingDownTemp[2].trendScore)},{name: 'New', [trendingDownTemp[0].album.title]: TDD1, [trendingDownTemp[1].album.title]: TDD2, [trendingDownTemp[2].album.title]: TDD3}]);
     setTrendingDown(trendingDownTemp);
+    setDisplayStats(true)
     };
 
 
@@ -454,6 +494,7 @@ const HomePage = (props) => {
                 <h1>
                 Welcome
                 </h1>
+
                 <div className="album-stats-entire">
                     <Carousel>
                         <Carousel.Item>
