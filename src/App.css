@@ -95,7 +95,7 @@ a:visited {
  }
 
  .album-stats-entire {
-   padding: 0 0 200px 0;
+   padding: 0 0 50px 0;
  }
 
  /*homepage                                                              */
@@ -104,6 +104,17 @@ a:visited {
    height: 520px;
    width: 630px;
    padding: 0 100px
+ }
+
+
+ /* statsss   */
+
+ .top-artist img{
+   max-width: 50%;
+ }
+
+ .legend {
+   top: 80px;
  }
 
  /* Navbar          */
@@ -132,14 +143,14 @@ nav{
 }
 
 .top_Albums {
-  position: absolute;
+  position:relative;
   padding: 10px 10px 10px 10px;
   width: 80%;
-  top: 770px;
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  overflow-y: hidden;
 }
 
 .top_Albums::-webkit-scrollbar {
@@ -150,6 +161,7 @@ nav{
 .top_Album_Individual {
   position: relative;
   height:0%;
+  max-block-size: 290px;
 }
 
 .top_Album_Individual p {
@@ -160,6 +172,7 @@ nav{
   text-align: center;
   padding: 14px;
   text-decoration: none;
+  max-height: 290px;
 }
 .top_Albums img {
   display: inline-block;
@@ -168,6 +181,7 @@ nav{
   padding: 14px;
   text-decoration: none;
   min-width: 300px;
+  max-height: 290px;
 }
 
 
@@ -193,8 +207,15 @@ nav{
 }
 
 .top_Albums_border {
-  padding-top: 140px;
+  padding-top: 200px;
 }
+
+.topRated{
+  padding: 10%;
+}
+
+
+
 
 
 

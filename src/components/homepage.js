@@ -22,7 +22,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Legend } from 'recharts';
+import { LineChart, CharacterDot, Line, CartesianGrid, XAxis, YAxis, Legend } from 'recharts';
 
 
 
@@ -67,7 +67,7 @@ const HomePage = (props) => {
     const [trendingDownData, setTrendingDownData] = useState([]);
     const [trends, setTrends] = useState([]);
     const [artistStat, setArtistStat] = useState('');
-    const [topArtistStat, setTopArtistStat] = useState('');
+    const [topArtistPhoto, setTopArtistPhoto] = useState('');
     const [artistScore, setArtistScore] = useState([]);
     const [genreScore, setGenreScore] = useState([]);
     const [topAlbums, setTopAlbums] = useState([]);
@@ -95,9 +95,7 @@ const HomePage = (props) => {
         }else{
             setActiveStep(0)
         }
-    };
-
-
+    }; 
 
 
     const StatPanelTU = () => (
@@ -119,10 +117,10 @@ const HomePage = (props) => {
                 {displayStats &&
                 <LineChart width={500} height={300} data={trendingUpData}>
                     <CartesianGrid stroke="#ccc" />
-                    <XAxis dataKey="name" />
-                    <YAxis yAxisId="left" domain={[50, 80]}/>
-                    <Legend />
-                    <Line yAxisId="left" type="monotone" dataKey= {Object.getOwnPropertyNames(trendingUpData[0])[1]} stroke="#8884d8" />
+                    <XAxis dataKey="name" tick={{fontSize: "18px"}}/>
+                    <YAxis yAxisId="left" domain={[50, 80]} tick={{fontSize: "18px"}}/>
+                    <Legend wrapperStyle={{top: 275, left: 0, fontSize: "18px"}} />
+                    <Line yAxisId="left" type="monotone" dataKey= {Object.getOwnPropertyNames(trendingUpData[0])[1]} stroke="#8884d8"/>
                     <Line yAxisId="left" type="monotone" dataKey={Object.getOwnPropertyNames(trendingUpData[0])[2]} stroke="#FFA500" />
                     <Line yAxisId="left" type="monotone" dataKey={Object.getOwnPropertyNames(trendingUpData[0])[3]} stroke="#00FF00" />
 
@@ -150,9 +148,9 @@ const HomePage = (props) => {
                  {displayStats &&
                     <LineChart width={500} height={300} data={trendingDownData}>
                         <CartesianGrid stroke="#ccc" />
-                        <XAxis dataKey="name" />
-                        <YAxis yAxisId="left" domain={[40, 100]}/>
-                        <Legend />
+                        <XAxis dataKey="name" tick={{fontSize: "18px"}}/>
+                        <YAxis yAxisId="left" domain={[40, 100]} tick={{fontSize: "18px"}}/>
+                        <Legend wrapperStyle={{top: 295, left: 0, fontSize: "18px"}}/>
                         <Line yAxisId="left" type="monotone" dataKey= {Object.getOwnPropertyNames(trendingDownData[0])[1]} stroke="#8884d8" />
                         <Line yAxisId="left" type="monotone" dataKey={Object.getOwnPropertyNames(trendingDownData[0])[2]} stroke="#FFA500" />
                         <Line yAxisId="left" type="monotone" dataKey={Object.getOwnPropertyNames(trendingDownData[0])[3]} stroke="#00FF00" />
@@ -189,6 +187,7 @@ const HomePage = (props) => {
             {
             artistScore.slice(0, 1).map((item, key) => (
             <>
+                <img src={topArtistPhoto}></img>
                 <Typography gutterBottom>
                     {artistScore[getMax(artistScore)].name}
                 </Typography>
@@ -240,8 +239,8 @@ const HomePage = (props) => {
     //get access to the URL
     let params = useParams()
     var profile = params.profile
-    console.log("params.profile")
-    console.log(params.profile)
+    //console.log("params.profile")
+    //console.log(params.profile)
     localStorage.clear();
     localStorage.profile = profile
 
@@ -323,6 +322,16 @@ const HomePage = (props) => {
         console.log(artistScoreTemp2)
         artistScoreTemp = artistScoreTemp2
         };*/
+
+        const GetTopArtist = () => {
+            artistScore.slice(0, 1).map((item, key) => (
+                console.log(artistScore[getMax(artistScore)].name),
+                axios.get(`https://api.deezer.com/search/artist/?q=artist:"${artistScore[getMax(artistScore)].name}"`).then(res => {
+                    console.log(res.data.data[0].picture_big);
+                    setTopArtistPhoto(res.data.data[0].picture_big)
+                }
+            ))
+        )}
 
 
 
@@ -421,6 +430,7 @@ const HomePage = (props) => {
         
     }
 
+
     //UseEffect ----------------------------------------------------------------------------
 
     useEffect(() => {
@@ -481,6 +491,7 @@ const HomePage = (props) => {
           sortArrayTopAlbums();
           sortArrayTopSongs();
           sortSongArray(sortTypeSong);
+          GetTopArtist();
 
     }, [sortTypeSong]) 
 
@@ -520,22 +531,24 @@ const HomePage = (props) => {
                     </Carousel>
                 </div>
 
+                <h1 className="topRated">
+                Top Rated
+                </h1>
 
-                <div className="top_Albums_border"></div>
                 <div className="top_Albums">
                 
                 {topAlbums.slice(0, 10).map((item, key) => (
                     <div className="top_Album_Individual">
-                    <img src= {item.cover_photo}/>
-                    <p>{item.title}</p><br></br>
-                    <p>{key + 1}</p>
+                        {//<a href={`/albumdetails/${item._id}`}>
+                           }   <img src= {item.cover_photo}/>
+                            <p>{item.title}</p>
+                            <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p><br></br>
+                            <p>{key + 1}</p>
+                        {//</a>
+                        }
                     </div>
                 ))}
                 </div>
-                <div className="top_Albums_border"></div>
-
-
-
                     
             
                 <a href={`/homepage/${profile}`}></a>
@@ -562,7 +575,7 @@ const HomePage = (props) => {
                             <div className="album_display">
                                 <a href={`/albumdetails/${item._id}`}>
                                     <Box sx={{ width: 900 }}>
-                                        <Grid container spacing={2} alignItems="center">
+                                        <Grid container spacing={3} alignItems="center">
                                             <Grid item xs>
                                                 <img src= {item.cover_photo}/>
                                             </Grid><Grid item xs>
@@ -573,6 +586,8 @@ const HomePage = (props) => {
                                                     <p>How Captivating: {item.how_captivating}   Originality: {item.originality}</p>
                                                     <p>Timelessness: {item.timelessness}</p>
                                                 </div>
+                                            </Grid><Grid item xs>
+                                                <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p>
                                     </Grid></Grid></Box>
                                 </a>
                             </div>

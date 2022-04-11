@@ -52,7 +52,7 @@ const AddAlbum = (props) => {
     const [timelessness, setTimelessness] = useState(50);
     const [notes, setNotes] = useState("");
     const [songScores1, setSongScores1] = useState([]);
-    const [songScores, setSongScores] = useState(5);
+    const [songScores, setSongScores] = useState();
 
 
     const current = new Date();
@@ -126,21 +126,6 @@ const AddAlbum = (props) => {
         }
 
 
-        const handleInputChangeSong = (event) => {
-            console.log("event "  + event.target.value)
-            /*songScoresArr = songScores
-            songScoresArr[0] = (event.target.value === '' ? '' : Number(event.target.value));
-            console.log("array post " + songScoresArr)
-
-            setSongScores(songScoresArr)
-            console.log("array final " + songScores)*/
-            setSongScores(event.target.value === '' ? '' : Number(event.target.value))
-
-            //console.log("array" + songScoresArr)
-        };
-
-
-
         const handleUpdate = (e) => {
             console.log("title   " + title + "  profile   " + profile + "  artist   " + artist + "  genre   " + genre + "  releaseDate   " + releaseDate + "  coverPhoto   " + coverPhoto + "  originality   " + originality + "  flow   " + flow + "  lyrics   " + lyrics + "  howCaptivating   " + howCaptivating + "  timelessness   " + timelessness + "  notes  " + notes)
             e.preventDefault();
@@ -158,10 +143,13 @@ const AddAlbum = (props) => {
 
             setSongScores1(songScoresArr)
             console.log(setSongScores1)
-            {results.tracks.data.map((item, key) => (
-                axios.post("/song/add",
-                {title: item.title, artist: results.artist.name, id: item.id, score: songScores1[key], profile: profile} )
-                ))
+            {results.tracks.data.map((item, key) => {
+                if(songScores1[key] != null){
+                    axios.post("/song/add",
+                    {title: item.title, artist: results.artist.name, id: item.id, score: songScores1[key], profile: profile} )
+                }
+            })
+            
             };
 
             //formulate tracks into 
@@ -196,10 +184,8 @@ const AddAlbum = (props) => {
             setArtist(res.data.artist.name)
             setGenre(res.data.genres.data[0].name)
             setReleaseDate(res.data.release_date)
-            setCoverPhoto(res.data.cover)
-            res.data.tracks.data.map((item,key) => (
-                songScoresArr[key] = 5
-            ))
+            setCoverPhoto(res.data.cover_big)
+            
             setSongScores1(songScoresArr)
             console.log("SongScores " + songScores)
             console.log(res.data)
@@ -288,7 +274,7 @@ const AddAlbum = (props) => {
                                 </Grid>
                                 <Grid item xs>
                                     <Input
-                                        defaultValue={songScoresArr[key]}
+                                        defaultValue={songScores1[key]}
                                         //value={songScores[key]}
                                         size="small"
                                         onChange= {songScoresArr = songScores1, (e) => songScoresArr[key] = e.target.value}
