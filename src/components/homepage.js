@@ -23,6 +23,8 @@ import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-re
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LineChart, CharacterDot, Line, CartesianGrid, XAxis, YAxis, Legend } from 'recharts';
+import { SystemUpdate } from "@material-ui/icons";
+import { sizeHeight } from "@mui/system";
 
 
 
@@ -54,6 +56,8 @@ const HomePage = (props) => {
     const [displaySongs, setDisplaySongs] = useState(false);
     const [displayStats, setDisplayStats] = useState(false);
 
+    const [displayedAlbums, setDisplayedAlbums] = useState([]);
+
 
 
     const data = [{name: 'Page A', a1: 400, a2: 450, a3: 700},{name: 'Page B', a1: 500, a2: 350, a3: 700}]; 
@@ -73,7 +77,7 @@ const HomePage = (props) => {
     const [topAlbums, setTopAlbums] = useState([]);
     const [topGenreStat, setTopGenreStat] = useState('');
     const [topSongs, setTopSongs] = useState([]);
-    const [recentlyChanged, setRecentlyChanged] = useState([]);
+    const [recentlyRated, setRecentlyRated] = useState([]);
 
     const [index, setActiveStep] = React.useState(0);
 
@@ -102,18 +106,6 @@ const HomePage = (props) => {
           <div className="trending-up">
                 <p>Trending Up</p>
                 
-                {/*trendingUp.slice(0, 3).map((item, key) => (
-                    <Box sx={{ width: 300 }}>
-                    <Grid container spacing={2} alignItems="center">
-                        <Grid item xs>
-                            <img src= {item.album.cover_photo}/>
-                        </Grid><Grid item xs>
-                            <Typography gutterBottom>
-                                {item.trendScore.toFixed(2)}
-                            </Typography>
-                </Grid></Grid></Box>
-
-                ))*/}
                 {displayStats &&
                 <LineChart width={500} height={300} data={trendingUpData}>
                     <CartesianGrid stroke="#ccc" />
@@ -133,17 +125,6 @@ const HomePage = (props) => {
       const StatPanelTD = () => (
           <div className="trending-down">
                 <p>Trending Down</p>
-                {/*trendingDown.slice(0, 3).map((item, key) => (
-                    <Box sx={{ width: 300 }}>
-                    <Grid container spacing={2} alignItems="center">
-                        <Grid item xs>
-                            <img src= {item.album.cover_photo}/>
-                        </Grid><Grid item xs>
-                            <Typography gutterBottom>
-                                {item.trendScore.toFixed(2)}
-                            </Typography>
-                </Grid></Grid></Box>
-                ))*/}
 
                  {displayStats &&
                     <LineChart width={500} height={300} data={trendingDownData}>
@@ -192,7 +173,7 @@ const HomePage = (props) => {
                     {artistScore[getMax(artistScore)].name}
                 </Typography>
                 <Typography gutterBottom>
-                    {artistScore[getMax(artistScore)].score}
+                    {artistScore[getMax(artistScore)].score.toFixed(2)}
                 </Typography>
             </>
             ))
@@ -228,6 +209,7 @@ const HomePage = (props) => {
         how_captivating: 'how_captivating',
         originality: 'originality',
         timelessness: 'timelessness',
+        total_score: 'total',
     };
 
     const songTypes = {
@@ -239,8 +221,6 @@ const HomePage = (props) => {
     //get access to the URL
     let params = useParams()
     var profile = params.profile
-    //console.log("params.profile")
-    //console.log(params.profile)
     localStorage.clear();
     localStorage.profile = profile
 
@@ -254,9 +234,14 @@ const HomePage = (props) => {
     //Functions for search feature
 
     const onChangeSearch = (e) => {
-        const search = e.target.value;
+        var search = e.target.value;
         setSearch(search)
+        setDisplayedAlbums(albumData)
+        setDisplayedAlbums(albumData.filter(obj => {
+            return obj.title.toLowerCase().includes(search.toLowerCase()) || obj.artist.toLowerCase().includes(search.toLowerCase())
+        }))
     }
+    
     const sortArrayTopSongs = () => {
 
         const topSongsTemp = [...songs].sort((a, b) => {
@@ -310,24 +295,28 @@ const HomePage = (props) => {
     setDisplayStats(true)
     };
 
+    const sortArrayRecentlyRated = () => {
+        const recentlyRatedTemp = [...albums].sort((a, b) => {
 
-    /*const sortArtistRank = () => {
+            var a_noSec = a.ratings[a.ratings.length - 1].split(",");
+            var [a_day, a_month, a_year] = a_noSec[0].split('/');
+            var [a_hours, a_minutes, a_seconds] = a_noSec[1].split(':');
+            var a_date = new Date(+a_year, a_month - 1, +a_day, +a_hours, +a_minutes, +a_seconds);
 
-        const artistScoreTemp2 = [...artistScoreTemp].sort((a, b) => {
-            return b.score - a.score;
+
+            var b_noSec = b.ratings[b.ratings.length - 1].split(",");
+            var [b_day, b_month, b_year] = b_noSec[0].split('/');
+            var [b_hours, b_minutes, b_seconds] = b_noSec[1].split(':');
+            var b_date = new Date(+b_year, b_month - 1, +b_day, +b_hours, +b_minutes, +b_seconds);
+            
+            return b_date - a_date;
         });
-        setArtistScore(artistScoreTemp2);
-        console.log("here")
-        console.log(artistScore)
-        console.log(artistScoreTemp2)
-        artistScoreTemp = artistScoreTemp2
-        };*/
+        setRecentlyRated(recentlyRatedTemp);
+    };
 
         const GetTopArtist = () => {
             artistScore.slice(0, 1).map((item, key) => (
-                console.log(artistScore[getMax(artistScore)].name),
-                axios.get(`https://api.deezer.com/search/artist/?q=artist:"${artistScore[getMax(artistScore)].name}"`).then(res => {
-                    console.log(res.data.data[0].picture_big);
+                axios.get(`http://localhost:4000/deezer/artist/${artistScore[getMax(artistScore)].name}`).then(res => {
                     setTopArtistPhoto(res.data.data[0].picture_big)
                 }
             ))
@@ -352,9 +341,6 @@ const HomePage = (props) => {
         }else{
             artistScoreTemp.push({name: singularAlbum.artist, score: totalScore})
         }
-        //.log(singularAlbum.originality + " + " + singularAlbum.flow + " + " + singularAlbum.lyrics + " + " + singularAlbum.howCaptivating + " + " + singularAlbum.timelessness)
-        console.log(artistScoreTemp)
-        //console.log(singularAlbum.artist)
         setArtistScore(artistScoreTemp)
     }
 
@@ -371,8 +357,6 @@ const HomePage = (props) => {
         }else{
             genreScoreTemp.push({genre: singularAlbum.genre, score: totalScore})
         }
-        console.log(genreScoreTemp)
-        //console.log(singularAlbum.genre)
         setGenreScore(genreScoreTemp)
     }
 
@@ -385,7 +369,6 @@ const HomePage = (props) => {
             setAlbum(res.data[0]);
             setSortType('title')
             setSortTypeType(types[sortType])
-            console.log(res.data);
             res.data.map((item, key) => {
                 GetRankStats(item)
                 getArtistRank(item)
@@ -396,7 +379,6 @@ const HomePage = (props) => {
     }
 
     const showArray = () => {
-        console.log(artistScore)
     }
 
     const GetSongs = () =>{
@@ -405,7 +387,6 @@ const HomePage = (props) => {
         setSong(res.data[0]);
         setSortTypeSong('title')
         setSortTypeTypeSong(songTypes[sortTypeSong])
-        console.log(res.data);
         });
     }
 
@@ -423,6 +404,7 @@ const HomePage = (props) => {
                     arrayTemp.push({album: singularAlbum, trendScore: (rating1 - rating2)})
                     setTrends(arrayTemp)
                     sortArrayTrend()
+                    
                 })
             })
         }
@@ -449,6 +431,7 @@ const HomePage = (props) => {
                 how_captivating: 'how_captivating',
                 originality: 'originality',
                 timelessness: 'timelessness',
+                total_score: 'total_score',
             };
             const sortProperty = types[type];
             const sorted = [...albums].sort((a, b) => {
@@ -457,12 +440,17 @@ const HomePage = (props) => {
                 }
                 else if(sortProperty === 'artist') {
                     return a.artist.localeCompare(b.artist);
+                }else if(sortProperty === 'total_score'){
+                    var aTrend1 = (a.originality + a.flow + a.lyrics + a.how_captivating + a.timelessness)/5
+                    var bTrend1 = (b.originality + b.flow + b.lyrics + b.how_captivating + b.timelessness)/5
+        
+                    return bTrend1 - aTrend1;
                 }else {
                     return b[sortProperty] - a[sortProperty];
                 }
             });
-            console.log(sorted);
             setAlbumData(sorted);
+            setDisplayedAlbums(sorted);
           };
           sortArray(sortType);
     }, [sortType]) 
@@ -485,10 +473,10 @@ const HomePage = (props) => {
                     return b[sortProperty] - a[sortProperty];
                 }
             });
-            console.log(sorted);
             setSongData(sorted);
           };
           sortArrayTopAlbums();
+          sortArrayRecentlyRated();
           sortArrayTopSongs();
           sortSongArray(sortTypeSong);
           GetTopArtist();
@@ -549,90 +537,124 @@ const HomePage = (props) => {
                     </div>
                 ))}
                 </div>
+
+                <h1 className="topRated">
+                Recently Rated
+                </h1>
+
+                <div className="top_Albums">
+                
+                {recentlyRated.slice(0, 10).map((item, key) => (
+                    <div className="top_Album_Individual">
+                        {//<a href={`/albumdetails/${item._id}`}>
+                           }   <img src= {item.cover_photo}/>
+                            <p>{item.title}</p>
+                            <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p><br></br>
+                            <p>{key + 1}</p>
+                        {//</a>
+                        }
+                    </div>
+                ))}
+                </div>
                     
             
                 <a href={`/homepage/${profile}`}></a>
+                
+                
+                    {!displaySongs && (
+                        <>
 
-                {!displaySongs && (
-                    <>
-                    <select onChange={(e) => setSortType(e.target.value)}>
-                        <option value="title">Title</option>
-                        <option value="artist">Artist</option>
-                        <option value="flow">Flow</option>
-                        <option value="lyrics">Lyrics</option>
-                        <option value="how_captivating">How Captivating</option>
-                        <option value="originality">Originality</option>
-                        <option value="timelessness">Timelessness</option>
-                    </select> 
-                        <Box sx={{ width: 600 }}>
-                            <Grid container spacing={2} alignItems="center">
-                                <Grid item xs>
-                                    <h2>Albums</h2>
-                                </Grid><Grid item xs>
-                                    <h2><div onClick={toggle}>Songs</div></h2>
-                        </Grid></Grid></Box>
-                        {albumData.map((item, key) => (
-                            <div className="album_display">
-                                <a href={`/albumdetails/${item._id}`}>
-                                    <Box sx={{ width: 900 }}>
-                                        <Grid container spacing={3} alignItems="center">
-                                            <Grid item xs>
-                                                <img src= {item.cover_photo}/>
-                                            </Grid><Grid item xs>
-                                                <p>{item.title}</p>
-                                                <p>{item.artist}</p>
-                                                <div className="scores">
-                                                    <p>Flow: {item.flow} Lyrics: {item.lyrics}</p>
-                                                    <p>How Captivating: {item.how_captivating}   Originality: {item.originality}</p>
-                                                    <p>Timelessness: {item.timelessness}</p>
-                                                </div>
-                                            </Grid><Grid item xs>
-                                                <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p>
-                                    </Grid></Grid></Box>
-                                </a>
-                            </div>
-                        ))}
-                    </>
-                )}
-
-                {displaySongs && (
-                    <>
-                        <select onChange={(e) => setSortTypeSong(e.target.value)}>
+                        <select onChange={(e) => setSortType(e.target.value)}>
                             <option value="title">Title</option>
                             <option value="artist">Artist</option>
-                            <option value="score">Score</option>
+                            <option value="flow">Flow</option>
+                            <option value="lyrics">Lyrics</option>
+                            <option value="how_captivating">How Captivating</option>
+                            <option value="originality">Originality</option>
+                            <option value="timelessness">Timelessness</option>
+                            <option value="total_score">Total</option>
                         </select> 
-                        <Box sx={{ width: 600 }}>
-                            <Grid container spacing={2} alignItems="center">
-                                <Grid item xs>
-                                    <h2><div onClick={toggle}>Albums</div></h2>
-                            </Grid><Grid item xs>
-                                <h2> Songs</h2>
-                        </Grid></Grid></Box>
-                        {songData.map((item, key) => (
-                            <a href={`/songdetails/${item._id}`}>
+                            <Box sx={{ width: 600 }}>
+                                <Grid container spacing={2} alignItems="center">
+                                    <Grid item xs>
+                                        <h2>Albums</h2>
+                                    </Grid><Grid item xs>
+                                        <h2><div onClick={toggle}>Songs</div></h2>
+                            </Grid></Grid></Box>
+                            <TextField 
+                            id="standard-basic" 
+                            sx={{ label: { color: 'white' }}} 
+                            label="Search Rated" 
+                            variant="outlined"
+                            onChange={onChangeSearch}/>
+
+                            {displayedAlbums.map((item, key) => (
                                 <div className="album_display">
-                                    <Box sx={{ width: 600 }}>
-                                        <Grid container spacing={2} alignItems="center">
-                                            <Grid item xs>
-                                                <div className="songInfo">
+                                    <a href={`/albumdetails/${item._id}`}>
+                                        <Box sx={{ width: 900 }}>
+                                            <Grid container spacing={3} alignItems="center">
+                                                <Grid item xs>
+                                                    <div className="album_display_image">
+                                                        <img src= {item.cover_photo}/>
+                                                    </div>
+                                                </Grid><Grid item xs>
                                                     <p>{item.title}</p>
-                                                    <p1>{item.artist}</p1> 
-                                                </div>                                   
-                                            </Grid><Grid item xs>
-                                                <div className="scores">
-                                                    <h1>{item.score}</h1>
-                                                </div>
-                                    </Grid></Grid></Box>
+                                                    <p>{item.artist}</p>
+                                                    <div className="scores">
+                                                        <p>Flow: {item.flow} Lyrics: {item.lyrics}</p>
+                                                        <p>How Captivating: {item.how_captivating}   Originality: {item.originality}</p>
+                                                        <p>Timelessness: {item.timelessness}</p>
+                                                    </div>
+                                                </Grid><Grid item xs>
+                                                    <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p>
+                                        </Grid></Grid></Box>
+                                    </a>
                                 </div>
-                            </a>
-                        ))}
-                    </>
-                )}
+                            ))}
+                        </>
+                    )}
+
+                    {displaySongs && (
+                        <>
+                            <select onChange={(e) => setSortTypeSong(e.target.value)}>
+                                <option value="title">Title</option>
+                                <option value="artist">Artist</option>
+                                <option value="score">Score</option>
+                            </select> 
+                            <Box sx={{ width: 600 }}>
+                                <Grid container spacing={2} alignItems="center">
+                                    <Grid item xs>
+                                        <h2><div onClick={toggle}>Albums</div></h2>
+                                </Grid><Grid item xs>
+                                    <h2> Songs</h2>
+                            </Grid></Grid></Box>
+                            {songData.map((item, key) => (
+                                <a href={`/songdetails/${item._id}`}>
+                                    <div className="album_display">
+                                        <Box sx={{ width: 600 }}>
+                                            <Grid container spacing={2} alignItems="center">
+                                                <Grid item xs>
+                                                    <div className="songInfo">
+                                                        <p>{item.title}</p>
+                                                        <p1>{item.artist}</p1> 
+                                                    </div>                                   
+                                                </Grid><Grid item xs>
+                                                    <div className="scores">
+                                                        <h1>{item.score}</h1>
+                                                    </div>
+                                        </Grid></Grid></Box>
+                                    </div>
+                                </a>
+                            ))}
+                        </>
+                    )}
+
+                
 
             </header>
         </div>
     )
+
 }
 
 

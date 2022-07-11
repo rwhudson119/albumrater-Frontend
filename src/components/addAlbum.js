@@ -168,7 +168,7 @@ const AddAlbum = (props) => {
 
 
     useEffect(() => {
-        const URL = `https://api.deezer.com/album/${params.albumId}`
+        const URL = `http://localhost:4000/deezer/albumid/${params.albumId}`
     
         const GetAlbum = async () => {
 

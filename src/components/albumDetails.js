@@ -53,10 +53,14 @@ const AlbumDetails = (props) => {
     const [timelessness, setTimelessness] = useState(50);
     const [songArrayFinal, setSongArrayFinal] = useState([]);
 
+    const [allUserAlbum, setAllUserAlbum] = useState([]);
+    const [averageRating, setAverageRating] = useState(0);
+
 
     const profile = localStorage.profile
     const navigate  = useNavigate ();
     var songArray = []
+
 
 
 
@@ -143,6 +147,15 @@ const AlbumDetails = (props) => {
             setRelease_Date(event.target.value);
         };
 
+        const getAverageRating = (allUserAlbum) => {
+            var totalRat = 0
+            
+            allUserAlbum.map((item, key) => (
+                totalRat = totalRat + (item.originality + item.flow + item.lyrics + item.how_captivating + item.timelessness)/5
+            ));
+            setAverageRating(totalRat/allUserAlbum.length);
+        };
+
 
 
         const handleUpdate = (e) => {
@@ -194,6 +207,21 @@ const AlbumDetails = (props) => {
             setSongArrayFinal(songArray)
         }
 
+        const getAllAlbumData = async (title) => {
+            const res = await axios({
+                method: 'get',
+                url: `/album/allAlbumsTitle/${title}`,
+                headers: {
+                  'Access-Control-Allow-Origin': '*',
+                },
+            }).then((res) => {
+                console.log(res.data)
+                setAllUserAlbum(res.data)
+                getAverageRating(res.data)
+                
+            })
+        }
+
 
         const getAlbumData = async () => {
             const res = await axios({
@@ -214,6 +242,7 @@ const AlbumDetails = (props) => {
                 setGenre(res.data.genre)
                 setRelease_Date(res.data.release_date)
                 getSongData(res.data.songs)
+                getAllAlbumData(res.data.title)
                 console.log(res.data)
             });
         };
@@ -247,6 +276,7 @@ const AlbumDetails = (props) => {
                     <p> {album.artist}</p>
                     <p> {album.release_date}</p>
                     <p> {album.genre}</p>
+
                 </div>
             )}
             
@@ -476,6 +506,8 @@ const AlbumDetails = (props) => {
                         </Grid>
                     </Box>
                 </div>
+                <p>Current Total: {(originality + flow + lyrics + howCaptivating + timelessness)/5} </p>
+                <p>Average Rating {averageRating. toFixed(2)}</p>
                 <div className="notes">
                     <Box sx={{ width: 250 }}>
                         <Grid container spacing={2} alignItems="center">

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import React from "react";
 import axios from "../services/backendApi.js";
 import { Link, useParams  } from 'react-router-dom';
-import { DeezerCredentials } from '../deezerCred'
 import NavBar from './navBar';
 
 
@@ -13,14 +12,14 @@ const headers = {
 
 const NewAlbum = (props) => {
 
-    const deezer = DeezerCredentials();
     let params = useParams()
 
     const [results, setResults] = useState([]);
 
 
     const GetAlbum = () => {
-        axios.get(`https://api.deezer.com/search/album/?q=album:"${params.album}"`).then(res => {
+        axios.get(`http://localhost:4000/deezer/${params.album}`).then(res => {
+            console.log(res.data.data[0]);
             setResults(res.data.data)
             console.log(res.data.data[0]);
         }
