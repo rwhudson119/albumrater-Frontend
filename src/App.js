@@ -1,4 +1,3 @@
-import logo from './album_logo.png';
 import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -10,9 +9,7 @@ import AddAlbum from './components/addAlbum';
 import AlbumDetails from './components/albumDetails';
 import SongDetails from './components/songDetails';
 import ProfileDetails from './components/profileDetails';
-import CreateAccount from './components/createAccount'
-
-
+import CreateAccount from './components/createAccount';
 
 class App extends Component {
   render() {
@@ -32,5 +29,6 @@ class App extends Component {
     );
   }
 }
+
 
 export default App;
