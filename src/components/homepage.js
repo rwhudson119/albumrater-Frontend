@@ -324,7 +324,7 @@ const HomePage = (props) => {
 
         const GetTopArtist = () => {
             artistScore.slice(0, 1).map((item, key) => (
-                axios.get(`http://localhost:4000/deezer/artist/${artistScore[getMax(artistScore)].name}`).then(res => {
+                axios.get(`https://album-rater-backend.herokuapp.com/deezer/artist/${artistScore[getMax(artistScore)].name}`).then(res => {
                     setTopArtistPhoto(res.data.data[0].picture_big)
                 }
             ))

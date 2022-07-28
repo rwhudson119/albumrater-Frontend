@@ -18,10 +18,9 @@ const NewAlbum = (props) => {
 
 
     const GetAlbum = () => {
-        axios.get(`http://localhost:4000/deezer/${params.album}`).then(res => {
+        axios.get(`https://album-rater-backend.herokuapp.com/deezer/${params.album}`).then(res => {
             console.log(res.data.data[0]);
             setResults(res.data.data)
-            console.log(res.data.data[0]);
         }
     )}
 

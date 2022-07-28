@@ -168,7 +168,7 @@ const AddAlbum = (props) => {
 
 
     useEffect(() => {
-        const URL = `http://localhost:4000/deezer/albumid/${params.albumId}`
+        const URL = `https://album-rater-backend.herokuapp.com/deezer/albumid/${params.albumId}`
     
         const GetAlbum = async () => {
 
