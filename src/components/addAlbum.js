@@ -52,16 +52,12 @@ const AddAlbum = (props) => {
     const [timelessness, setTimelessness] = useState(50);
     const [notes, setNotes] = useState("");
     const [songScores1, setSongScores1] = useState([]);
-    const [songScores, setSongScores] = useState();
 
 
-    const current = new Date();
-    const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
     const profile = localStorage.profile
     const navigate  = useNavigate ();
     var arr = [];
     var songScoresArr = [];
-    //const [ratings, setRatings] = useState("");
     
 
     const handleSliderChangeOriginality = (event, newValue) => {
@@ -187,7 +183,6 @@ const AddAlbum = (props) => {
             setCoverPhoto(res.data.cover_big)
             
             setSongScores1(songScoresArr)
-            console.log("SongScores " + songScores)
             console.log(res.data)
         };
         GetAlbum();
@@ -211,7 +206,7 @@ const AddAlbum = (props) => {
     <div className="App">
         <NavBar />
         <header className="App-header">
-            <img src= {results.cover}/>
+            <img src= {results.cover} alt= ""/>
             {!displayDetails && (
                 <div className="albumInfo">
                     <p> {results.title}</p>

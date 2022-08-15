@@ -53,7 +53,6 @@ const AlbumDetails = (props) => {
     const [timelessness, setTimelessness] = useState(50);
     const [songArrayFinal, setSongArrayFinal] = useState([]);
 
-    const [allUserAlbum, setAllUserAlbum] = useState([]);
     const [averageRating, setAverageRating] = useState(0);
 
 
@@ -66,7 +65,7 @@ const AlbumDetails = (props) => {
 
 
 
-    const CssTextField = styled(TextField)({
+    /*const CssTextField = styled(TextField)({
             '& label.Mui-focused': {
                 color: 'white',
             },
@@ -82,14 +81,9 @@ const AlbumDetails = (props) => {
             '&.MuiInput-input': {
                 color: 'white',
             }
-      });
+      });*/
 
 
-
-
-
-
-    
 
     const handleSliderChangeOriginality = (event, newValue) => {
             setOriginality(newValue);
@@ -216,7 +210,6 @@ const AlbumDetails = (props) => {
                 },
             }).then((res) => {
                 console.log(res.data)
-                setAllUserAlbum(res.data)
                 getAverageRating(res.data)
                 
             })
@@ -269,7 +262,7 @@ const AlbumDetails = (props) => {
     <div className="App">
         <NavBar />
         <header className="App-header">
-            <img src= {album.cover_photo}/>
+            <img src= {album.cover_photo} alt= ""/>
             {!displayDetails && (
                 <div className="albumInfo">
                     <p> {album.title}</p>

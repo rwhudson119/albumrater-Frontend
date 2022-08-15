@@ -3,7 +3,6 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/login';
 import HomePage from './components/homepage';
-import Genres from './SpotifyAPITutorial/SpotifyGenres';
 import NewAlbum from './components/newAlbum';
 import AddAlbum from './components/addAlbum';
 import AlbumDetails from './components/albumDetails';

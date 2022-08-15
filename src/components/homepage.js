@@ -1,37 +1,18 @@
 import { useState, useEffect } from "react";
 import React from "react";
 import axios from "../services/backendApi.js";
-import { Link, useParams  } from 'react-router-dom';
-import logo from '../album_logo.png';
+import { useParams } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import urlencode from 'urlencode';
 import Typography from '@mui/material/Typography';
-import MobileStepper from "@material-ui/core/MobileStepper";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import { useTheme } from "@material-ui/core/styles";
 import NavBar from './navBar';
 //import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { Carousel } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
-import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
-import { LineChart, CharacterDot, Line, CartesianGrid, XAxis, YAxis, Legend } from 'recharts';
-import { SystemUpdate } from "@material-ui/icons";
-import { sizeHeight } from "@mui/system";
-
-
-
-
-
-
-
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Legend } from 'recharts';
 
 
 
@@ -40,66 +21,36 @@ const HomePage = (props) => {
     //definitions --------------------------------------------------------------------
 
     const [albums, setAlbums] = useState([]);
-    const [album, setAlbum] = useState("");
-    const [search, setSearch] = useState("");
     const [albumData, setAlbumData] = useState([]);
     const [sortType, setSortType] = useState('');
-    const [sortTypeType, setSortTypeType] = useState('');
 
     const [songs, setSongs] = useState([]);
-    const [song, setSong] = useState("");
-    const [searchSong, setSearchSong] = useState("");
     const [songData, setSongData] = useState([]);
     const [sortTypeSong, setSortTypeSong] = useState('');
-    const [sortTypeTypeSong, setSortTypeTypeSong] = useState('');
 
     const [displaySongs, setDisplaySongs] = useState(false);
     const [displayStats, setDisplayStats] = useState(false);
 
     const [displayedAlbums, setDisplayedAlbums] = useState([]);
 
-
-
-    const data = [{name: 'Page A', a1: 400, a2: 450, a3: 700},{name: 'Page B', a1: 500, a2: 350, a3: 700}]; 
-
-
     //stats
 
-    const [trendingUp, setTrendingUp] = useState([]);
     const [trendingUpData, setTrendingUpData] = useState([]);
-    const [trendingDown, setTrendingDown] = useState([]);
     const [trendingDownData, setTrendingDownData] = useState([]);
     const [trends, setTrends] = useState([]);
-    const [artistStat, setArtistStat] = useState('');
+    //const [artistStat, setArtistStat] = useState('');
     const [topArtistPhoto, setTopArtistPhoto] = useState('');
     const [artistScore, setArtistScore] = useState([]);
     const [genreScore, setGenreScore] = useState([]);
     const [topAlbums, setTopAlbums] = useState([]);
-    const [topGenreStat, setTopGenreStat] = useState('');
+    //const [topGenreStat, setTopGenreStat] = useState('');
     const [topSongs, setTopSongs] = useState([]);
     const [recentlyRated, setRecentlyRated] = useState([]);
 
-    const [index, setActiveStep] = React.useState(0);
 
-    const theme = useTheme();
-
-    const CollectionSize = 3
 
     var artistScoreTemp = []
     var genreScoreTemp = []
-
-
-    const goToNextPicture = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    };
-
-    const incrimentIndex = () => {
-        if(index < (CollectionSize - 1)){
-            setActiveStep((index) => index + 1);
-        }else{
-            setActiveStep(0)
-        }
-    }; 
 
 
     const StatPanelTU = () => (
@@ -144,9 +95,11 @@ const HomePage = (props) => {
         <div className="top-songs">
             <p>Top Songs</p>
             {topSongs.slice(0, 5).map((item, key) => (
+                <div key = {key}>
                     <Typography gutterBottom>
-                    {item.title} {item.score}
-                </Typography>
+                        {item.title} {item.score}
+                    </Typography>
+                </div>
             ))}
         </div>
       )
@@ -167,15 +120,15 @@ const HomePage = (props) => {
             <p>Top Artist</p>
             {
             artistScore.slice(0, 1).map((item, key) => (
-            <>
-                <img src={topArtistPhoto}></img>
+            <div key={key}>
+                <img src={topArtistPhoto} alt= ""></img>
                 <Typography gutterBottom>
                     {artistScore[getMax(artistScore)].name}
                 </Typography>
                 <Typography gutterBottom>
                     {artistScore[getMax(artistScore)].score.toFixed(2)}
                 </Typography>
-            </>
+            </div>
             ))
         }
         </div>
@@ -185,14 +138,14 @@ const HomePage = (props) => {
         <div className="top-genre">
             <p>Top Genre</p>
             {genreScore.slice(0, 1).map((item, key) => (
-            <>
+            <div key={key}>
                 <Typography gutterBottom>
                     {genreScore[getMax(genreScore)].genre}
                 </Typography>
                 <Typography gutterBottom>
                     {genreScore[getMax(genreScore)].score}
                 </Typography>
-            </>
+            </div>
             ))
         }
         </div>
@@ -201,7 +154,7 @@ const HomePage = (props) => {
 
     //search options
 
-    const types = {
+    /*const types = {
         title: 'title',
         artist: 'artist',
         flow: 'flow',
@@ -216,7 +169,7 @@ const HomePage = (props) => {
         title: 'title',
         artist: 'artist',
         score: 'score',
-    };
+    };*/
 
     //get access to the URL
     let params = useParams()
@@ -235,7 +188,6 @@ const HomePage = (props) => {
 
     const onChangeSearch = (e) => {
         var search = e.target.value;
-        setSearch(search)
         setDisplayedAlbums(albumData)
         setDisplayedAlbums(albumData.filter(obj => {
             return obj.title.toLowerCase().includes(search.toLowerCase()) || obj.artist.toLowerCase().includes(search.toLowerCase())
@@ -282,7 +234,6 @@ const HomePage = (props) => {
         });
         try{
             setTrendingUpData([{name: 'Prev', [trendingUpTemp[0].album.title]: ((trendingUpTemp[0].album.how_captivating + trendingUpTemp[0].album.flow + trendingUpTemp[0].album.lyrics + trendingUpTemp[0].album.originality + trendingUpTemp[0].album.timelessness)/5 - trendingUpTemp[0].trendScore), [trendingUpTemp[1].album.title]: ((trendingUpTemp[1].album.how_captivating + trendingUpTemp[1].album.flow + trendingUpTemp[1].album.lyrics + trendingUpTemp[1].album.originality + trendingUpTemp[1].album.timelessness)/5 - trendingUpTemp[1].trendScore), [trendingUpTemp[2].album.title]: ((trendingUpTemp[2].album.how_captivating + trendingUpTemp[2].album.flow + trendingUpTemp[2].album.lyrics + trendingUpTemp[2].album.originality + trendingUpTemp[2].album.timelessness)/5 - trendingUpTemp[2].trendScore)},{name: 'New', [trendingUpTemp[0].album.title]: (trendingUpTemp[0].album.how_captivating + trendingUpTemp[0].album.flow + trendingUpTemp[0].album.lyrics + trendingUpTemp[0].album.originality + trendingUpTemp[0].album.timelessness)/5, [trendingUpTemp[1].album.title]: (trendingUpTemp[1].album.how_captivating + trendingUpTemp[1].album.flow + trendingUpTemp[1].album.lyrics + trendingUpTemp[1].album.originality + trendingUpTemp[1].album.timelessness)/5, [trendingUpTemp[2].album.title]: (trendingUpTemp[2].album.how_captivating + trendingUpTemp[2].album.flow + trendingUpTemp[2].album.lyrics + trendingUpTemp[2].album.originality + trendingUpTemp[2].album.timelessness)/5}]);
-            setTrendingUp(trendingUpTemp);
         }catch{
             console.log("setTrendUp err")
         }
@@ -296,7 +247,6 @@ const HomePage = (props) => {
             var TDD2 = (trendingDownTemp[1].album.how_captivating + trendingDownTemp[1].album.flow + trendingDownTemp[1].album.lyrics + trendingDownTemp[1].album.originality + trendingDownTemp[1].album.timelessness)/5;
             var TDD3 = (trendingDownTemp[2].album.how_captivating + trendingDownTemp[2].album.flow + trendingDownTemp[2].album.lyrics + trendingDownTemp[2].album.originality + trendingDownTemp[2].album.timelessness)/5;
             setTrendingDownData([{name: 'Prev', [trendingDownTemp[0].album.title]: (TDD1 - trendingDownTemp[1].trendScore), [trendingDownTemp[1].album.title]: (TDD2 - trendingDownTemp[1].trendScore), [trendingDownTemp[2].album.title]: (TDD3 - trendingDownTemp[2].trendScore)},{name: 'New', [trendingDownTemp[0].album.title]: TDD1, [trendingDownTemp[1].album.title]: TDD2, [trendingDownTemp[2].album.title]: TDD3}]);
-            setTrendingDown(trendingDownTemp);
             setDisplayStats(true)
         }catch{
             console.log("trenddown")
@@ -324,7 +274,7 @@ const HomePage = (props) => {
 
         const GetTopArtist = () => {
             artistScore.slice(0, 1).map((item, key) => (
-                axios.get(`https://album-rater-backend.herokuapp.com/deezer/artist/${artistScore[getMax(artistScore)].name}`).then(res => {
+                axios.get(`/deezer/artist/${artistScore[getMax(artistScore)].name}`).then(res => {
                     setTopArtistPhoto(res.data.data[0].picture_big)
                 }
             ))
@@ -374,9 +324,8 @@ const HomePage = (props) => {
     const GetAlbums = () =>{
         axios.get(`/album/${params.profile}`).then(res => {
             setAlbums(res.data);
-            setAlbum(res.data[0]);
             setSortType('title')
-            setSortTypeType(types[sortType])
+            //setSortTypeType(types[sortType])
             res.data.map((item, key) => {
                 GetRankStats(item)
                 getArtistRank(item)
@@ -386,15 +335,10 @@ const HomePage = (props) => {
         });
     }
 
-    const showArray = () => {
-    }
-
     const GetSongs = () =>{
         axios.get(`/song/profile/${params.profile}`).then(res => {
         setSongs(res.data);
-        setSong(res.data[0]);
         setSortTypeSong('title')
-        setSortTypeTypeSong(songTypes[sortTypeSong])
         });
     }
 
@@ -536,7 +480,7 @@ const HomePage = (props) => {
                 {topAlbums.slice(0, 10).map((item, key) => (
                     <div className="top_Album_Individual">
                         {//<a href={`/albumdetails/${item._id}`}>
-                           }   <img src= {item.cover_photo}/>
+                           }   <img src= {item.cover_photo} alt= ""/>
                             <p>{item.title}</p>
                             <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p><br></br>
                             <p>{key + 1}</p>
@@ -555,7 +499,7 @@ const HomePage = (props) => {
                 {recentlyRated.slice(0, 10).map((item, key) => (
                     <div className="top_Album_Individual">
                         {//<a href={`/albumdetails/${item._id}`}>
-                           }   <img src= {item.cover_photo}/>
+                           }   <img src= {item.cover_photo} alt= ""/>
                             <p>{item.title}</p>
                             <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p><br></br>
                             <p>{key + 1}</p>
@@ -603,7 +547,7 @@ const HomePage = (props) => {
                                             <Grid container spacing={3} alignItems="center">
                                                 <Grid item xs>
                                                     <div className="album_display_image">
-                                                        <img src= {item.cover_photo}/>
+                                                        <img src= {item.cover_photo} alt= ""/>
                                                     </div>
                                                 </Grid><Grid item xs>
                                                     <p>{item.title}</p>

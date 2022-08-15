@@ -1,13 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import React from "react";
-import axios from "../services/backendApi.js";
-import { Link } from 'react-router-dom';
 import logo from '../album_logo.png';
-import { alpha, styled } from '@mui/material/styles';
-import classes from '@mui/material/StepConnector/stepConnectorClasses';
 import TextField from '@mui/material/TextField';
-import { createTheme } from '@mui/material/styles';
-import { green, purple } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -20,7 +14,9 @@ function NavBar() {
  
   const navigate  = useNavigate ();
 
-
+/* VISUALS
+import { alpha, styled } from '@mui/material/styles';
+import classes from '@mui/material/StepConnector/stepConnectorClasses';
   const styles = theme => ({
         multilineColor:{
             color:'red'
@@ -43,7 +39,7 @@ function NavBar() {
             borderColor: 'white',
           },
         },
-      });
+      }); 
 
 
 const theme = createTheme({
@@ -55,7 +51,7 @@ const theme = createTheme({
       main: green[500],
     },
   },
-});
+});*/
 
     const [search, setSearch] = useState("");
 
@@ -75,9 +71,11 @@ const theme = createTheme({
                 id="standard-basic" 
                 onKeyPress={(ev) => {
                   console.log(`Pressed keyCode ${ev.key}`);
-                  if (ev.key === 'Enter') {
+                  if (ev.key === 'Enter' && search !== "") {
+                    console.log("SEARCHING... " + search)
                     navigate(`/newalbum/${search}`);
                     ev.preventDefault();
+                    window.location.reload();
                   }
                 }}
                 sx={{ label: { color: 'white' }}} 

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import React from "react";
 import axios from "../services/backendApi.js";
-import { Link, useParams  } from 'react-router-dom';
 import GenreData from './genreData';
 import { Credentials } from './Credentials'
 
@@ -16,7 +15,6 @@ const Genres = (props) => {
         {value: 3, name: 'C'},
     ]
 
-    const [token, setToken] = useState('');
     const [genres, setGenres] = useState([]);
 
     useEffect(() => {
@@ -30,7 +28,6 @@ const Genres = (props) => {
         })
         .then(tokenResponse => {
             console.log(tokenResponse.data.access_token);
-            setToken(tokenResponse.data.access_token);
             
             axios('https://api.spotify.com/v1/browse/categories?locale=sv_US', {
                 method: 'GET',

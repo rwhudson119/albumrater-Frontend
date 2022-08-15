@@ -1,12 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import React from "react";
 import axios from "../services/backendApi.js";
-import logo from '../album_logo.png';
-import { Link, useParams  } from 'react-router-dom';
 import NavBar from './navBar';
 import TextField from '@mui/material/TextField';
-import { createTheme } from '@mui/material/styles';
-import { green, purple } from '@mui/material/colors';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 

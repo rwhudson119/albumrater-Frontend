@@ -9,8 +9,6 @@ import Grid from '@mui/material/Grid';
 import MuiInput from '@mui/material/Input';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import { setSelectionRange } from "@testing-library/user-event/dist/utils";
 import NavBar from './navBar';
 
 
@@ -25,11 +23,8 @@ const SongDetails = (props) => {
 
 
     let params = useParams()
-    const time = new Date().toLocaleString()
 
     const [song, setSong] = useState("");
-    const [artist, setArtist] = useState("");
-    const [title, setTitle] = useState("");
     const [score, setScore] = useState(5);
 
 
@@ -45,14 +40,6 @@ const SongDetails = (props) => {
         const handleInputChangeScore = (event) => {
             setScore(event.target.value === '' ? '' : Number(event.target.value));
         };
-
-        const handleInputChangeTitle = (event) => {
-            setTitle(event.target.value);
-        };
-        const handleInputChangeArtist = (event) => {
-            setArtist(event.target.value);
-        };
-
 
 
         const handleUpdate = (e) => {

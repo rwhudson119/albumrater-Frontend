@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
 import React from "react";
 import axios from "../services/backendApi.js";
-import { Link } from 'react-router-dom';
 import logo from '../album_logo.png';
 import { useNavigate } from 'react-router-dom';
 
 import TextField from '@mui/material/TextField';
-import { createTheme } from '@mui/material/styles';
-import { green, purple } from '@mui/material/colors';
 
 
 function Login() {

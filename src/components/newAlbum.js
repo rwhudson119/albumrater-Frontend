@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import React from "react";
 import axios from "../services/backendApi.js";
-import { Link, useParams  } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import NavBar from './navBar';
 
 
-const headers = {
+/*const headers = {
     "Access-Control-Allow-Origins": "*"
-}
+}*/
 
 
 const NewAlbum = (props) => {
@@ -18,7 +18,7 @@ const NewAlbum = (props) => {
 
 
     const GetAlbum = () => {
-        axios.get(`https://album-rater-backend.herokuapp.com/deezer/${params.album}`).then(res => {
+        axios.get(`/deezer/${params.album}`).then(res => {
             console.log(res.data.data[0]);
             setResults(res.data.data)
         }
@@ -38,7 +38,7 @@ const NewAlbum = (props) => {
                 <>
                     <p> {item.title} {item.artist.name}</p> 
 
-                    <a href={`/addalbum/${item.id}`}><img src= {item.cover}/> </a>
+                    <a href={`/addalbum/${item.id}`}><img src= {item.cover} alt= ""/> </a>
                 </>
             ))}
         </header>
