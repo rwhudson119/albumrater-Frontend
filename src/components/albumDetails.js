@@ -162,19 +162,17 @@ const AlbumDetails = (props) => {
 
             console.log("songs: " + songArrayFinal)
 
-            {songArrayFinal.map((item, key) => (
-                console.log("HELLO"),
-                console.log(item._id),
+            songArrayFinal.map((item, key) => (
                 axios.post(`/song/update/${item._id}`, 
                 {score: item.score} ).then((res) => {
                     console.log(res)
-                })))}
+                })))
 
 
             var ratings = []
-            {album.ratings.map((item, key) => (
+            album.ratings.map((item, key) => (
                 ratings.push(item)
-            ))}
+            ))
             ratings.push(time)
             console.log(originality + "   " + flow + "   " + lyrics + "   " + howCaptivating + "   " + timelessness + "   " + ratings)
             axios.post(`/album/update/${params.albumId}`, 
@@ -189,20 +187,20 @@ const AlbumDetails = (props) => {
 
         const getSongData = async (albumSongs) => {
             console.log(albumSongs)
-            {albumSongs.map((item, key) => (
+            albumSongs.map((item, key) => (
                 axios.get(`/song/${item}`)
                 .then((res) => {
                     songArray[key] = res.data
                     //console.log("song: " + res.data.title + " score: " + res.data.score)
                 })
 
-            ))}
+            ))
             console.log(songArray)
             setSongArrayFinal(songArray)
         }
 
         const getAllAlbumData = async (title) => {
-            const res = await axios({
+            await axios({
                 method: 'get',
                 url: `/album/allAlbumsTitle/${title}`,
                 headers: {
@@ -217,7 +215,7 @@ const AlbumDetails = (props) => {
 
 
         const getAlbumData = async () => {
-            const res = await axios({
+            await axios({
                 method: 'get',
                 url: `/album/oneAlbum/${params.albumId}`,
                 headers: {

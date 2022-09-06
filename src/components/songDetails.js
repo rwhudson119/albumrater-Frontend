@@ -26,8 +26,9 @@ const SongDetails = (props) => {
 
     const [song, setSong] = useState("");
     const [score, setScore] = useState(5);
+    const [parentAlbum, setParentAlbum] = useState({});
 
-
+    var tempParentAlbum = [];
     const profile = localStorage.profile
     const navigate  = useNavigate ();
 
@@ -52,19 +53,48 @@ const SongDetails = (props) => {
 
     }
 
+
+    const getSongData = async (albarr) => {
+        axios.get(`/song/${params.songId}`)
+        .then((res) => {
+            console.log(res.data)
+            
+            setSong(res.data)
+            setScore(res.data.score)
+            getDaddyAlbum(res.data);
+        })
+        console.log(song)
+    }
+    
+    const findChildSong = (albumArray, song) => {
+        console.log(song)
+        albumArray.map((item) => {
+            var songArray = item.songs
+            
+            if(songArray.indexOf(song.id.toString()) > -1) {
+                tempParentAlbum.push(item);
+            }
+        })
+        setParentAlbum(tempParentAlbum[0])
+    }
+
+    const getDaddyAlbum = async (song) => {
+        axios.get(`/album/${localStorage.profile}`)
+        .then((res) => {
+            findChildSong(res.data, song)
+        })
+    }
+    
+
     useEffect(() => {
 
+        
 
-        const getSongData = async () => {
-                axios.get(`/song/${params.songId}`)
-                .then((res) => {
-                    setSong(res.data)
-                    setScore(res.data.score)
-                })
-            console.log(song)
-        }
-        getSongData()
-
+        getSongData();
+        
+        
+        
+        
     }, []);
 
 
@@ -80,6 +110,11 @@ const SongDetails = (props) => {
                     </div>
                 );
     }
+    if(parentAlbum == null){
+        console.log("Returning null");
+    return null;
+}
+    
 
     return (
     <div className="App">
@@ -126,6 +161,15 @@ const SongDetails = (props) => {
             </div>
 
             <Button variant="Contained" onClick = {handleUpdate}>Update Rating</Button>
+            
+            <Typography id="input-slider" gutterBottom>
+                    From: 
+                    <a href={`/albumdetails/${parentAlbum._id}`}>
+                    <div> 
+                        <p>{parentAlbum.title}</p>
+                    </div>
+                </a>
+                </Typography>
         
         </header>
     </div>

@@ -13,6 +13,7 @@ import { Carousel } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Legend } from 'recharts';
+import _ from 'underscore';
 
 
 
@@ -46,6 +47,7 @@ const HomePage = (props) => {
     //const [topGenreStat, setTopGenreStat] = useState('');
     const [topSongs, setTopSongs] = useState([]);
     const [recentlyRated, setRecentlyRated] = useState([]);
+    const [averageDiff, setAverageDiff] = useState({});
 
 
 
@@ -110,6 +112,7 @@ const HomePage = (props) => {
             if(item.score > array[max].score){
                 max = key
             }
+            return 0;
         })
         return max;
     }
@@ -125,9 +128,6 @@ const HomePage = (props) => {
                 <Typography gutterBottom>
                     {artistScore[getMax(artistScore)].name}
                 </Typography>
-                <Typography gutterBottom>
-                    {artistScore[getMax(artistScore)].score.toFixed(2)}
-                </Typography>
             </div>
             ))
         }
@@ -142,11 +142,29 @@ const HomePage = (props) => {
                 <Typography gutterBottom>
                     {genreScore[getMax(genreScore)].genre}
                 </Typography>
-                <Typography gutterBottom>
-                    {genreScore[getMax(genreScore)].score}
-                </Typography>
             </div>
             ))
+        }
+        </div>
+      )
+
+      const StatPanelAD = () => (
+        <div className="average-difference">
+            <p>You're Special</p>
+            {
+            <div>
+                <Typography gutterBottom>
+                    {averageDiff.album}
+                </Typography>
+                <Typography gutterBottom>
+                    <p>You rated it: {averageDiff.profScore} </p>
+                </Typography>
+                <Typography gutterBottom>
+                    <p>Average Rating:    {averageDiff.averageScore} </p>
+                </Typography>
+                
+            </div>
+            
         }
         </div>
       )
@@ -273,12 +291,17 @@ const HomePage = (props) => {
     };
 
         const GetTopArtist = () => {
+            try{
             artistScore.slice(0, 1).map((item, key) => (
                 axios.get(`/deezer/artist/${artistScore[getMax(artistScore)].name}`).then(res => {
+                    console.log(res.data.data[0])
                     setTopArtistPhoto(res.data.data[0].picture_big)
                 }
             ))
-        )}
+        )}catch{
+            console.log("unable to find artist")
+        }
+    }
 
 
 
@@ -292,6 +315,7 @@ const HomePage = (props) => {
             if(item.name === singularAlbum.artist){
                 bool = key
             }
+            return 0;
         })
         const totalScore = (singularAlbum.originality + singularAlbum.flow + singularAlbum.lyrics + singularAlbum.how_captivating + singularAlbum.timelessness)/5
         if(bool > -1){
@@ -308,6 +332,7 @@ const HomePage = (props) => {
             if(item.genre === singularAlbum.genre){
                 bool = key
             }
+            return 0;
         })
         const totalScore = (singularAlbum.originality + singularAlbum.flow + singularAlbum.lyrics + singularAlbum.how_captivating + singularAlbum.timelessness)/5
         if(bool > -1){
@@ -316,6 +341,7 @@ const HomePage = (props) => {
             genreScoreTemp.push({genre: singularAlbum.genre, score: totalScore})
         }
         setGenreScore(genreScoreTemp)
+        return 0;
     }
 
 
@@ -330,15 +356,89 @@ const HomePage = (props) => {
                 GetRankStats(item)
                 getArtistRank(item)
                 getGenreRank(item)
+                return 0;
             })
             //sortArtistRank()
         });
+        return 0;
     }
 
     const GetSongs = () =>{
         axios.get(`/song/profile/${params.profile}`).then(res => {
         setSongs(res.data);
         setSortTypeSong('title')
+        });
+    }
+    
+    const GetAverageDiff = (albums) => {
+        var sumScore = 0, profileVal = -1;
+        try{
+        albums.map((item, key) => {
+            var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness)/5)
+            if(item.profile === params.profile){
+                profileVal = totalScore
+            }else{
+                sumScore = sumScore + totalScore
+            }
+            return 0;
+        })
+        
+        if(profileVal === -1){
+            return 0;
+        }else{
+            if(albums.length - 1 > 0){
+                //console.log((sumScore/(albums.length - 1)) - profileVal)
+                return (sumScore/(albums.length - 1)) - profileVal
+            }else{
+            return 0
+            }
+            
+        }
+        
+        }catch{
+            console.log("nope" + params.profile);
+        }
+        return 0;
+    }
+
+    const UseVariationStats = (everyAlbum) => {
+        //return an object with the average rating and the profile rating so i can display it easier
+        const diffSort = everyAlbum.sort((a,b) => { return Math.abs(GetAverageDiff(b)) - Math.abs(GetAverageDiff(a))});
+        //console.log(diffSort)
+        //console.log("sorted ratings diff^^")
+        
+        var averageScore = 0, profileScore = 0;
+        diffSort[0].map((item, key) => {
+            var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness)/5)
+            if(item.profile === params.profile){
+                profileScore = totalScore
+            }else{
+                averageScore = averageScore + totalScore
+                console.log(item);
+            }
+            return 0;
+        })
+
+        var testobj = { album: diffSort[0][0].title, averageScore: averageScore, profScore: profileScore}
+
+
+        setAverageDiff(testobj);
+     
+        //console.log("HERE:")
+        //console.log(averageDiff)
+        //console.log("THERE^^")
+    }
+
+    const GetVariationStats = (albums) => {        
+        axios.get(`/album/`).then(res => {
+            
+            const albumsSingular = _.groupBy(res.data, function(alb){ return alb.title});
+            const albumsSingVal = Object.values(albumsSingular);
+
+            UseVariationStats(albumsSingVal);
+            //console.log("var start");
+            //console.log(albumsSingVal);
+            //console.log(albums);
         });
     }
 
@@ -432,6 +532,7 @@ const HomePage = (props) => {
           sortArrayTopSongs();
           sortSongArray(sortTypeSong);
           GetTopArtist();
+          GetVariationStats(albums);
 
     }, [sortTypeSong]) 
 
@@ -467,6 +568,10 @@ const HomePage = (props) => {
                         <Carousel.Item>
                         <div className="stats-buttonless">
                         <StatPanelTG /></div>
+                        </Carousel.Item>
+                        <Carousel.Item>
+                        <div className="stats-buttonless">
+                        <StatPanelAD /></div>
                         </Carousel.Item>
                     </Carousel>
                 </div>
@@ -509,9 +614,7 @@ const HomePage = (props) => {
                 ))}
                 </div>
                     
-            
-                <a href={`/homepage/${profile}`}></a>
-                
+                            
                 
                     {!displaySongs && (
                         <>

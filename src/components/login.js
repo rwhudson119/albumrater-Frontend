@@ -27,6 +27,7 @@ function Login() {
             }else if(found === false){
                 setUsernameValid(false)
             }
+            return 0;
         })
     }
 
@@ -69,7 +70,7 @@ function Login() {
                 )}
                 {!usernameValid && (
                     <>
-                        <a className="App-link">Login</a>
+                        <p className="App-link">Login</p>
                     </>
                 )}
                 <a className="App-link" href= {`/createAccount`}>Create Account</a>

@@ -117,8 +117,8 @@ const AddAlbum = (props) => {
         };
 
         const showArray = (event) => {
-            console.log("array" + songScoresArr)
-            console.log("array2" + songScores1)
+            console.log(songScoresArr)
+            console.log(songScores1)
         }
 
 
@@ -139,20 +139,19 @@ const AddAlbum = (props) => {
 
             setSongScores1(songScoresArr)
             console.log(setSongScores1)
-            {results.tracks.data.map((item, key) => {
+            results.tracks.data.map((item, key) => {
                 if(songScores1[key] != null){
                     axios.post("/song/add",
                     {title: item.title, artist: results.artist.name, id: item.id, score: songScores1[key], profile: profile} )
                 }
-            })
-            
-            };
+                return 0;
+            });
 
             //formulate tracks into 
 
-            {results.tracks.data.map((item, key) => (
+            results.tracks.data.map((item, key) => (
                 arr.push(item.id)
-            ))}
+            ))
             const ratings = [time]
             axios.post("/album/add", 
                 {title: title, profile: profile, artist: artist, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, notes: notes, ratings: ratings, songs: arr} ).then((res) => {
@@ -365,7 +364,7 @@ const AddAlbum = (props) => {
                         <Grid container spacing={2} alignItems="center">
                             <Grid item xs>
                             <Slider
-                                value={typeof lyrics === 'number' ? lyrics : 50}
+                                value={typeof lyrics === 'number' ? lyrics : 0}
                                 onChange={handleSliderChangeLyrics}
                                 aria-labelledby="input-slider"
                             />
@@ -397,7 +396,7 @@ const AddAlbum = (props) => {
                         <Grid container spacing={2} alignItems="center">
                             <Grid item xs>
                             <Slider
-                                value={typeof howCaptivating === 'number' ? howCaptivating : 50}
+                                value={typeof howCaptivating === 'number' ? howCaptivating : 0}
                                 onChange={handleSliderChangeHowCaptivating}
                                 aria-labelledby="input-slider"
                             />
