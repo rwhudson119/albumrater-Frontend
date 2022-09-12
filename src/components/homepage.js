@@ -56,42 +56,32 @@ const HomePage = (props) => {
 
 
     const StatPanelTU = () => (
-          <div className="trending-up">
-                <p>Trending Up</p>
-                
-                {displayStats &&
-                <LineChart width={500} height={300} data={trendingUpData}>
-                    <CartesianGrid stroke="#ccc" />
-                    <XAxis dataKey="name" tick={{fontSize: "18px"}}/>
-                    <YAxis yAxisId="left" domain={[50, 80]} tick={{fontSize: "18px"}}/>
-                    <Legend wrapperStyle={{top: 275, left: 0, fontSize: "18px"}} />
-                    <Line yAxisId="left" type="monotone" dataKey= {Object.getOwnPropertyNames(trendingUpData[0])[1]} stroke="#8884d8"/>
-                    <Line yAxisId="left" type="monotone" dataKey={Object.getOwnPropertyNames(trendingUpData[0])[2]} stroke="#FFA500" />
-                    <Line yAxisId="left" type="monotone" dataKey={Object.getOwnPropertyNames(trendingUpData[0])[3]} stroke="#00FF00" />
+        <div className="trending-up">
+            <p>Trending Up</p>
+            {
+                displayStats &&
+                <>
+                    <img src={trendingUpData[0].album.cover_photo} alt= ""></img><p>{trendingUpData[0].album.title} +{trendingUpData[0].change}</p>
+                    <img src={trendingUpData[1].album.cover_photo} alt= ""></img><p>{trendingUpData[1].album.title} +{trendingUpData[1].change}</p>
+                    <img src={trendingUpData[2].album.cover_photo} alt= ""></img><p>{trendingUpData[2].album.title} +{trendingUpData[2].change}</p>
+                </>
+            }
+        </div>
+    )
 
-
-                </LineChart>
-                }
-            </div>
-      )
-
-      const StatPanelTD = () => (
-          <div className="trending-down">
-                <p>Trending Down</p>
-
-                 {displayStats &&
-                    <LineChart width={500} height={300} data={trendingDownData}>
-                        <CartesianGrid stroke="#ccc" />
-                        <XAxis dataKey="name" tick={{fontSize: "18px"}}/>
-                        <YAxis yAxisId="left" domain={[40, 100]} tick={{fontSize: "18px"}}/>
-                        <Legend wrapperStyle={{top: 295, left: 0, fontSize: "18px"}}/>
-                        <Line yAxisId="left" type="monotone" dataKey= {Object.getOwnPropertyNames(trendingDownData[0])[1]} stroke="#8884d8" />
-                        <Line yAxisId="left" type="monotone" dataKey={Object.getOwnPropertyNames(trendingDownData[0])[2]} stroke="#FFA500" />
-                        <Line yAxisId="left" type="monotone" dataKey={Object.getOwnPropertyNames(trendingDownData[0])[3]} stroke="#00FF00" />
-                    </LineChart>
-                }
-            </div>
-      )
+    const StatPanelTD = () => (
+        <div className="trending-down">
+            <p>Trending Down</p>
+            {
+                displayStats &&
+                <>
+                    <img src={trendingDownData[0].album.cover_photo} alt= ""></img><p>{trendingDownData[0].album.title} {trendingDownData[0].change}</p>
+                    <img src={trendingDownData[1].album.cover_photo} alt= ""></img><p>{trendingDownData[1].album.title} {trendingDownData[1].change}</p>
+                    <img src={trendingDownData[2].album.cover_photo} alt= ""></img><p>{trendingDownData[2].album.title} {trendingDownData[2].change}</p>
+                </>
+            }
+        </div>
+    )
 
       const StatPanelTS = () => (
         <div className="top-songs">
@@ -246,12 +236,18 @@ const HomePage = (props) => {
     };
 
     const sortArrayTrend = (trendsTemp) => {
+        var TUDTst;
 
         const trendingUpTemp = [...trendsTemp].sort((a, b) => {
             return b.trendScore- a.trendScore;
         });
         try{
-            setTrendingUpData([{name: 'Prev', [trendingUpTemp[0].album.title]: ((trendingUpTemp[0].album.how_captivating + trendingUpTemp[0].album.flow + trendingUpTemp[0].album.lyrics + trendingUpTemp[0].album.originality + trendingUpTemp[0].album.timelessness)/5 - trendingUpTemp[0].trendScore), [trendingUpTemp[1].album.title]: ((trendingUpTemp[1].album.how_captivating + trendingUpTemp[1].album.flow + trendingUpTemp[1].album.lyrics + trendingUpTemp[1].album.originality + trendingUpTemp[1].album.timelessness)/5 - trendingUpTemp[1].trendScore), [trendingUpTemp[2].album.title]: ((trendingUpTemp[2].album.how_captivating + trendingUpTemp[2].album.flow + trendingUpTemp[2].album.lyrics + trendingUpTemp[2].album.originality + trendingUpTemp[2].album.timelessness)/5 - trendingUpTemp[2].trendScore)},{name: 'New', [trendingUpTemp[0].album.title]: (trendingUpTemp[0].album.how_captivating + trendingUpTemp[0].album.flow + trendingUpTemp[0].album.lyrics + trendingUpTemp[0].album.originality + trendingUpTemp[0].album.timelessness)/5, [trendingUpTemp[1].album.title]: (trendingUpTemp[1].album.how_captivating + trendingUpTemp[1].album.flow + trendingUpTemp[1].album.lyrics + trendingUpTemp[1].album.originality + trendingUpTemp[1].album.timelessness)/5, [trendingUpTemp[2].album.title]: (trendingUpTemp[2].album.how_captivating + trendingUpTemp[2].album.flow + trendingUpTemp[2].album.lyrics + trendingUpTemp[2].album.originality + trendingUpTemp[2].album.timelessness)/5}]);
+            var trendingUpDataTest1 = {album: trendingUpTemp[0].album, change: trendingUpTemp[0].trendScore}
+            var trendingUpDataTest2 = {album: trendingUpTemp[1].album, change: trendingUpTemp[1].trendScore}
+            var trendingUpDataTest3 = {album: trendingUpTemp[2].album, change: trendingUpTemp[2].trendScore}
+            TUDTst = [trendingUpDataTest1,trendingUpDataTest2,trendingUpDataTest3]
+
+            setTrendingUpData(TUDTst);
         }catch{
             console.log("setTrendUp err")
         }
@@ -261,10 +257,21 @@ const HomePage = (props) => {
         });
         
         try{
-            var TDD1 = (trendingDownTemp[0].album.how_captivating + trendingDownTemp[0].album.flow + trendingDownTemp[0].album.lyrics + trendingDownTemp[0].album.originality + trendingDownTemp[0].album.timelessness)/5;
+
+            var trendingDownDataTest1 = {album: trendingDownTemp[0].album, change: trendingDownTemp[0].trendScore}
+            var trendingDownDataTest2 = {album: trendingDownTemp[1].album, change: trendingDownTemp[1].trendScore}
+            var trendingDownDataTest3 = {album: trendingDownTemp[2].album, change: trendingDownTemp[2].trendScore}
+            TUDTst = [trendingDownDataTest1,trendingDownDataTest2,trendingDownDataTest3]
+
+            setTrendingDownData(TUDTst);
+
+
+
+
+            /*var TDD1 = (trendingDownTemp[0].album.how_captivating + trendingDownTemp[0].album.flow + trendingDownTemp[0].album.lyrics + trendingDownTemp[0].album.originality + trendingDownTemp[0].album.timelessness)/5;
             var TDD2 = (trendingDownTemp[1].album.how_captivating + trendingDownTemp[1].album.flow + trendingDownTemp[1].album.lyrics + trendingDownTemp[1].album.originality + trendingDownTemp[1].album.timelessness)/5;
             var TDD3 = (trendingDownTemp[2].album.how_captivating + trendingDownTemp[2].album.flow + trendingDownTemp[2].album.lyrics + trendingDownTemp[2].album.originality + trendingDownTemp[2].album.timelessness)/5;
-            setTrendingDownData([{name: 'Prev', [trendingDownTemp[0].album.title]: (TDD1 - trendingDownTemp[1].trendScore), [trendingDownTemp[1].album.title]: (TDD2 - trendingDownTemp[1].trendScore), [trendingDownTemp[2].album.title]: (TDD3 - trendingDownTemp[2].trendScore)},{name: 'New', [trendingDownTemp[0].album.title]: TDD1, [trendingDownTemp[1].album.title]: TDD2, [trendingDownTemp[2].album.title]: TDD3}]);
+            setTrendingDownData([{name: 'Prev', [trendingDownTemp[0].album.title]: (TDD1 - trendingDownTemp[1].trendScore), [trendingDownTemp[1].album.title]: (TDD2 - trendingDownTemp[1].trendScore), [trendingDownTemp[2].album.title]: (TDD3 - trendingDownTemp[2].trendScore)},{name: 'New', [trendingDownTemp[0].album.title]: TDD1, [trendingDownTemp[1].album.title]: TDD2, [trendingDownTemp[2].album.title]: TDD3}]);*/
             setDisplayStats(true)
         }catch{
             console.log("trenddown")
@@ -456,6 +463,7 @@ const HomePage = (props) => {
                     arrayTemp.push({album: singularAlbum, trendScore: (rating1 - rating2)})
                     setTrends(arrayTemp)
                     sortArrayTrend(arrayTemp)
+                    
                     
                 })
             })
