@@ -147,6 +147,11 @@ a:visited {
   padding-bottom: 2%;
  }
 
+
+ .average-difference img{
+  max-width: 30%;
+ }
+
  /* Navbar          */
 
  
@@ -267,5 +272,6 @@ nav{
 .alterDetails {
   font-size: 20px;
 }
+
 
 
