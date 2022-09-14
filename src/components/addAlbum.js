@@ -11,6 +11,8 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import NavBar from './navBar';
+import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
+//import { SettingsSuggestIcon } from "@mui/icons-material";
 
 
 
@@ -212,6 +214,9 @@ const AddAlbum = (props) => {
                     <p> {results.artist.name}</p>
                     <p> {results.release_date}</p>
                     <p> {results.genres.data[0].name}</p>
+                    <div className="alterDetails" onClick={toggle}>
+                        <SettingsSuggestIcon />
+                    </div>
                 </div>
             )}
 
@@ -239,19 +244,16 @@ const AddAlbum = (props) => {
                             <TextField id="standard-basic" label="Genre" variant="standard" onChange={handleInputChangeGenre} defaultValue={results.genres.data[0].name}/>
                         </Grid>
                     </div>
+                    <div className="alterDetails" onClick={toggle}>
+                        <p>Done</p>
+                    </div>
                 </div>
+                
             )}
 
-            <div className="boxTitle" onClick={toggle}>
-                Change Details
-            </div>
 
-            <div className="boxTitle" onClick={toggleSongs}>
-                Show Songs
-            </div>
-
-            <div className="boxTitle" onClick={showArray}>
-                Show array
+            <div className="alterDetails" onClick={toggleSongs}>
+                <p>Rate Songs</p>
             </div>
             
 

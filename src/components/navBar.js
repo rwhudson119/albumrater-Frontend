@@ -86,7 +86,6 @@ const theme = createTheme({
                 <ul class="nav-links">
                     <li><a href={`/homepage/${profile}`}>Home</a></li>
                     <li><a href={`/profiledetails/`}>Profile</a></li>
-                    <li><a href={`/homepage/${profile}`}>Data</a></li>
                     <li><a href={`/`}>Logout</a></li>
                     
                 </ul>

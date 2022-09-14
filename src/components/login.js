@@ -83,10 +83,11 @@ function Login() {
                     <p>Ask Robbie :)</p>
                 )}
                 </div>
+                {/*}
                 <h2>Profiles</h2>
                 {profiles.map((item, key) => (
                     <a className="App-link" href= {`/homepage/${item._id}`} >{item.username}</a>
-                ))}
+                ))} */}
             </header>
         </div>
     )

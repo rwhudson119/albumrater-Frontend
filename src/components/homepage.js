@@ -12,7 +12,6 @@ import NavBar from './navBar';
 import { Carousel } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'pure-react-carousel/dist/react-carousel.es.css';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Legend } from 'recharts';
 import _ from 'underscore';
 
 
@@ -273,13 +272,6 @@ const HomePage = (props) => {
 
             setTrendingDownData(TUDTst);
 
-
-
-
-            /*var TDD1 = (trendingDownTemp[0].album.how_captivating + trendingDownTemp[0].album.flow + trendingDownTemp[0].album.lyrics + trendingDownTemp[0].album.originality + trendingDownTemp[0].album.timelessness)/5;
-            var TDD2 = (trendingDownTemp[1].album.how_captivating + trendingDownTemp[1].album.flow + trendingDownTemp[1].album.lyrics + trendingDownTemp[1].album.originality + trendingDownTemp[1].album.timelessness)/5;
-            var TDD3 = (trendingDownTemp[2].album.how_captivating + trendingDownTemp[2].album.flow + trendingDownTemp[2].album.lyrics + trendingDownTemp[2].album.originality + trendingDownTemp[2].album.timelessness)/5;
-            setTrendingDownData([{name: 'Prev', [trendingDownTemp[0].album.title]: (TDD1 - trendingDownTemp[1].trendScore), [trendingDownTemp[1].album.title]: (TDD2 - trendingDownTemp[1].trendScore), [trendingDownTemp[2].album.title]: (TDD3 - trendingDownTemp[2].trendScore)},{name: 'New', [trendingDownTemp[0].album.title]: TDD1, [trendingDownTemp[1].album.title]: TDD2, [trendingDownTemp[2].album.title]: TDD3}]);*/
             setDisplayStats(true)
         }catch{
             console.log("trenddown")
@@ -602,8 +594,8 @@ const HomePage = (props) => {
                     <div className="top_Album_Individual">
                         {//<a href={`/albumdetails/${item._id}`}>
                            }   <img src= {item.cover_photo} alt= ""/>
-                            <p>{key + 1}</p>
-                            <p>{item.title}</p>
+                            <p>{key + 1}</p><br></br>
+                            <p>{item.title}</p><br></br>
                             <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p><br></br>
                         {//</a>
                         }
@@ -621,7 +613,7 @@ const HomePage = (props) => {
                     <div className="top_Album_Individual">
                         {//<a href={`/albumdetails/${item._id}`}>
                            }   <img src= {item.cover_photo} alt= ""/>
-                            <p>{item.title}</p>
+                            <p>{item.title}</p><br></br>
                             <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p><br></br>
                         {//</a>
                         }
