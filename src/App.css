@@ -10,6 +10,10 @@
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 15s linear;
+    padding: 5% 5% 5% 5%;
+    max-width: 40%;
+    width: 40%;
+    height: auto;
   }
 }
 
@@ -250,7 +254,15 @@ nav{
 }
 
 
+.graphText {
+  font-size: 15px;
+  color: white;
+}
 
+.login_text {
+  font-size: 20px;
+
+}
 
 
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, PureComponent } from "react";
 import axios from "../services/backendApi.js";
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +11,10 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import NavBar from './navBar';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import urlencode from 'urlencode';
+
+
 
 
 
@@ -52,6 +56,9 @@ const AlbumDetails = (props) => {
     const [howCaptivating, setHowCaptivating] = useState(50);
     const [timelessness, setTimelessness] = useState(50);
     const [songArrayFinal, setSongArrayFinal] = useState([]);
+    const [ratingData, setRatingData] = useState([]);
+
+    const ratingDataTesttt = [{name: '15/03/2022, 12:08:43', score: 65.8}, {name: '15/03/2022, 12:09:43', score: 60.8}]
 
     const [averageRating, setAverageRating] = useState(0);
 
@@ -157,7 +164,7 @@ const AlbumDetails = (props) => {
             const totalScore = (originality + flow + lyrics + howCaptivating + timelessness)/5
             axios.post("/rating/add",
                 {date: time, total_score: totalScore, notes: notes} ).then((res) => {
-                console.log(res)
+                //console.log(res)
             });
 
             console.log("songs: " + songArrayFinal)
@@ -165,7 +172,7 @@ const AlbumDetails = (props) => {
             songArrayFinal.map((item, key) => (
                 axios.post(`/song/update/${item._id}`, 
                 {score: item.score} ).then((res) => {
-                    console.log(res)
+                    //console.log(res)
                 })))
 
 
@@ -174,28 +181,39 @@ const AlbumDetails = (props) => {
                 ratings.push(item)
             ))
             ratings.push(time)
-            console.log(originality + "   " + flow + "   " + lyrics + "   " + howCaptivating + "   " + timelessness + "   " + ratings)
+            //console.log(originality + "   " + flow + "   " + lyrics + "   " + howCaptivating + "   " + timelessness + "   " + ratings)
             axios.post(`/album/update/${params.albumId}`, 
                 {title: title, artist: artist, genre: genre, release_date: release_date, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, ratings: ratings, notes: notes} ).then((res) => {
-                    console.log(res)
+                    //console.log(res)
                     navigate(`/homepage/${profile}`);
                 });
     }
+
+    class CustomizedLabel extends PureComponent {
+        render() {
+          const { x, y, stroke, value } = this.props;
+      
+          return (
+            <text className="graphText" x={x} y={y} dy={-4} fill={stroke} stroke="white" strokeWidth=".5px" textAnchor="middle">
+              {value}
+            </text>
+          );
+        }
+      }
+
 
     useEffect(() => {
 
 
         const getSongData = async (albumSongs) => {
-            console.log(albumSongs)
+            //console.log(albumSongs)
             albumSongs.map((item, key) => (
                 axios.get(`/song/${item}`)
                 .then((res) => {
                     songArray[key] = res.data
-                    //console.log("song: " + res.data.title + " score: " + res.data.score)
                 })
 
             ))
-            console.log(songArray)
             setSongArrayFinal(songArray)
         }
 
@@ -207,11 +225,40 @@ const AlbumDetails = (props) => {
                   'Access-Control-Allow-Origin': '*',
                 },
             }).then((res) => {
-                console.log(res.data)
                 getAverageRating(res.data)
                 
             })
         }
+
+        const getRating = async (rating) => {
+            await axios({
+                method: 'get',
+                url: `/rating/date/${urlencode(rating)}`,
+                headers: {
+                'Access-Control-Allow-Origin': '*',
+                },
+            }).then((res) => {
+                console.log(res.data.total_score) 
+                var ratingDataTest = ratingData
+                ratingDataTest.push({name: rating.split(' ')[0], score: res.data.total_score})
+                setRatingData(ratingDataTest)
+
+            })
+        }
+
+        const getAllRatings = async (ratings) => {
+            ratings.map((rating, key) => (
+                getRating(rating)
+            ))
+            var ratingDataSorted = ratingData
+            ratingDataSorted.sort((a, b) => {
+                return new Date(a.name) - new Date(b.name);
+            });
+            setRatingData(ratingDataSorted)
+            console.log("Sorted")
+            console.log(ratingDataSorted)
+        }
+        
 
 
         const getAlbumData = async () => {
@@ -222,6 +269,7 @@ const AlbumDetails = (props) => {
                   'Access-Control-Allow-Origin': '*',
                 },
             }).then((res) => {
+                getAllRatings(res.data.ratings)
                 setAlbum(res.data);
                 setOriginality(res.data.originality)
                 setFlow(res.data.flow)
@@ -234,7 +282,7 @@ const AlbumDetails = (props) => {
                 setRelease_Date(res.data.release_date)
                 getSongData(res.data.songs)
                 getAllAlbumData(res.data.title)
-                console.log(res.data)
+                
             });
         };
 
@@ -511,6 +559,21 @@ const AlbumDetails = (props) => {
                 <Button variant="Contained" onClick = {handleUpdate}>Update Rating</Button>
             </div>
             )}
+
+            {ratingData[1] && (
+                console.log("DADTATD"),
+                 console.log(ratingData),
+                 console.log(ratingDataTesttt),
+                <>
+                    <LineChart width={500} height={300} data={ratingData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" tick={{fontSize: "15px"}} padding={{ left: 10, right: 10 }}/>
+                        <YAxis yAxisId="left" domain={[0, 100]} tick={{fontSize: "18px"}}/>
+                        <Line yAxisId="left" type="Cardinal" dataKey= "score" stroke="#1976d2" strokeWidth="3px" label={<CustomizedLabel />}/>
+                    </LineChart>
+                </>
+            )}
+           
                             
         </header>
     </div>

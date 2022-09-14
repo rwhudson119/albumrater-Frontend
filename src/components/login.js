@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import React from "react";
 import axios from "../services/backendApi.js";
-import logo from '../album_logo.png';
+import logo from '../album_logo_crop.png';
 import { useNavigate } from 'react-router-dom';
 
 import TextField from '@mui/material/TextField';
@@ -11,10 +11,13 @@ function Login() {
     const [profiles, setProfiles] = useState([]);
     const [usernameID, setUsernameID] = useState("");
     const [usernameValid, setUsernameValid] = useState(false);
+    const [forgotUsername, setForgotUsername] = useState(false);
 
     const navigate  = useNavigate ();
 
-
+    function toggleFU() {
+        setForgotUsername(forgotUsername => !forgotUsername);
+    }
 
     const onChangeUsername = (e) => {
         const username = e.target.value;
@@ -73,7 +76,13 @@ function Login() {
                         <p className="App-link">Login</p>
                     </>
                 )}
+                <div className="login_text">
                 <a className="App-link" href= {`/createAccount`}>Create Account</a>
+                <p><div onClick={toggleFU} >Forgot Username?</div></p>
+                {forgotUsername && (
+                    <p>Ask Robbie :)</p>
+                )}
+                </div>
                 <h2>Profiles</h2>
                 {profiles.map((item, key) => (
                     <a className="App-link" href= {`/homepage/${item._id}`} >{item.username}</a>
