@@ -13,7 +13,7 @@ import TextField from '@mui/material/TextField';
 import NavBar from './navBar';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 import urlencode from 'urlencode';
-
+import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 
 
 
@@ -315,7 +315,9 @@ const AlbumDetails = (props) => {
                     <p> {album.artist}</p>
                     <p> {album.release_date}</p>
                     <p> {album.genre}</p>
-
+                    <div className="alterDetails" onClick={toggle}>
+                        <SettingsSuggestIcon />
+                    </div>
                 </div>
             )}
             
@@ -341,15 +343,14 @@ const AlbumDetails = (props) => {
                             <TextField id="standard-basic" label="Genre" variant="standard" onChange={handleInputChangeGenre} defaultValue={album.genre}/>
                         </Grid>
                     </div>
+                    <div className="boxTitle" onClick={toggle}>
+                        Done
+                    </div>
                 </div>
             )}
 
-            <div className="boxTitle" onClick={toggle}>
-                Change Details
-            </div>
-
-            <div className="boxTitle" onClick={toggleSongs}>
-                Show songs
+            <div className="alterDetails" onClick={toggleSongs}>
+                <p>Rate songs</p>
             </div>
                 
             {displaySongs && (

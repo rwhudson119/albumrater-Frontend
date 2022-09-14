@@ -13,6 +13,8 @@ import { Carousel } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import _ from 'underscore';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 
 
 
@@ -63,17 +65,17 @@ const HomePage = (props) => {
                     <Grid container spacing={3} alignItems="center">
                         <Grid item xs={3}><img src={trendingUpData[0].album.cover_photo} alt= ""></img></Grid>
                         <Grid item xs={6}><p>{trendingUpData[0].album.title}</p></Grid>
-                        <Grid item xs={3}><p>+{trendingUpData[0].change.toFixed(2)}</p></Grid>
+                        <Grid item xs={3}><p><TrendingUpIcon /> {trendingUpData[0].change.toFixed(2)}</p></Grid>
                     </Grid>
                     <Grid container spacing={3} alignItems="center">
                         <Grid item xs={3}><img src={trendingUpData[1].album.cover_photo} alt= ""></img></Grid>
                         <Grid item xs={6}><p>{trendingUpData[1].album.title}</p></Grid>
-                        <Grid item xs={3}><p>+{trendingUpData[1].change.toFixed(2)}</p></Grid>
+                        <Grid item xs={3}><p> <TrendingUpIcon /> {trendingUpData[1].change.toFixed(2)}</p></Grid>
                     </Grid>
                     <Grid container spacing={3} alignItems="center">
                         <Grid item xs={3}><img src={trendingUpData[2].album.cover_photo} alt= ""></img></Grid>
                         <Grid item xs={6}><p>{trendingUpData[2].album.title}</p></Grid>
-                        <Grid item xs={3}><p>+{trendingUpData[2].change.toFixed(2)}</p></Grid>
+                        <Grid item xs={3}><p><TrendingUpIcon /> {trendingUpData[2].change.toFixed(2)}</p></Grid>
                     </Grid>
                 </div>
             }
@@ -89,15 +91,15 @@ const HomePage = (props) => {
                     <Grid container spacing={3} alignItems="center">
                         <Grid item xs={3}><img src={trendingDownData[0].album.cover_photo} alt= ""></img></Grid>
                         <Grid item xs={6}><p>{trendingDownData[0].album.title}</p></Grid>
-                        <Grid item xs={3}><p>{trendingDownData[0].change.toFixed(2)}</p></Grid>
+                        <Grid item xs={3}><p><TrendingDownIcon /> {trendingDownData[0].change.toFixed(2)}</p></Grid>
                     </Grid><Grid container spacing={3} alignItems="center">
                         <Grid item xs={3}><img src={trendingDownData[1].album.cover_photo} alt= ""></img></Grid>
                         <Grid item xs={6}><p>{trendingDownData[1].album.title}</p></Grid>
-                        <Grid item xs={3}><p>{trendingDownData[1].change.toFixed(2)}</p></Grid>
+                        <Grid item xs={3}><p><TrendingDownIcon /> {trendingDownData[1].change.toFixed(2)}</p></Grid>
                     </Grid><Grid container spacing={3} alignItems="center">
                     <Grid item xs={3}><img src={trendingDownData[2].album.cover_photo} alt= ""></img></Grid>
                     <Grid item xs={6}><p>{trendingDownData[2].album.title}</p></Grid>
-                    <Grid item xs={3}><p>{trendingDownData[2].change.toFixed(2)}</p></Grid>
+                    <Grid item xs={3}><p> <TrendingDownIcon /> {trendingDownData[2].change.toFixed(2)}</p></Grid>
                     </Grid>
                 </div>
             }
