@@ -102,19 +102,45 @@ a:visited {
 
  .stats-buttonless {
    height: 520px;
-   width: 630px;
-   padding: 0 100px
+   width: 800px;
+   padding: 0 00px
  }
 
 
  /* statsss   */
+ .data_title{
+  padding: 15% 15% 5% 15%;
+  font-size: 23px;
+ }
+ .trending{
+  padding-top: 5%;
+  font-size: 20px;
+ }
+
+ .trending img{
+  max-width: 80%;
+ }
 
  .top-artist img{
    max-width: 50%;
  }
 
+ .top-genre{
+  padding-top: 15%;
+  font-size: 25px;
+ }
+
  .legend {
    top: 80px;
+ }
+
+ .top-songs{
+  padding-top: 5%;
+  font-size: 20px;
+ }
+
+ .top-songs p{
+  padding-bottom: 2%;
  }
 
  /* Navbar          */
@@ -172,7 +198,7 @@ nav{
   text-align: center;
   padding: 14px;
   text-decoration: none;
-  max-height: 290px;
+  max-height: 110px;
 }
 .top_Albums img {
   display: inline-block;

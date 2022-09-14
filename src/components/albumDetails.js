@@ -497,7 +497,7 @@ const AlbumDetails = (props) => {
                         </Grid>
                     </Box>
                 </div>
-                <p>Current Total: {(originality + flow + lyrics + howCaptivating + timelessness)/5} </p>
+                <p>Current Total: {((originality + flow + lyrics + howCaptivating + timelessness)/5).toFixed(2)} </p>
                 <p>Average Rating {averageRating.toFixed(2)}</p>
                 <div className="notes">
                     <Box sx={{ width: 250 }}>

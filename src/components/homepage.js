@@ -56,46 +56,125 @@ const HomePage = (props) => {
 
 
     const StatPanelTU = () => (
-        <div className="trending-up">
+        <div className="data_title">
             <p>Trending Up</p>
             {
                 displayStats &&
-                <>
-                    <img src={trendingUpData[0].album.cover_photo} alt= ""></img><p>{trendingUpData[0].album.title} +{trendingUpData[0].change}</p>
-                    <img src={trendingUpData[1].album.cover_photo} alt= ""></img><p>{trendingUpData[1].album.title} +{trendingUpData[1].change}</p>
-                    <img src={trendingUpData[2].album.cover_photo} alt= ""></img><p>{trendingUpData[2].album.title} +{trendingUpData[2].change}</p>
-                </>
+                <div className="trending">
+                    <Grid container spacing={3} alignItems="center">
+                        <Grid item xs={3}><img src={trendingUpData[0].album.cover_photo} alt= ""></img></Grid>
+                        <Grid item xs={6}><p>{trendingUpData[0].album.title}</p></Grid>
+                        <Grid item xs={3}><p>+{trendingUpData[0].change.toFixed(2)}</p></Grid>
+                    </Grid>
+                    <Grid container spacing={3} alignItems="center">
+                        <Grid item xs={3}><img src={trendingUpData[1].album.cover_photo} alt= ""></img></Grid>
+                        <Grid item xs={6}><p>{trendingUpData[1].album.title}</p></Grid>
+                        <Grid item xs={3}><p>+{trendingUpData[1].change.toFixed(2)}</p></Grid>
+                    </Grid>
+                    <Grid container spacing={3} alignItems="center">
+                        <Grid item xs={3}><img src={trendingUpData[2].album.cover_photo} alt= ""></img></Grid>
+                        <Grid item xs={6}><p>{trendingUpData[2].album.title}</p></Grid>
+                        <Grid item xs={3}><p>+{trendingUpData[2].change.toFixed(2)}</p></Grid>
+                    </Grid>
+                </div>
             }
         </div>
     )
 
     const StatPanelTD = () => (
-        <div className="trending-down">
+        <div className="data_title">
             <p>Trending Down</p>
             {
                 displayStats &&
-                <>
-                    <img src={trendingDownData[0].album.cover_photo} alt= ""></img><p>{trendingDownData[0].album.title} {trendingDownData[0].change}</p>
-                    <img src={trendingDownData[1].album.cover_photo} alt= ""></img><p>{trendingDownData[1].album.title} {trendingDownData[1].change}</p>
-                    <img src={trendingDownData[2].album.cover_photo} alt= ""></img><p>{trendingDownData[2].album.title} {trendingDownData[2].change}</p>
-                </>
+                <div className="trending">
+                    <Grid container spacing={3} alignItems="center">
+                        <Grid item xs={3}><img src={trendingDownData[0].album.cover_photo} alt= ""></img></Grid>
+                        <Grid item xs={6}><p>{trendingDownData[0].album.title}</p></Grid>
+                        <Grid item xs={3}><p>{trendingDownData[0].change.toFixed(2)}</p></Grid>
+                    </Grid><Grid container spacing={3} alignItems="center">
+                        <Grid item xs={3}><img src={trendingDownData[1].album.cover_photo} alt= ""></img></Grid>
+                        <Grid item xs={6}><p>{trendingDownData[1].album.title}</p></Grid>
+                        <Grid item xs={3}><p>{trendingDownData[1].change.toFixed(2)}</p></Grid>
+                    </Grid><Grid container spacing={3} alignItems="center">
+                    <Grid item xs={3}><img src={trendingDownData[2].album.cover_photo} alt= ""></img></Grid>
+                    <Grid item xs={6}><p>{trendingDownData[2].album.title}</p></Grid>
+                    <Grid item xs={3}><p>{trendingDownData[2].change.toFixed(2)}</p></Grid>
+                    </Grid>
+                </div>
             }
         </div>
     )
 
       const StatPanelTS = () => (
-        <div className="top-songs">
+        <div className="data_title">
             <p>Top Songs</p>
-            {topSongs.slice(0, 5).map((item, key) => (
+        <div className="top-songs">
+            {topSongs.slice(0, 3).map((item, key) => (
                 <div key = {key}>
-                    <Typography gutterBottom>
-                        {item.title} {item.score}
-                    </Typography>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={8}><p> {item.title} </p> </Grid>
+                        
+                    <Grid item xs={4}><p>{item.score}</p> </Grid> 
+                </Grid>
                 </div>
             ))}
-        </div>
+        </div></div>
       )
 
+      const StatPanelTA = () => (
+        <div className="data_title">
+            <p>Top Artist</p>
+        <div className="top-artist">
+            {artistScore.slice(0, 1).map((item, key) => (
+            <div key={key}>
+                <img src={topArtistPhoto} alt= ""></img>
+                <Typography gutterBottom>
+                    {artistScore[getMax(artistScore)].name}
+                </Typography>
+            </div>
+            ))
+        }
+        </div></div>
+      )
+
+      const StatPanelTG = () => (
+        <div className="data_title">
+            <p>Top Genre</p>
+        <div className="top-genre">
+            {genreScore.slice(0, 1).map((item, key) => (
+            <div key={key}>
+                <p>{genreScore[getMax(genreScore)].genre}</p>
+            </div>
+            ))
+        }
+        </div></div>
+      )
+
+      const StatPanelAD = () => (
+        <div className="data_title">
+            <p>You're Special</p>
+        <div className="average-difference">
+            {
+            <div>
+                <img src={averageDiff.albumImage} alt= ""></img>
+                <p>
+                    {averageDiff.album}
+                    </p>
+                <Typography gutterBottom>
+                    <p>You rated it: {averageDiff.profScore} </p>
+                </Typography>
+                <Typography gutterBottom>
+                    <p>Average Rating:    {averageDiff.averageScore} </p>
+                </Typography>
+                
+            </div>
+            
+        }
+        </div></div>
+      )
+
+
+      
     const getMax = (array) => {
         var max = 0
         array.map((item, key) => {
@@ -107,77 +186,6 @@ const HomePage = (props) => {
         return max;
     }
 
-
-      const StatPanelTA = () => (
-        <div className="top-artist">
-            <p>Top Artist</p>
-            {
-            artistScore.slice(0, 1).map((item, key) => (
-            <div key={key}>
-                <img src={topArtistPhoto} alt= ""></img>
-                <Typography gutterBottom>
-                    {artistScore[getMax(artistScore)].name}
-                </Typography>
-            </div>
-            ))
-        }
-        </div>
-      )
-
-      const StatPanelTG = () => (
-        <div className="top-genre">
-            <p>Top Genre</p>
-            {genreScore.slice(0, 1).map((item, key) => (
-            <div key={key}>
-                <Typography gutterBottom>
-                    {genreScore[getMax(genreScore)].genre}
-                </Typography>
-            </div>
-            ))
-        }
-        </div>
-      )
-
-      const StatPanelAD = () => (
-        <div className="average-difference">
-            <p>You're Special</p>
-            {
-            <div>
-                <Typography gutterBottom>
-                    {averageDiff.album}
-                </Typography>
-                <Typography gutterBottom>
-                    <p>You rated it: {averageDiff.profScore} </p>
-                </Typography>
-                <Typography gutterBottom>
-                    <p>Average Rating:    {averageDiff.averageScore} </p>
-                </Typography>
-                
-            </div>
-            
-        }
-        </div>
-      )
-
-
-    //search options
-
-    /*const types = {
-        title: 'title',
-        artist: 'artist',
-        flow: 'flow',
-        lyrics: 'lyrics',
-        how_captivating: 'how_captivating',
-        originality: 'originality',
-        timelessness: 'timelessness',
-        total_score: 'total',
-    };
-
-    const songTypes = {
-        title: 'title',
-        artist: 'artist',
-        score: 'score',
-    };*/
 
     //get access to the URL
     let params = useParams()
@@ -426,7 +434,7 @@ const HomePage = (props) => {
             return 0;
         })
 
-        var testobj = { album: diffSort[0][0].title, averageScore: averageScore, profScore: profileScore}
+        var testobj = { album: diffSort[0][0].title, averageScore: averageScore, profScore: profileScore, albumImage: diffSort[0][0].cover_photo}
 
 
         setAverageDiff(testobj);
@@ -556,7 +564,7 @@ const HomePage = (props) => {
                 </h1>
 
                 <div className="album-stats-entire">
-                    <Carousel>
+                    <Carousel slide={false}>
                         <Carousel.Item>
                         <div className="stats-buttonless">
                         <StatPanelTU /></div>
@@ -594,9 +602,9 @@ const HomePage = (props) => {
                     <div className="top_Album_Individual">
                         {//<a href={`/albumdetails/${item._id}`}>
                            }   <img src= {item.cover_photo} alt= ""/>
+                            <p>{key + 1}</p>
                             <p>{item.title}</p>
                             <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p><br></br>
-                            <p>{key + 1}</p>
                         {//</a>
                         }
                     </div>
@@ -615,7 +623,6 @@ const HomePage = (props) => {
                            }   <img src= {item.cover_photo} alt= ""/>
                             <p>{item.title}</p>
                             <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p><br></br>
-                            <p>{key + 1}</p>
                         {//</a>
                         }
                     </div>
