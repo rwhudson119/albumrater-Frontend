@@ -8,6 +8,7 @@ import Grid from '@mui/material/Grid';
 import urlencode from 'urlencode';
 import Typography from '@mui/material/Typography';
 import NavBar from './navBar';
+import Foot from './footer';
 //import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { Carousel } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -61,6 +62,7 @@ const HomePage = (props) => {
             <p>Trending Up</p>
             {
                 displayStats &&
+                trendingUpData[0] !== [] &&
                 <div className="trending">
                     <Grid container spacing={3} alignItems="center">
                         <Grid item xs={3}><img src={trendingUpData[0].album.cover_photo} alt= ""></img></Grid>
@@ -78,7 +80,14 @@ const HomePage = (props) => {
                         <Grid item xs={3}><p><TrendingUpIcon /> {trendingUpData[2].change.toFixed(2)}</p></Grid>
                     </Grid>
                 </div>
+            }{
+                displayStats &&
+                trendingUpData === [] &&
+                <div className="trending">
+                    <p>change some songs buddy</p>
+                </div>
             }
+
         </div>
     )
 
@@ -153,7 +162,7 @@ const HomePage = (props) => {
 
       const StatPanelAD = () => (
         <div className="data_title">
-            <p>You're Special</p>
+            <p>Where you stand out</p>
         <div className="average-difference">
             {
             <div>
@@ -193,6 +202,9 @@ const HomePage = (props) => {
     var profile = params.profile
     localStorage.clear();
     localStorage.profile = profile
+    console.log("PROFILE")
+    console.log(profile)
+    console.log(localStorage.profile)
 
     //functions ----------------------------------------------------------------------
 
@@ -251,14 +263,18 @@ const HomePage = (props) => {
             return b.trendScore- a.trendScore;
         });
         try{
+            console.log("KHJEBGFSakbs")
             var trendingUpDataTest1 = {album: trendingUpTemp[0].album, change: trendingUpTemp[0].trendScore}
             var trendingUpDataTest2 = {album: trendingUpTemp[1].album, change: trendingUpTemp[1].trendScore}
             var trendingUpDataTest3 = {album: trendingUpTemp[2].album, change: trendingUpTemp[2].trendScore}
             TUDTst = [trendingUpDataTest1,trendingUpDataTest2,trendingUpDataTest3]
 
             setTrendingUpData(TUDTst);
+        
         }catch{
+            console.log("KHJEBGFSakbs")
             console.log("setTrendUp err")
+            setTrendingUpData([])
         }
 
         const trendingDownTemp = [...trendsTemp].sort((a, b) => {
@@ -416,7 +432,7 @@ const HomePage = (props) => {
         //console.log(diffSort)
         //console.log("sorted ratings diff^^")
         
-        var averageScore = 0, profileScore = 0;
+        var averageScore = 0, profileScore = -1;
         diffSort[0].map((item, key) => {
             var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness)/5)
             if(item.profile === params.profile){
@@ -445,30 +461,31 @@ const HomePage = (props) => {
             const albumsSingVal = Object.values(albumsSingular);
 
             UseVariationStats(albumsSingVal);
-            //console.log("var start");
-            //console.log(albumsSingVal);
-            //console.log(albums);
         });
     }
 
     const GetRankStats = (singularAlbum) => {
-        var rating1 = 0
-        var rating2 = 0
+        var rating1 = 0, rating2 = 0
 
         if((singularAlbum.ratings.length) > 1){
 
             axios.get(`/rating/date/${urlencode(singularAlbum.ratings[singularAlbum.ratings.length - 1])}`).then(res => {
                 rating1 = res.data.total_score  
                 axios.get(`/rating/date/${urlencode(singularAlbum.ratings[singularAlbum.ratings.length - 2])}`).then(res2 => {
+                    console.log("is this even working")
                     rating2 = res2.data.total_score
                     var arrayTemp = trends
                     arrayTemp.push({album: singularAlbum, trendScore: (rating1 - rating2)})
+                    
                     setTrends(arrayTemp)
                     sortArrayTrend(arrayTemp)
                     
                     
                 })
             })
+        }else{
+            setTrendingUpData([])
+            setTrendingDownData([])
         }
 
         
@@ -559,30 +576,41 @@ const HomePage = (props) => {
 
                 <div className="album-stats-entire">
                     <Carousel slide={false}>
-                        <Carousel.Item>
-                        <div className="stats-buttonless">
-                        <StatPanelTU /></div>
-                        </Carousel.Item>
-                        <Carousel.Item>
-                        <div className="stats-buttonless">
-                        <StatPanelTD /></div>
-                        </Carousel.Item>
-                        <Carousel.Item>
-                        <div className="stats-buttonless">
-                        <StatPanelTS /></div>
-                        </Carousel.Item>
+                        {artistScore[0] &&
                         <Carousel.Item>
                         <div className="stats-buttonless">
                         <StatPanelTA /></div>
                         </Carousel.Item>
+                        }{!artistScore[0] &&
+                        <div className="stats-buttonless">
+                        <p>Rate some Albums to view your stats</p></div>
+                        }
+                        {genreScore[0] &&
                         <Carousel.Item>
                         <div className="stats-buttonless">
                         <StatPanelTG /></div>
                         </Carousel.Item>
+                        }{(averageDiff.profScore !== -1) &&
                         <Carousel.Item>
                         <div className="stats-buttonless">
                         <StatPanelAD /></div>
                         </Carousel.Item>
+                        }{topSongs[0] &&
+                            <Carousel.Item>
+                            <div className="stats-buttonless">
+                            <StatPanelTS /></div>
+                            </Carousel.Item>
+                        }{trendingUpData[0] &&
+                            <Carousel.Item>
+                            <div className="stats-buttonless">
+                            <StatPanelTU /></div>
+                            </Carousel.Item>
+                        }{trendingDownData[0] &&
+                        <Carousel.Item>
+                        <div className="stats-buttonless">
+                        <StatPanelTD /></div>
+                        </Carousel.Item>
+                        }
                     </Carousel>
                 </div>
 
@@ -713,9 +741,10 @@ const HomePage = (props) => {
                         </>
                     )}
 
-                
-
             </header>
+
+            <Foot />
+
         </div>
     )
 

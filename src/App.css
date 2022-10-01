@@ -18,6 +18,7 @@
 }
 
 .App-header {
+  padding: 5% 0% 10% 0%;
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -107,7 +108,7 @@ a:visited {
  .stats-buttonless {
    height: 520px;
    width: 800px;
-   padding: 0 00px
+   font-size: 20px;
  }
 
 
@@ -197,17 +198,18 @@ nav{
   position: relative;
   height:0%;
   max-block-size: 290px;
+  width: 300px;
+  height: 290px;
 }
 
 .top_Album_Individual p {
   position: relative;
-  top: -275px;
+  text-align: center;
   display: none;
   color: white;
-  text-align: center;
   padding: 14px;
   text-decoration: none;
-  max-height: 110px;
+  max-height: 100px;
 }
 .top_Albums img {
   display: inline-block;
@@ -220,6 +222,8 @@ nav{
 }
 
 
+
+
 .top_Album_Individual:hover img {
   display: inline-block;
   color: white;
@@ -227,7 +231,7 @@ nav{
   padding: 14px;
   text-decoration: none;
   min-width: 300px;
-  opacity: 50%;
+  opacity: 30%;
 }
 .top_Album_Individual:hover p {
   position: relative;
@@ -273,5 +277,26 @@ nav{
   font-size: 20px;
 }
 
+
+/*footer                                                  */
+
+.padding_foot {
+  padding-top: 10%;
+}
+
+
+.footer {
+  background-color: black;
+
+}
+
+.footer p {
+  color: white;
+}
+
+.footer_logo {
+  padding-top: 1%;
+  max-width: 60px;
+}
 
 

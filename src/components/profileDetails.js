@@ -9,6 +9,7 @@ import NavBar from './navBar';
 const ProfileDetails = () => {
 
     const profileId = localStorage.profile
+    console.log(profileId)
 
     const [profile, setProfile] = useState("");
     const [albums, setAlbums] = useState("");
@@ -25,11 +26,8 @@ const ProfileDetails = () => {
     const GetAlbums = () =>{
         axios.get(`/album/${profileId}`).then(res => {
             setAlbums(res.data);
-        });
-    }
-    const GetRatings = () =>{
-        axios.get(`/rating`).then(res => {
-            setRatings(res.data);
+            ComputeRatings(res.data);
+            console.log(ratings)
         });
     }
     const GetSongs = () =>{
@@ -37,11 +35,20 @@ const ProfileDetails = () => {
             setSongs(res.data);
         });
     }
+
+    const ComputeRatings = (resAlbums) => {
+        var totalRatings = 0;
+        resAlbums.map((item, key) => {
+            totalRatings = totalRatings + item.ratings.length
+        })
+        setRatings(totalRatings); 
+    }
+
     useEffect(() => {
         GetProfiles();
         GetAlbums();
-        GetRatings();
         GetSongs();
+        
     }, [])
     return (
         <div className="App">
@@ -51,7 +58,7 @@ const ProfileDetails = () => {
                 <p>{profile.username}</p>
                 <p>Number of Albums: {albums.length}</p>
                 <p>Number of Songs: {songs.length}</p>
-                <p>Number of Ratings: {ratings.length}</p>
+                <p>Number of Ratings: {ratings}</p>
             </header>
         </div>
     )
