@@ -100,7 +100,7 @@ a:visited {
  }
 
  .album-stats-entire {
-   padding: 0 0 50px 0;
+   padding: 0 0 5% 0;
  }
 
  /*homepage                                                              */
@@ -117,6 +117,68 @@ a:visited {
   padding: 15% 15% 5% 15%;
   font-size: 23px;
  }
+
+/* mobile */
+@media (max-width: 400px){
+  .trending{
+    width: 300px;
+   }
+  .trending img{
+    width: 100%;
+   }
+
+   .top-songs{
+    width: 300px;
+   }
+   .top-songs p{
+    font-size: 15px;
+   }
+
+   .album-list-entire {
+    width: 400px;
+   }
+
+   .album_display_image img {
+    width: 100%;
+   }
+   .album_display {
+    width: 400px;
+   }
+   .album-display-box {
+    width: 400;
+   }
+   .album_display p{
+    font-size: 12px;
+   }
+
+   .scores p {
+    font-size: 10px;
+   }
+
+
+   .albums-songs-toggle-box {
+    width: 400;
+  }
+
+  .data_title{
+    max-width: 400px;
+  }
+
+  .stats-buttonless{
+    max-width: 400px;
+  }
+
+}
+
+.albums-songs-toggle-box {
+  width: 900;
+}
+
+.album-display-box {
+  width: 900;
+}
+
+
  .trending{
   padding-top: 5%;
   font-size: 20px;

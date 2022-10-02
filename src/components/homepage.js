@@ -654,7 +654,7 @@ const HomePage = (props) => {
                             
                 
                     {!displaySongs && (
-                        <>
+                        <div className="album-list-entire">
 
                         <select onChange={(e) => setSortType(e.target.value)}>
                             <option value="title">Title</option>
@@ -666,7 +666,7 @@ const HomePage = (props) => {
                             <option value="timelessness">Timelessness</option>
                             <option value="total_score">Total</option>
                         </select> 
-                            <Box sx={{ width: 600 }}>
+                            <Box className="albums-songs-toggle-box">
                                 <Grid container spacing={2} alignItems="center">
                                     <Grid item xs>
                                         <h2>Albums</h2>
@@ -683,7 +683,7 @@ const HomePage = (props) => {
                             {displayedAlbums.map((item, key) => (
                                 <div className="album_display">
                                     <a href={`/albumdetails/${item._id}`}>
-                                        <Box sx={{ width: 900 }}>
+                                        <Box className="album-display-box">
                                             <Grid container spacing={3} alignItems="center">
                                                 <Grid item xs>
                                                     <div className="album_display_image">
@@ -703,7 +703,7 @@ const HomePage = (props) => {
                                     </a>
                                 </div>
                             ))}
-                        </>
+                        </div>
                     )}
 
                     {displaySongs && (
