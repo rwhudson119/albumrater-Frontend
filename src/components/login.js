@@ -3,7 +3,7 @@ import React from "react";
 import axios from "../services/backendApi.js";
 import logo from '../album_logo_crop.png';
 import { useNavigate } from 'react-router-dom';
-
+import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
 
@@ -64,18 +64,20 @@ function Login() {
                         }
                       ev.preventDefault();
                     }
-                  }}
-                  />
-                {usernameValid && (
-                    <>
-                        <a className="App-link" href= {`/homepage/${usernameID}`}>Login</a>
-                    </>
-                )}
-                {!usernameValid && (
-                    <>
-                        <p className="App-link">Login</p>
-                    </>
-                )}
+                }}
+                />
+                <div className="userLogin">
+                    {usernameValid && (
+                        <div classname="badUser">
+                            <Button variant="outlined"  onClick={() => { navigate(`/homepage/${usernameID}`)}} >Login</Button>
+                        </div>
+                    )}
+                    {!usernameValid && (
+                        <>
+                            <Button variant="outlined" color="error">Login</Button>
+                        </>
+                    )}
+                </div>
                 <div className="login_text">
                 <a className="App-link" href= {`/createAccount`}>Create Account</a>
                 <p><div onClick={toggleFU} >Forgot Username?</div></p>

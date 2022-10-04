@@ -335,7 +335,7 @@ const AlbumDetails = (props) => {
     <div className="App">
         <NavBar />
         <header className="App-header">
-            <img src= {album.cover_photo} alt= ""/>
+            <img className="album_deets_image" src= {album.cover_photo} alt= ""/>
             {!displayDetails && (
                 <div className="albumInfo">
                     <p> {album.title}</p>

@@ -249,7 +249,7 @@ const AddAlbum = (props) => {
     <div className="App">
         <NavBar />
         <header className="App-header">
-            <img src= {results.cover} alt= ""/>
+            <img className="album_deets_image" src= {results.cover} alt= ""/>
             {!displayDetails && (
                 <div className="albumInfo">
                     <p> {results.title}</p>

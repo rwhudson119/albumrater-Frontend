@@ -622,13 +622,13 @@ const HomePage = (props) => {
                 
                 {topAlbums.slice(0, 10).map((item, key) => (
                     <div className="top_Album_Individual">
-                        {//<a href={`/albumdetails/${item._id}`}>
-                           }   <img src= {item.cover_photo} alt= ""/>
+                        <a href={`/albumdetails/${item._id}`}>
+                              <img src= {item.cover_photo} alt= ""/>
                             <p>{key + 1}</p><br></br>
                             <p>{item.title}</p><br></br>
                             <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p><br></br>
-                        {//</a>
-                        }
+                        </a>
+                        
                     </div>
                 ))}
                 </div>
@@ -641,12 +641,12 @@ const HomePage = (props) => {
                 
                 {recentlyRated.slice(0, 10).map((item, key) => (
                     <div className="top_Album_Individual">
-                        {//<a href={`/albumdetails/${item._id}`}>
-                           }   <img src= {item.cover_photo} alt= ""/>
+                        <a href={`/albumdetails/${item._id}`}>
+                              <img src= {item.cover_photo} alt= ""/>
                             <p>{item.title}</p><br></br>
                             <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p><br></br>
-                        {//</a>
-                        }
+                        </a>
+                        
                     </div>
                 ))}
                 </div>

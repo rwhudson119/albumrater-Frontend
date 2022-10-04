@@ -11,8 +11,7 @@
   .App-logo {
     animation: App-logo-spin infinite 15s linear;
     padding: 5% 5% 5% 5%;
-    max-width: 40%;
-    width: 40%;
+    width: 30vw;
     height: auto;
   }
 }
@@ -168,6 +167,10 @@ a:visited {
     max-width: 400px;
   }
 
+  .album_deets_image{
+    max-width: 60%;
+  }
+
 }
 
 .albums-songs-toggle-box {
@@ -284,8 +287,6 @@ nav{
 }
 
 
-
-
 .top_Album_Individual:hover img {
   display: inline-block;
   color: white;
@@ -333,6 +334,10 @@ nav{
 .login_text {
   font-size: 20px;
 
+}
+
+.userLogin{
+  padding: 1vh 0 1vh 0;
 }
 
 .alterDetails {
