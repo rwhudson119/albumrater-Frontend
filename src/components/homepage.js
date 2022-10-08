@@ -7,6 +7,13 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import urlencode from 'urlencode';
 import Typography from '@mui/material/Typography';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import { makeStyles } from '@mui/styles';
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
+
 import NavBar from './navBar';
 import Foot from './footer';
 //import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -55,6 +62,8 @@ const HomePage = (props) => {
 
     var artistScoreTemp = []
     var genreScoreTemp = []
+    
+
 
 
     const StatPanelTU = () => (
@@ -564,7 +573,6 @@ const HomePage = (props) => {
     }, [sortTypeSong]) 
 
     //Whats Displaying ----------------------------------------------------------------------------------------
-
     return (
         <div className="App">
             <NavBar />
@@ -654,25 +662,34 @@ const HomePage = (props) => {
                             
                 
                     {!displaySongs && (
-                        <div className="album-list-entire">
+                        <>
 
-                        <select onChange={(e) => setSortType(e.target.value)}>
-                            <option value="title">Title</option>
-                            <option value="artist">Artist</option>
-                            <option value="flow">Flow</option>
-                            <option value="lyrics">Lyrics</option>
-                            <option value="how_captivating">How Captivating</option>
-                            <option value="originality">Originality</option>
-                            <option value="timelessness">Timelessness</option>
-                            <option value="total_score">Total</option>
-                        </select> 
-                            <Box className="albums-songs-toggle-box">
+                        
+
+
+                        <FormControl sx={{ m: 1, minWidth: 150 }}>
+
+                        <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
+                        <Select value={sortType}  variant="filled"
+                            onChange={(e) => setSortType(e.target.value)} color="primary">
+                                <MenuItem  value="title">Title</MenuItem >
+                                <MenuItem  value="artist">Artist</MenuItem >
+                                <MenuItem  value="flow">Flow</MenuItem >
+                                <MenuItem  value="lyrics">Lyrics</MenuItem >
+                                <MenuItem  value="how_captivating">How Captivating</MenuItem >
+                                <MenuItem  value="originality">Originality</MenuItem >
+                                <MenuItem  value="timelessness">Timelessness</MenuItem >
+                                <MenuItem  value="total_score">Total</MenuItem >
+
+                            </Select></FormControl>
+
+                            <div className="toggle_box">
                                 <Grid container spacing={2} alignItems="center">
                                     <Grid item xs>
                                         <h2>Albums</h2>
                                     </Grid><Grid item xs>
-                                        <h2><div onClick={toggle}>Songs</div></h2>
-                            </Grid></Grid></Box>
+                                        <h2 onClick={toggle}>Songs</h2>
+                            </Grid></Grid></div>
                             <TextField 
                             id="standard-basic" 
                             sx={{ label: { color: 'white' }}} 
@@ -680,10 +697,12 @@ const HomePage = (props) => {
                             variant="outlined"
                             onChange={onChangeSearch}/>
 
+                            <div className="album-list-entire">
+
                             {displayedAlbums.map((item, key) => (
                                 <div className="album_display">
                                     <a href={`/albumdetails/${item._id}`}>
-                                        <Box className="album-display-box">
+                                        <div className="album-display-box">
                                             <Grid container spacing={3} alignItems="center">
                                                 <Grid item xs>
                                                     <div className="album_display_image">
@@ -699,27 +718,39 @@ const HomePage = (props) => {
                                                     </div>
                                                 </Grid><Grid item xs>
                                                     <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p>
-                                        </Grid></Grid></Box>
+                                        </Grid></Grid></div>
                                     </a>
                                 </div>
                             ))}
-                        </div>
+                        </div></>
                     )}
 
                     {displaySongs && (
                         <>
-                            <select onChange={(e) => setSortTypeSong(e.target.value)}>
-                                <option value="title">Title</option>
-                                <option value="artist">Artist</option>
-                                <option value="score">Score</option>
-                            </select> 
-                            <Box sx={{ width: 600 }}>
+
+                            <FormControl sx={{ m: 1, minWidth: 150 }}>
+
+                            <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
+                            <Select value={sortTypeSong}  variant="filled"
+                                onChange={(e) => setSortTypeSong(e.target.value)} color="primary">
+                                    <MenuItem value="title">Title</MenuItem>
+                                    <MenuItem value="artist">Artist</MenuItem>
+                                    <MenuItem value="score">Score</MenuItem>
+                                </Select></FormControl>
+
+
+
+                            
+                            <div className="toggle_box">
                                 <Grid container spacing={2} alignItems="center">
                                     <Grid item xs>
-                                        <h2><div onClick={toggle}>Albums</div></h2>
+                                        <h2 onClick={toggle}>Albums</h2>
                                 </Grid><Grid item xs>
                                     <h2> Songs</h2>
-                            </Grid></Grid></Box>
+                            </Grid></Grid></div>
+
+                            <div className="album-list-entire">
+
                             {songData.map((item, key) => (
                                 <a href={`/songdetails/${item._id}`}>
                                     <div className="album_display">
@@ -738,7 +769,7 @@ const HomePage = (props) => {
                                     </div>
                                 </a>
                             ))}
-                        </>
+                        </div></>
                     )}
 
             </header>

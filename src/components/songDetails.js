@@ -10,6 +10,7 @@ import MuiInput from '@mui/material/Input';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import NavBar from './navBar';
+import Foot from './footer';
 
 
 
@@ -172,6 +173,7 @@ const SongDetails = (props) => {
                 </Typography>
         
         </header>
+        <Foot />
     </div>
     )
 } 

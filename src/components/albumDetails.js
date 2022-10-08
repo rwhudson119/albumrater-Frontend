@@ -14,8 +14,7 @@ import NavBar from './navBar';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 import urlencode from 'urlencode';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
-
-
+import Foot from './footer';
 
 
 
@@ -600,7 +599,8 @@ const AlbumDetails = (props) => {
                         </Grid>
                     </Box>
                 </div>
-                <Button variant="Contained" onClick = {handleUpdate}>Update Rating</Button>
+                <Button variant="text" onClick = {handleUpdate}>Update Rating</Button>
+                
             </div>
             )}
 
@@ -620,6 +620,7 @@ const AlbumDetails = (props) => {
            
                             
         </header>
+        <Foot />
     </div>
     )
 } 

@@ -134,17 +134,18 @@ a:visited {
    }
 
    .album-list-entire {
-    width: 400px;
+    width: 390px;
+    padding: 0 4% 0 4%;
    }
 
    .album_display_image img {
     width: 100%;
    }
    .album_display {
-    width: 400px;
+    width: 390px;
    }
    .album-display-box {
-    width: 400;
+    width: 390;
    }
    .album_display p{
     font-size: 12px;
@@ -156,15 +157,15 @@ a:visited {
 
 
    .albums-songs-toggle-box {
-    width: 400;
+    width: 390;
   }
 
   .data_title{
-    max-width: 400px;
+    max-width: 390px;
   }
 
   .stats-buttonless{
-    max-width: 400px;
+    max-width: 390px;
   }
 
   .album_deets_image{
@@ -175,6 +176,11 @@ a:visited {
 
 .albums-songs-toggle-box {
   width: 900;
+}
+
+.toggle_box {
+  width: 70%;
+  margin: auto;
 }
 
 .album-display-box {
@@ -359,11 +365,23 @@ nav{
 
 .footer p {
   color: white;
+  font-size: calc(8px + 1vmin);
 }
 
 .footer_logo {
-  padding-top: 1%;
   max-width: 60px;
 }
 
+.footer_title {
+  text-align: right;
+}
 
+.footer_name {
+  text-align: left;
+}
+
+.foot_box {
+  width: 68%;
+  margin: auto;
+  
+}

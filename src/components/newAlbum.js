@@ -3,6 +3,7 @@ import React from "react";
 import axios from "../services/backendApi.js";
 import { useParams } from 'react-router-dom';
 import NavBar from './navBar';
+import Foot from './footer';
 
 
 /*const headers = {
@@ -42,6 +43,7 @@ const NewAlbum = (props) => {
                 </>
             ))}
         </header>
+        <Foot />
     </div>
     )
 }

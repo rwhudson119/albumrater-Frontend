@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 import axios from "../services/backendApi.js";
 import NavBar from './navBar';
+import Foot from './footer';
 
 
 
@@ -60,6 +61,7 @@ const ProfileDetails = () => {
                 <p>Number of Songs: {songs.length}</p>
                 <p>Number of Ratings: {ratings}</p>
             </header>
+            <Foot />
         </div>
     )
 }

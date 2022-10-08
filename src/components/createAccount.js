@@ -5,6 +5,7 @@ import NavBar from './navBar';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import Foot from './footer';
 
 
 
@@ -47,6 +48,7 @@ const CreateAccount = () => {
                 <TextField id="standard-basic" sx={{ label: { color: 'white' }}} label="Enter Public Password" variant="outlined" onChange={onChangePassword}/>
                 <Button variant="Contained" onClick = {handleUpdate}>Create Profile</Button>
             </header>
+            <Foot />
         </div>
     )
 }

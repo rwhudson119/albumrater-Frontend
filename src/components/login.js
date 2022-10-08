@@ -5,6 +5,7 @@ import logo from '../album_logo_crop.png';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import Foot from './footer';
 
 
 function Login() {
@@ -91,6 +92,7 @@ function Login() {
                     <a className="App-link" href= {`/homepage/${item._id}`} >{item.username}</a>
                 ))} */}
             </header>
+            <Foot />
         </div>
     )
 }

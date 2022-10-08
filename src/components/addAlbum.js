@@ -12,6 +12,8 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import NavBar from './navBar';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
+import Foot from './footer';
+
 
 
 
@@ -510,10 +512,11 @@ const AddAlbum = (props) => {
                         </Grid>
                     </Box>
                 </div>
-                <Button variant="Contained" onClick = {handleUpdate}>Submit Rating</Button>
+                <Button variant="text" onClick = {handleUpdate}>Submit Rating</Button>
             </div>
             )}
         </header>
+        <Foot />
     </div>
     )
 }
