@@ -81,7 +81,7 @@ function Login() {
                 </div>
                 <div className="login_text">
                 <a className="App-link" href= {`/createAccount`}>Create Account</a>
-                <p><div onClick={toggleFU} >Forgot Username?</div></p>
+                <p onClick={toggleFU} >Forgot Username?</p>
                 {forgotUsername && (
                     <p>Ask Robbie :)</p>
                 )}

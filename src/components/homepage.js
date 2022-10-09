@@ -11,8 +11,6 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import { makeStyles } from '@mui/styles';
-import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 
 import NavBar from './navBar';
 import Foot from './footer';

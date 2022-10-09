@@ -75,6 +75,7 @@ const SongDetails = (props) => {
             if(songArray.indexOf(song.id.toString()) > -1) {
                 tempParentAlbum.push(item);
             }
+            return 0
         })
         setParentAlbum(tempParentAlbum[0])
     }

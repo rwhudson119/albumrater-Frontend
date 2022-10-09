@@ -11,7 +11,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import NavBar from './navBar';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 import urlencode from 'urlencode';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import Foot from './footer';
@@ -177,8 +177,10 @@ const AlbumDetails = (props) => {
                 }if(item < 0){
                     songArray[key] = "0"
                 }
+                return 0
             })
             setSongArrayFinal(songArray)
+            return 0
           }
 
 
@@ -229,7 +231,6 @@ const AlbumDetails = (props) => {
             console.log("GETTING SONGS")
             var songArrayTest = []
             albumSongs.map((item, key) => (
-                console.log(item),
                 axios.get(`/song/${item}`)
                 .then((res) => {
                     songArrayTest[key] = res.data

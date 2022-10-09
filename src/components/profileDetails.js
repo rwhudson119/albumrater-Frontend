@@ -41,6 +41,7 @@ const ProfileDetails = () => {
         var totalRatings = 0;
         resAlbums.map((item, key) => {
             totalRatings = totalRatings + item.ratings.length
+            return 0
         })
         setRatings(totalRatings); 
     }

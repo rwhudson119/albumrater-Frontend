@@ -163,6 +163,7 @@ const AddAlbum = (props) => {
                 }if(item < 0){
                     songScoresArr[key] = "0"
                 }
+                return 0
             })
             setSongScores1(songScoresArr)
           }
@@ -204,6 +205,7 @@ const AddAlbum = (props) => {
                     console.log(res)
                     navigate(`/homepage/${profile}`);
                 });
+        return 0
     }
 
 
