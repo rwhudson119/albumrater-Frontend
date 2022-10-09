@@ -753,18 +753,19 @@ const HomePage = (props) => {
                             {songData.map((item, key) => (
                                 <a href={`/songdetails/${item._id}`}>
                                     <div className="album_display">
-                                        <Box sx={{ width: 600 }}>
+                                        
+                                        <div className="album-display-box">
                                             <Grid container spacing={2} alignItems="center">
-                                                <Grid item xs>
+                                                <Grid item xs={8}>
                                                     <div className="songInfo">
                                                         <p>{item.title}</p>
                                                         <p1>{item.artist}</p1> 
                                                     </div>                                   
-                                                </Grid><Grid item xs>
+                                                </Grid><Grid item xs={4}>
                                                     <div className="scores">
                                                         <h1>{item.score}</h1>
                                                     </div>
-                                        </Grid></Grid></Box>
+                                        </Grid></Grid></div>
                                     </div>
                                 </a>
                             ))}

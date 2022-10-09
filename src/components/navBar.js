@@ -84,7 +84,6 @@ const theme = createTheme({
                 onChange={onChangeSearch}/>
                 
                 <ul class="nav-links">
-                    <li><a href={`/homepage/${profile}`}>Home</a></li>
                     <li><a href={`/profiledetails/`}>Profile</a></li>
                     <li><a href={`/`}>Logout</a></li>
                     

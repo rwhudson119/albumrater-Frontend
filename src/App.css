@@ -45,6 +45,10 @@
   font-size: 16px;
 }
 
+.scores  h1{
+  padding-right: 25%;
+}
+
 .album_display {
   padding: 2% 0% 3% 0%;
 }
@@ -77,6 +81,10 @@
 
 .songInfo p1 {
   font-size: 25px;
+}
+
+.songInfo {
+  padding-bottom: 10%;
 }
 
 .boxTitle {
@@ -117,68 +125,25 @@ a:visited {
   font-size: 23px;
  }
 
-/* mobile */
-@media (max-width: 400px){
-  .trending{
-    width: 300px;
-   }
-  .trending img{
-    width: 100%;
-   }
-
-   .top-songs{
-    width: 300px;
-   }
-   .top-songs p{
-    font-size: 15px;
-   }
-
-   .album-list-entire {
-    width: 390px;
-    padding: 0 4% 0 4%;
-   }
-
-   .album_display_image img {
-    width: 100%;
-   }
-   .album_display {
-    width: 390px;
-   }
-   .album-display-box {
-    width: 390;
-   }
-   .album_display p{
-    font-size: 12px;
-   }
-
-   .scores p {
-    font-size: 10px;
-   }
 
 
-   .albums-songs-toggle-box {
-    width: 390;
-  }
-
-  .data_title{
-    max-width: 390px;
-  }
-
-  .stats-buttonless{
-    max-width: 390px;
-  }
-
-  .album_deets_image{
-    max-width: 60%;
-  }
-
+ .top_Albums img {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+  width: 300px;
+  height: 290px;
 }
+
 
 .albums-songs-toggle-box {
   width: 900;
 }
 
 .toggle_box {
+  padding-top: 3%;
   width: 70%;
   margin: auto;
 }
@@ -234,10 +199,11 @@ nav{
   background: #000000;
 }
 .nav-logo-2{
-  max-width: 100px;
+  max-width: 70px;
+  padding-top: 20%;
 }
 .nav-links{
-  padding: 28px 20px;
+  padding: 15px 18px 0px 0;
 }
 .nav-links li{
   display: inline-block;
@@ -251,7 +217,7 @@ nav{
 
 .top_Albums {
   position:relative;
-  padding: 10px 10px 70px 10px;
+  padding: 10px 10px 50px 10px;
   width: 80%;
   display: flex;
   flex-wrap: nowrap;
@@ -267,7 +233,6 @@ nav{
 
 .top_Album_Individual {
   position: relative;
-  height:0%;
   max-block-size: 290px;
   width: 300px;
   height: 290px;
@@ -282,15 +247,7 @@ nav{
   text-decoration: none;
   max-height: 100px;
 }
-.top_Albums img {
-  display: inline-block;
-  color: white;
-  text-align: center;
-  padding: 14px;
-  text-decoration: none;
-  min-width: 300px;
-  max-height: 290px;
-}
+
 
 
 .top_Album_Individual:hover img {
@@ -384,4 +341,108 @@ nav{
   width: 68%;
   margin: auto;
   
+}
+
+
+
+
+
+
+
+
+
+
+/* mobile */
+@media (max-width: 400px){
+  .trending{
+    width: 300px;
+   }
+  .trending img{
+    width: 100%;
+   }
+
+   .top-songs{
+    width: 300px;
+   }
+   .top-songs p{
+    font-size: 15px;
+   }
+
+   .album-list-entire {
+    width: 390px;
+    padding: 7% 4% 0 4%;
+   }
+
+   .album_display_image img {
+    width: 100%;
+   }
+   .album_display {
+    width: 350px;
+    padding-left: 4%;
+   }
+   .album-display-box {
+    width: 350px;
+   }
+   .album_display p{
+    font-size: 15px;
+   }
+
+   .album_display p1{
+    font-size: 12px;
+   }
+
+   .scores p {
+    font-size: 10px;
+   }
+
+
+   .albums-songs-toggle-box {
+    width: 390;
+  }
+
+  .data_title{
+    max-width: 390px;
+  }
+
+  .stats-buttonless{
+    max-width: 390px;
+    max-height: 425px;
+  }
+
+  .album_deets_image{
+    max-width: 60%;
+  }
+
+  .top-genre{
+    padding-top: 25%;
+   }
+
+  .top_Albums img {
+    width: 200px;
+    height: auto;
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+  }
+
+  .top_Album_Individual {
+    position: relative;
+    max-block-size: 290px;
+    width: 200px;
+    height: 200px;
+  }
+
+
+  .data_title img {
+    padding-top: 10%;
+  }
+
+  .nav-links{
+    padding: 15px 0px 0px 0;
+  }
+
+
+
 }
