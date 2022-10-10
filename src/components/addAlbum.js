@@ -228,8 +228,10 @@ const AddAlbum = (props) => {
             setGenre(res.data.genres.data[0].name)
             setReleaseDate(res.data.release_date)
             setCoverPhoto(res.data.cover_big)
-            
             setSongScores1(songScoresArr)
+            if((title === "" || artist === "" || genre === ""|| releaseDate === "") === ""){
+               displayDetails = true 
+            }
             console.log(res.data)
         };
         GetAlbum();

@@ -16,6 +16,7 @@ const ProfileDetails = () => {
     const [albums, setAlbums] = useState("");
     const [ratings, setRatings] = useState("");
     const [songs, setSongs] = useState("");
+    const [averageRating, setAverageRating] = useState("");
 
     
     const GetProfiles = () =>{
@@ -39,11 +40,15 @@ const ProfileDetails = () => {
 
     const ComputeRatings = (resAlbums) => {
         var totalRatings = 0;
+        var averageRatingTemp = 0;
         resAlbums.map((item, key) => {
             totalRatings = totalRatings + item.ratings.length
+            averageRatingTemp = averageRatingTemp + (item.originality + item.flow + item.lyrics + item.how_captivating + item.timelessness)/5
             return 0
         })
+        averageRatingTemp = averageRatingTemp/resAlbums.length
         setRatings(totalRatings); 
+        setAverageRating(averageRatingTemp)
     }
 
     useEffect(() => {
@@ -58,6 +63,7 @@ const ProfileDetails = () => {
             <header className="App-header">
                 <h2>Profile Details</h2>
                 <p>{profile.username}</p>
+                <p>Average Total Rating: {averageRating}</p>
                 <p>Number of Albums: {albums.length}</p>
                 <p>Number of Songs: {songs.length}</p>
                 <p>Number of Ratings: {ratings}</p>
