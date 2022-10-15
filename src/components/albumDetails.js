@@ -44,12 +44,17 @@ const AlbumDetails = (props) => {
     const [artist, setArtist] = useState("");
     const [title, setTitle] = useState("");
     const [release_date, setRelease_Date] = useState("");
+    const [country, setCountry] = useState("");
     const [genre, setGenre] = useState("");
+    const [artwork, setArtwork] = useState(50);
     const [originality, setOriginality] = useState(50);
     const [flow, setFlow] = useState(50);
     const [lyrics, setLyrics] = useState(50);
     const [howCaptivating, setHowCaptivating] = useState(50);
     const [timelessness, setTimelessness] = useState(50);
+    const [music, setMusic] = useState(50);
+    const [delivery, setDelivery] = useState(50);
+    const [expectation, setExpectation] = useState(50);
     const [songArrayFinal, setSongArrayFinal] = useState([]);
     const [ratingData, setRatingData] = useState([]);
 
@@ -68,126 +73,199 @@ const AlbumDetails = (props) => {
         console.log(songArrayFinal)
     }
 
+    const handleSliderChangeArtwork = (event, newValue) => {
+        setArtwork(newValue);
+    };
+
+    const handleInputChangeArtwork = (event) => {
+        setArtwork(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+    const handleSliderChangeExpectation = (event, newValue) => {
+        setExpectation(newValue);
+    };
+
+    const handleInputChangeExpectation = (event) => {
+        setExpectation(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
 
     const handleSliderChangeOriginality = (event, newValue) => {
-            setOriginality(newValue);
-        };
+        setOriginality(newValue);
+    };
+    
+    const handleInputChangeOriginality = (event) => {
+        setOriginality(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+    const handleSliderChangeFlow = (event, newValue) => {
+        setFlow(newValue);
+    };
+    
+    const handleInputChangeFlow = (event) => {
+        setFlow(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+    const handleSliderChangeLyrics = (event, newValue) => {
+        setLyrics(newValue);
+    };
+    
+    const handleInputChangeLyrics = (event) => {
+        setLyrics(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+    const handleSliderChangeHowCaptivating = (event, newValue) => {
+        setHowCaptivating(newValue);
+    };
+    
+    const handleInputChangeHowCaptivating = (event) => {
+        setHowCaptivating(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+    const handleSliderChangeTimelessness = (event, newValue) => {
+        setTimelessness(newValue);
+    };
+    
+    const handleInputChangeTimelessness = (event) => {
+        setTimelessness(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+
+
+    const handleSliderChangeDelivery = (event, newValue) => {
+        setDelivery(newValue);
+    };
+
+    const handleInputChangeDelivery = (event) => {
+        setDelivery(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+    const handleSliderChangeMusic = (event, newValue) => {
+        setMusic(newValue);
+    };
+
+    const handleInputChangeMusic = (event) => {
+        setMusic(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+
+
+    const handleInputChangeNotes = (event) => {
+        setNotes(event.target.value);
+    };
+    const handleInputChangeTitle = (event) => {
+        setTitle(event.target.value);
+    };
+    const handleInputChangeArtist = (event) => {
+        setArtist(event.target.value);
+    };
+
+    const handleInputChangeCountry = (event) => {
+        setCountry(event.target.value);
+    };
+
+    const handleInputChangeGenre = (event) => {
+        setGenre(event.target.value);
+    };
+    const handleInputChangeRelease_Date = (event) => {
+        setRelease_Date(event.target.value);
+    };
+
+    const getAverageRating = (allUserAlbum) => {
+        var totalRat = 0
         
-        const handleInputChangeOriginality = (event) => {
-            setOriginality(event.target.value === '' ? '' : Number(event.target.value));
-        };
+        allUserAlbum.map((item, key) => (
+            totalRat = totalRat + (item.originality + item.flow + item.lyrics + item.how_captivating + item.timelessness)/5
+        ));
+        setAverageRating(totalRat/allUserAlbum.length);
+    };
 
-        const handleSliderChangeFlow = (event, newValue) => {
-            setFlow(newValue);
-        };
-        
-        const handleInputChangeFlow = (event) => {
-            setFlow(event.target.value === '' ? '' : Number(event.target.value));
-        };
+    const handleBlurArtwork = () => {
+        if (artwork < 0) {
+            setArtwork(0);
+        } else if (artwork > 100) {
+            setArtwork(100);
+        }
+    };
 
-        const handleSliderChangeLyrics = (event, newValue) => {
-            setLyrics(newValue);
-        };
-        
-        const handleInputChangeLyrics = (event) => {
-            setLyrics(event.target.value === '' ? '' : Number(event.target.value));
-        };
+    const handleBlurExpectation = () => {
+        if (expectation < 0) {
+            setExpectation(0);
+        } else if (expectation > 100) {
+            setExpectation(100);
+        }
+    };
 
-        const handleSliderChangeHowCaptivating = (event, newValue) => {
-            setHowCaptivating(newValue);
-        };
-        
-        const handleInputChangeHowCaptivating = (event) => {
-            setHowCaptivating(event.target.value === '' ? '' : Number(event.target.value));
-        };
+    const handleBlurOriginality = () => {
+        if (originality < 0) {
+            setOriginality(0);
+        } else if (originality > 100) {
+            setOriginality(100);
+        }
+    };
+    const handleBlurFlow = () => {
+        if (flow < 0) {
+            setFlow(0);
+        } else if (flow > 100) {
+            setFlow(100);
+        }
+    };
+    const handleBlurLyrics = () => {
+        if (lyrics < 0) {
+            setLyrics(0);
+        } else if (lyrics > 100) {
+            setLyrics(100);
+        }
+    };
+    const handleBlurHowCaptivating = () => {
+        if (howCaptivating < 0) {
+            setHowCaptivating(0);
+        } else if (howCaptivating > 100) {
+            setHowCaptivating(100);
+        }
+    };
+    const handleBlurTimelessness = () => {
+        if (timelessness < 0) {
+            setTimelessness(0);
+        } else if (timelessness > 100) {
+            setTimelessness(100);
+        }
+    };
 
-        const handleSliderChangeTimelessness = (event, newValue) => {
-            setTimelessness(newValue);
-        };
-        
-        const handleInputChangeTimelessness = (event) => {
-            setTimelessness(event.target.value === '' ? '' : Number(event.target.value));
-        };
+    const handleBlurDelivery = () => {
+        if (delivery < 0) {
+            setDelivery(0);
+        } else if (delivery > 100) {
+            setDelivery(100);
+        }
+    };
 
-         const handleInputChangeNotes = (event) => {
-            setNotes(event.target.value);
-        };
-        const handleInputChangeTitle = (event) => {
-            setTitle(event.target.value);
-        };
-        const handleInputChangeArtist = (event) => {
-            setArtist(event.target.value);
-        };
-        const handleInputChangeGenre = (event) => {
-            setGenre(event.target.value);
-        };
-        const handleInputChangeRelease_Date = (event) => {
-            setRelease_Date(event.target.value);
-        };
+    const handleBlurMusic = () => {
+        if (music < 0) {
+            setMusic(0);
+        } else if (music > 100) {
+            setMusic(100);
+        }
+    };
 
-        const getAverageRating = (allUserAlbum) => {
-            var totalRat = 0
-            
-            allUserAlbum.map((item, key) => (
-                totalRat = totalRat + (item.originality + item.flow + item.lyrics + item.how_captivating + item.timelessness)/5
-            ));
-            setAverageRating(totalRat/allUserAlbum.length);
-        };
-
-        const handleBlurOriginality = () => {
-            if (originality < 0) {
-                setOriginality(0);
-            } else if (originality > 100) {
-                setOriginality(100);
+        const handleBlurTest = () => {
+        songArray.map((item, key) => {
+            if(item > 10){
+                songArray[key] = "10"
+            }if(item < 0){
+                songArray[key] = "0"
             }
-          };
-          const handleBlurFlow = () => {
-            if (flow < 0) {
-                setFlow(0);
-            } else if (flow > 100) {
-                setFlow(100);
-            }
-          };
-          const handleBlurLyrics = () => {
-            if (lyrics < 0) {
-                setLyrics(0);
-            } else if (lyrics > 100) {
-                setLyrics(100);
-            }
-          };
-          const handleBlurHowCaptivating = () => {
-            if (howCaptivating < 0) {
-                setHowCaptivating(0);
-            } else if (howCaptivating > 100) {
-                setHowCaptivating(100);
-            }
-          };
-          const handleBlurTimelessness = () => {
-            if (timelessness < 0) {
-                setTimelessness(0);
-            } else if (timelessness > 100) {
-                setTimelessness(100);
-            }
-          };
-
-          const handleBlurTest = () => {
-            songArray.map((item, key) => {
-                if(item > 10){
-                    songArray[key] = "10"
-                }if(item < 0){
-                    songArray[key] = "0"
-                }
-                return 0
-            })
-            setSongArrayFinal(songArray)
             return 0
-          }
+        })
+        setSongArrayFinal(songArray)
+        return 0
+        }
 
 
 
         const handleUpdate = (e) => {
             e.preventDefault();
-            const totalScore = (originality + flow + lyrics + howCaptivating + timelessness)/5
+            const totalScore = (originality + flow + lyrics + howCaptivating + timelessness + delivery + music)/7
             axios.post("/rating/add",
                 {date: time, total_score: totalScore, notes: notes} ).then((res) => {
             });
@@ -206,7 +284,7 @@ const AlbumDetails = (props) => {
             ))
             ratings.push(time)
             axios.post(`/album/update/${params.albumId}`, 
-                {title: title, artist: artist, genre: genre, release_date: release_date, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, ratings: ratings, notes: notes} ).then((res) => {
+                {title: title, artist: artist, country: country, genre: genre, release_date: release_date, artwork: artwork, expectation: expectation, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, delivery: delivery, music: music, ratings: ratings, notes: notes} ).then((res) => {
                     navigate(`/homepage/${profile}`);
                 });
     }
@@ -297,13 +375,18 @@ const AlbumDetails = (props) => {
             }).then((res) => {
                 getAllRatings(res.data.ratings)
                 setAlbum(res.data);
+                setArtwork(res.data.artwork)
+                setExpectation(res.data.expectation)
                 setOriginality(res.data.originality)
                 setFlow(res.data.flow)
                 setLyrics(res.data.lyrics)
                 setHowCaptivating(res.data.how_captivating)
                 setTimelessness(res.data.timelessness)
+                setDelivery(res.data.delivery)
+                setMusic(res.data.music)
                 setTitle(res.data.title)
                 setArtist(res.data.artist)
+                setCountry(res.data.country)
                 setGenre(res.data.genre)
                 setNotes(res.data.notes)
                 setRelease_Date(res.data.release_date)
@@ -340,6 +423,7 @@ const AlbumDetails = (props) => {
                 <div className="albumInfo">
                     <p> {album.title}</p>
                     <p> {album.artist}</p>
+                    <p> Country: {album.country}</p>
                     <p> {album.release_date}</p>
                     <p> {album.genre}</p>
                     <div className="alterDetails" onClick={toggle}>
@@ -360,6 +444,13 @@ const AlbumDetails = (props) => {
                             <TextField id="standard-basic" label="Artist" variant="standard" onChange={handleInputChangeArtist} defaultValue={album.artist} />
                         </Grid>
                     </div>
+
+                    <div className="change_details_items">
+                        <Grid container spacing={2} alignItems="center">
+                            <TextField id="standard-basic" label="Country" variant="standard" onChange={handleInputChangeCountry} defaultValue={album.country}/>
+                        </Grid>
+                    </div>
+
                     <div className="change_details_items">
                         <Grid container spacing={2} alignItems="center">
                             <TextField id="standard-basic" label="Release Date" variant="standard" onChange={handleInputChangeRelease_Date} defaultValue={album.release_date}/>
@@ -420,6 +511,72 @@ const AlbumDetails = (props) => {
             {!displaySongs && (
             <div className="rating">
                 <h1>Rate it</h1>
+
+                <div className="Artwork">
+                    <Typography id="input-slider" gutterBottom>
+                    Artwork
+                    </Typography>
+                    <Box sx={{ width: 250 }}>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs>
+                            <Slider
+                                value={typeof artwork === 'number' ? artwork : 50}
+                                onChange={handleSliderChangeArtwork}
+                                aria-labelledby="input-slider"
+                            />
+                            </Grid>
+                            <Grid item>
+                            <Input
+                                value={artwork}
+                                size="small"
+                                onChange={handleInputChangeArtwork}
+                                onBlur={handleBlurArtwork}
+                                inputProps={{
+                                    style: { color: "white" },
+                                    step: 5,
+                                    min: 0,
+                                    max: 100,
+                                    type: 'number',
+                                    'aria-labelledby': 'input-slider',
+                                }}
+                            />
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </div>
+
+                <div className="Expectation">
+                    <Typography id="input-slider" gutterBottom>
+                    Expectation
+                    </Typography>
+                    <Box sx={{ width: 250 }}>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs>
+                            <Slider
+                                value={typeof expectation === 'number' ? expectation : 50}
+                                onChange={handleSliderChangeExpectation}
+                                aria-labelledby="input-slider"
+                            />
+                            </Grid>
+                            <Grid item>
+                            <Input
+                                value={expectation}
+                                size="small"
+                                onChange={handleInputChangeExpectation}
+                                onBlur={handleBlurExpectation}
+                                inputProps={{
+                                    style: { color: "white" },
+                                    step: 5,
+                                    min: 0,
+                                    max: 100,
+                                    type: 'number',
+                                    'aria-labelledby': 'input-slider',
+                                }}
+                            />
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </div>
                 <div className="Originality">
                     <Typography id="input-slider" gutterBottom>
                         Originality
@@ -585,6 +742,73 @@ const AlbumDetails = (props) => {
                         </Grid>
                     </Box>
                 </div>
+
+                <div className="Delivery">
+                    <Typography id="input-slider" gutterBottom>
+                        Delivery
+                    </Typography>
+                    <Box sx={{ width: 250 }}>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs>
+                            <Slider
+                                value={typeof delivery === 'number' ? delivery : 50}
+                                onChange={handleSliderChangeDelivery}
+                                aria-labelledby="input-slider"
+                            />
+                            </Grid>
+                            <Grid item>
+                            <Input
+                                value={delivery}
+                                size="small"
+                                onChange={handleInputChangeDelivery}
+                                onBlur={handleBlurDelivery}
+                                inputProps={{
+                                    style: { color: "white" },
+                                    step: 5,
+                                    min: 0,
+                                    max: 100,
+                                    type: 'number',
+                                    'aria-labelledby': 'input-slider',
+                                }}
+                            />
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </div>
+
+                <div className="Music">
+                    <Typography id="input-slider" gutterBottom>
+                    Music
+                    </Typography>
+                    <Box sx={{ width: 250 }}>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs>
+                            <Slider
+                                value={typeof music === 'number' ? music : 50}
+                                onChange={handleSliderChangeMusic}
+                                aria-labelledby="input-slider"
+                            />
+                            </Grid>
+                            <Grid item>
+                            <Input
+                                value={music}
+                                size="small"
+                                onChange={handleInputChangeMusic}
+                                onBlur={handleBlurMusic}
+                                inputProps={{
+                                    style: { color: "white" },
+                                    step: 5,
+                                    min: 0,
+                                    max: 100,
+                                    type: 'number',
+                                    'aria-labelledby': 'input-slider',
+                                }}
+                            />
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </div>
+
                 <p>Current Total: {((originality + flow + lyrics + howCaptivating + timelessness)/5).toFixed(2)} </p>
                 {averageRating !== 0 && (
                     <p>Average Rating {averageRating.toFixed(2)}</p>
@@ -606,7 +830,6 @@ const AlbumDetails = (props) => {
             )}
 
             {ratingData[1] && (
-                console.log("DADTATD"),
                  console.log(ratingData),
                  console.log(ratingDataTesttt),
                 <>
