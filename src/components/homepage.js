@@ -255,8 +255,8 @@ const HomePage = (props) => {
 
         const topAlbumsTemp = [...albums].sort((a, b) => {
 
-            var aTrend = (a.originality + a.flow + a.lyrics + a.how_captivating + a.timelessness)/5
-            var bTrend = (b.originality + b.flow + b.lyrics + b.how_captivating + b.timelessness)/5
+            var aTrend = (a.originality + a.flow + a.lyrics + a.how_captivating + a.timelessness + a.music + a.delivery)/7
+            var bTrend = (b.originality + b.flow + b.lyrics + b.how_captivating + b.timelessness + b.music + b.delivery)/7
 
             return bTrend - aTrend;
         });
@@ -349,7 +349,7 @@ const HomePage = (props) => {
             }
             return 0;
         })
-        const totalScore = (singularAlbum.originality + singularAlbum.flow + singularAlbum.lyrics + singularAlbum.how_captivating + singularAlbum.timelessness)/5
+        const totalScore = (singularAlbum.originality + singularAlbum.flow + singularAlbum.lyrics + singularAlbum.how_captivating + singularAlbum.timelessness + singularAlbum.delivery + singularAlbum.music)/7
         if(bool > -1){
             artistScoreTemp[bool].score = artistScoreTemp[bool].score + totalScore
         }else{
@@ -366,7 +366,7 @@ const HomePage = (props) => {
             }
             return 0;
         })
-        const totalScore = (singularAlbum.originality + singularAlbum.flow + singularAlbum.lyrics + singularAlbum.how_captivating + singularAlbum.timelessness)/5
+        const totalScore = (singularAlbum.originality + singularAlbum.flow + singularAlbum.lyrics + singularAlbum.how_captivating + singularAlbum.timelessness + singularAlbum.delivery + singularAlbum.music)/7
         if(bool > -1){
             genreScoreTemp[bool].score = genreScoreTemp[bool].score + totalScore
         }else{
@@ -406,7 +406,7 @@ const HomePage = (props) => {
         var sumScore = 0, profileVal = -1;
         try{
         albums.map((item, key) => {
-            var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness)/5)
+            var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness + item.delivery + item.music)/7)
             if(item.profile === params.profile){
                 profileVal = totalScore
             }else{
@@ -419,7 +419,6 @@ const HomePage = (props) => {
             return 0;
         }else{
             if(albums.length - 1 > 0){
-                //console.log((sumScore/(albums.length - 1)) - profileVal)
                 return (sumScore/(albums.length - 1)) - profileVal
             }else{
             return 0
@@ -436,12 +435,10 @@ const HomePage = (props) => {
     const UseVariationStats = (everyAlbum) => {
         //return an object with the average rating and the profile rating so i can display it easier
         const diffSort = everyAlbum.sort((a,b) => { return Math.abs(GetAverageDiff(b)) - Math.abs(GetAverageDiff(a))});
-        //console.log(diffSort)
-        //console.log("sorted ratings diff^^")
         
         var averageScore = 0, profileScore = -1;
         diffSort[0].map((item, key) => {
-            var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness)/5)
+            var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness + item.delivery + item.music)/7)
             if(item.profile === params.profile){
                 profileScore = totalScore
             }else{
@@ -453,12 +450,7 @@ const HomePage = (props) => {
 
         var testobj = { album: diffSort[0][0].title, averageScore: averageScore, profScore: profileScore, albumImage: diffSort[0][0].cover_photo}
 
-
         setAverageDiff(testobj);
-     
-        //console.log("HERE:")
-        //console.log(averageDiff)
-        //console.log("THERE^^")
     }
 
     const GetVariationStats = (albums) => {        
@@ -517,6 +509,8 @@ const HomePage = (props) => {
                 how_captivating: 'how_captivating',
                 originality: 'originality',
                 timelessness: 'timelessness',
+                delivery: 'delivery',
+                music: 'music',
                 total_score: 'total_score',
             };
             const sortProperty = types[type];
@@ -527,8 +521,8 @@ const HomePage = (props) => {
                 else if(sortProperty === 'artist') {
                     return a.artist.localeCompare(b.artist);
                 }else if(sortProperty === 'total_score'){
-                    var aTrend1 = (a.originality + a.flow + a.lyrics + a.how_captivating + a.timelessness)/5
-                    var bTrend1 = (b.originality + b.flow + b.lyrics + b.how_captivating + b.timelessness)/5
+                    var aTrend1 = (a.originality + a.flow + a.lyrics + a.how_captivating + a.timelessness + a.delivery + a.music)/7
+                    var bTrend1 = (b.originality + b.flow + b.lyrics + b.how_captivating + b.timelessness + b.delivery + b.music)/7
         
                     return bTrend1 - aTrend1;
                 }else {
@@ -632,7 +626,7 @@ const HomePage = (props) => {
                               <img src= {item.cover_photo} alt= ""/>
                             <p>{key + 1}</p><br></br>
                             <p>{item.title}</p><br></br>
-                            <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p><br></br>
+                            <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness + item.delivery + item.music) / 7}/100</p><br></br>
                         </a>
                         
                     </div>
@@ -650,7 +644,7 @@ const HomePage = (props) => {
                         <a href={`/albumdetails/${item._id}`}>
                               <img src= {item.cover_photo} alt= ""/>
                             <p>{item.title}</p><br></br>
-                            <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p><br></br>
+                            <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness + item.delivery + item.music) / 7}/100</p><br></br>
                         </a>
                         
                     </div>
@@ -677,6 +671,8 @@ const HomePage = (props) => {
                                 <MenuItem  value="how_captivating">How Captivating</MenuItem >
                                 <MenuItem  value="originality">Originality</MenuItem >
                                 <MenuItem  value="timelessness">Timelessness</MenuItem >
+                                <MenuItem  value="delivery">Delivery</MenuItem >
+                                <MenuItem  value="music">Music</MenuItem >
                                 <MenuItem  value="total_score">Total</MenuItem >
 
                             </Select></FormControl>
@@ -712,10 +708,10 @@ const HomePage = (props) => {
                                                     <div className="scores">
                                                         <p>Flow: {item.flow} Lyrics: {item.lyrics}</p>
                                                         <p>How Captivating: {item.how_captivating}   Originality: {item.originality}</p>
-                                                        <p>Timelessness: {item.timelessness}</p>
+                                                        <p>Timelessness: {item.timelessness} Delivery: {item.delivery} Music: {item.music}</p>
                                                     </div>
                                                 </Grid><Grid item xs>
-                                                    <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p>
+                                                    <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness + item.delivery + item.music) / 7}/100</p>
                                         </Grid></Grid></div>
                                     </a>
                                 </div>
