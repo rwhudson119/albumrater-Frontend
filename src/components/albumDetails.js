@@ -175,7 +175,7 @@ const AlbumDetails = (props) => {
         var totalRat = 0
         
         allUserAlbum.map((item, key) => (
-            totalRat = totalRat + (item.originality + item.flow + item.lyrics + item.how_captivating + item.timelessness)/5
+            totalRat = totalRat + (item.originality + item.flow + item.lyrics + item.how_captivating + item.timelessness + item.delivery + item.music)/7
         ));
         setAverageRating(totalRat/allUserAlbum.length);
     };
@@ -253,7 +253,10 @@ const AlbumDetails = (props) => {
             if(item > 10){
                 songArray[key] = "10"
             }if(item < 0){
-                songArray[key] = "0"
+                //if the song is unrated it will show a -1
+                if(item !== -1){
+                    songArray[key] = "0"
+                }
             }
             return 0
         })
@@ -809,7 +812,7 @@ const AlbumDetails = (props) => {
                     </Box>
                 </div>
 
-                <p>Current Total: {((originality + flow + lyrics + howCaptivating + timelessness)/5).toFixed(2)} </p>
+                <p>Current Total: {((originality + flow + lyrics + howCaptivating + timelessness + delivery + music)/7).toFixed(2)} </p>
                 {averageRating !== 0 && (
                     <p>Average Rating {averageRating.toFixed(2)}</p>
                 )}
