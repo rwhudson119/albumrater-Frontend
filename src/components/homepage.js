@@ -60,6 +60,28 @@ const HomePage = (props) => {
 
     var artistScoreTemp = []
     var genreScoreTemp = []
+
+
+
+    const CheckScore = (score) => {
+        if(score === undefined){
+            return 0
+        }
+        return score
+    }
+
+
+
+    const GetTotalScore = (albumParent) => {
+        var originality = CheckScore(albumParent.originality)
+        var flow = CheckScore(albumParent.flow)
+        var lyrics = CheckScore(albumParent.lyrics)
+        var how_captivating = CheckScore(albumParent.how_captivating)
+        var timelessness = CheckScore(albumParent.timelessness)
+        var delivery = CheckScore(albumParent.delivery)
+        var music = CheckScore(albumParent.music)
+        return (originality + flow + lyrics + how_captivating + timelessness + delivery + music)/7
+    }
     
 
 
@@ -178,10 +200,10 @@ const HomePage = (props) => {
                     {averageDiff.album}
                     </p>
                 <Typography gutterBottom>
-                    <p>You rated it: {averageDiff.profScore} </p>
+                    <p>You rated it: {(+averageDiff.profScore).toFixed(2)} </p>
                 </Typography>
                 <Typography gutterBottom>
-                    <p>Average Rating:    {averageDiff.averageScore} </p>
+                    <p>Average Rating:    {(+averageDiff.averageScore).toFixed(2)} </p>
                 </Typography>
                 
             </div>
@@ -255,8 +277,8 @@ const HomePage = (props) => {
 
         const topAlbumsTemp = [...albums].sort((a, b) => {
 
-            var aTrend = (a.originality + a.flow + a.lyrics + a.how_captivating + a.timelessness + a.music + a.delivery)/7
-            var bTrend = (b.originality + b.flow + b.lyrics + b.how_captivating + b.timelessness + b.music + b.delivery)/7
+            var aTrend = GetTotalScore(a)
+            var bTrend = GetTotalScore(b)
 
             return bTrend - aTrend;
         });
@@ -349,7 +371,7 @@ const HomePage = (props) => {
             }
             return 0;
         })
-        const totalScore = (singularAlbum.originality + singularAlbum.flow + singularAlbum.lyrics + singularAlbum.how_captivating + singularAlbum.timelessness + singularAlbum.delivery + singularAlbum.music)/7
+        const totalScore = GetTotalScore(singularAlbum)
         if(bool > -1){
             artistScoreTemp[bool].score = artistScoreTemp[bool].score + totalScore
         }else{
@@ -366,7 +388,7 @@ const HomePage = (props) => {
             }
             return 0;
         })
-        const totalScore = (singularAlbum.originality + singularAlbum.flow + singularAlbum.lyrics + singularAlbum.how_captivating + singularAlbum.timelessness + singularAlbum.delivery + singularAlbum.music)/7
+        const totalScore = GetTotalScore(singularAlbum)
         if(bool > -1){
             genreScoreTemp[bool].score = genreScoreTemp[bool].score + totalScore
         }else{
@@ -406,7 +428,7 @@ const HomePage = (props) => {
         var sumScore = 0, profileVal = -1;
         try{
         albums.map((item, key) => {
-            var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness + item.delivery + item.music)/7)
+            var totalScore = GetTotalScore(item)
             if(item.profile === params.profile){
                 profileVal = totalScore
             }else{
@@ -438,7 +460,7 @@ const HomePage = (props) => {
         
         var averageScore = 0, profileScore = -1;
         diffSort[0].map((item, key) => {
-            var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness + item.delivery + item.music)/7)
+            var totalScore = GetTotalScore(item)
             if(item.profile === params.profile){
                 profileScore = totalScore
             }else{
@@ -521,8 +543,8 @@ const HomePage = (props) => {
                 else if(sortProperty === 'artist') {
                     return a.artist.localeCompare(b.artist);
                 }else if(sortProperty === 'total_score'){
-                    var aTrend1 = (a.originality + a.flow + a.lyrics + a.how_captivating + a.timelessness + a.delivery + a.music)/7
-                    var bTrend1 = (b.originality + b.flow + b.lyrics + b.how_captivating + b.timelessness + b.delivery + b.music)/7
+                    var aTrend1 = GetTotalScore(a)
+                    var bTrend1 = GetTotalScore(b)
         
                     return bTrend1 - aTrend1;
                 }else {
@@ -626,7 +648,7 @@ const HomePage = (props) => {
                               <img src= {item.cover_photo} alt= ""/>
                             <p>{key + 1}</p><br></br>
                             <p>{item.title}</p><br></br>
-                            <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness + item.delivery + item.music) / 7}/100</p><br></br>
+                            <p>{GetTotalScore(item)}/100</p><br></br>
                         </a>
                         
                     </div>
@@ -644,7 +666,7 @@ const HomePage = (props) => {
                         <a href={`/albumdetails/${item._id}`}>
                               <img src= {item.cover_photo} alt= ""/>
                             <p>{item.title}</p><br></br>
-                            <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness + item.delivery + item.music) / 7}/100</p><br></br>
+                            <p>{GetTotalScore(item)}/100</p><br></br>
                         </a>
                         
                     </div>
@@ -711,7 +733,7 @@ const HomePage = (props) => {
                                                         <p>Timelessness: {item.timelessness} Delivery: {item.delivery} Music: {item.music}</p>
                                                     </div>
                                                 </Grid><Grid item xs>
-                                                    <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness + item.delivery + item.music) / 7}/100</p>
+                                                    <p>{GetTotalScore(item).toFixed(2)}/100</p>
                                         </Grid></Grid></div>
                                     </a>
                                 </div>
