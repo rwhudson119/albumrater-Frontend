@@ -352,6 +352,38 @@ const AddAlbum = (props) => {
         <NavBar />
         <header className="App-header">
             <img className="album_deets_image" src= {results.cover} alt= ""/>
+            <div className="Artwork">
+                <Typography id="input-slider" gutterBottom>
+                Artwork
+                </Typography>
+                <Box sx={{ width: 250 }}>
+                    <Grid container spacing={2} alignItems="center">
+                        <Grid item xs>
+                        <Slider
+                            value={typeof artwork === 'number' ? artwork : 50}
+                            onChange={handleSliderChangeArtwork}
+                            aria-labelledby="input-slider"
+                        />
+                        </Grid>
+                        <Grid item>
+                        <Input
+                            value={artwork}
+                            size="small"
+                            onChange={handleInputChangeArtwork}
+                            onBlur={handleBlurArtwork}
+                            inputProps={{
+                                style: { color: "white" },
+                                step: 5,
+                                min: 0,
+                                max: 100,
+                                type: 'number',
+                                'aria-labelledby': 'input-slider',
+                            }}
+                        />
+                        </Grid>
+                    </Grid>
+                </Box>
+            </div>
             {!displayDetails && (
                 <div className="albumInfo">
                     <p> {results.title}</p>
@@ -401,6 +433,39 @@ const AddAlbum = (props) => {
                 
             )}
 
+                <div className="Expectation">
+                    <Typography id="input-slider" gutterBottom>
+                    Expectation
+                    </Typography>
+                    <Box sx={{ width: 250 }}>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs>
+                            <Slider
+                                value={typeof expectation === 'number' ? expectation : 50}
+                                onChange={handleSliderChangeExpectation}
+                                aria-labelledby="input-slider"
+                            />
+                            </Grid>
+                            <Grid item>
+                            <Input
+                                value={expectation}
+                                size="small"
+                                onChange={handleInputChangeExpectation}
+                                onBlur={handleBlurExpectation}
+                                inputProps={{
+                                    style: { color: "white" },
+                                    step: 5,
+                                    min: 0,
+                                    max: 100,
+                                    type: 'number',
+                                    'aria-labelledby': 'input-slider',
+                                }}
+                            />
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </div>
+
 
             <div className="alterDetails" onClick={toggleSongs}>
                 <p>Rate Songs</p>
@@ -445,76 +510,6 @@ const AddAlbum = (props) => {
             {!displaySongs && (
             <div className="rating">
                 <h1>Rate Album</h1>
-
-
-                <div className="Artwork">
-                    <Typography id="input-slider" gutterBottom>
-                    Artwork
-                    </Typography>
-                    <Box sx={{ width: 250 }}>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs>
-                            <Slider
-                                value={typeof artwork === 'number' ? artwork : 50}
-                                onChange={handleSliderChangeArtwork}
-                                aria-labelledby="input-slider"
-                            />
-                            </Grid>
-                            <Grid item>
-                            <Input
-                                value={artwork}
-                                size="small"
-                                onChange={handleInputChangeArtwork}
-                                onBlur={handleBlurArtwork}
-                                inputProps={{
-                                    style: { color: "white" },
-                                    step: 5,
-                                    min: 0,
-                                    max: 100,
-                                    type: 'number',
-                                    'aria-labelledby': 'input-slider',
-                                }}
-                            />
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </div>
-
-                <div className="Expectation">
-                    <Typography id="input-slider" gutterBottom>
-                    Expectation
-                    </Typography>
-                    <Box sx={{ width: 250 }}>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs>
-                            <Slider
-                                value={typeof expectation === 'number' ? expectation : 50}
-                                onChange={handleSliderChangeExpectation}
-                                aria-labelledby="input-slider"
-                            />
-                            </Grid>
-                            <Grid item>
-                            <Input
-                                value={expectation}
-                                size="small"
-                                onChange={handleInputChangeExpectation}
-                                onBlur={handleBlurExpectation}
-                                inputProps={{
-                                    style: { color: "white" },
-                                    step: 5,
-                                    min: 0,
-                                    max: 100,
-                                    type: 'number',
-                                    'aria-labelledby': 'input-slider',
-                                }}
-                            />
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </div>
-
-
-
 
                 <div className="Originality">
                     <Typography id="input-slider" gutterBottom>

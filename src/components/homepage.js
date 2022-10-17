@@ -648,7 +648,7 @@ const HomePage = (props) => {
                               <img src= {item.cover_photo} alt= ""/>
                             <p>{key + 1}</p><br></br>
                             <p>{item.title}</p><br></br>
-                            <p>{GetTotalScore(item)}/100</p><br></br>
+                            <p>{GetTotalScore(item).toFixed(2)}/100</p><br></br>
                         </a>
                         
                     </div>
@@ -666,7 +666,7 @@ const HomePage = (props) => {
                         <a href={`/albumdetails/${item._id}`}>
                               <img src= {item.cover_photo} alt= ""/>
                             <p>{item.title}</p><br></br>
-                            <p>{GetTotalScore(item)}/100</p><br></br>
+                            <p>{GetTotalScore(item).toFixed(2)}/100</p><br></br>
                         </a>
                         
                     </div>
