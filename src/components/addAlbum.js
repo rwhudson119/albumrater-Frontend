@@ -10,9 +10,12 @@ import MuiInput from '@mui/material/Input';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import NavBar from './navBar';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import Foot from './footer';
+
 
 
 
@@ -28,18 +31,9 @@ const AddAlbum = (props) => {
     let params = useParams()
     const time = new Date().toLocaleString()
 
-    const [displayDetails, setDisplayDetails] = useState(false);
-      
-    function toggle() {
-        setDisplayDetails(wasDetails => !wasDetails);
-    }
-
-    
+    const [displayDetails, setDisplayDetails] = useState(false); 
+    const [toQueue, setToQueue] = useState(true);
     const [displaySongs, setDisplaySongs] = useState(false);
-      
-    function toggleSongs() {
-        setDisplaySongs(wasSongs => !wasSongs);
-    }
 
 
     const [results, setResults] = useState(null);
@@ -70,6 +64,17 @@ const AddAlbum = (props) => {
     var songBpmArr = [];
     
 
+    function toggleQueue(item) {
+        setToQueue(wasQueue => !wasQueue);
+    }
+
+    function toggleDetails() {
+        setDisplayDetails(wasDetails => !wasDetails);
+    }
+
+    function toggleSongs() {
+        setDisplaySongs(wasSongs => !wasSongs);
+    }
 
 
     const handleSliderChangeArtwork = (event, newValue) => {
@@ -268,38 +273,47 @@ const AddAlbum = (props) => {
 
             e.preventDefault();
             const totalScore = (originality + flow + lyrics + howCaptivating + timelessness + delivery + music)/7
+            if(toQueue === true){
+                axios.post("/album/add", 
+                    {title: title, profile: profile, artist: artist, country: country, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, artwork: artwork, expectation: expectation, in_queue: "true"} ).then((res) => {
+                        console.log(res)
+                        navigate(`/homepage/${profile}`);
+                    });
+            }
+            if(toQueue === false){
 
-            //Post album rating
+                //Post album rating
 
-            axios.post("/rating/add",
-                {date: time, total_score: totalScore, notes: notes} ).then((res) => {
-                console.log(res)
-            });
-
-            //add tracks to database
-
-            setSongScores1(songScoresArr)
-            console.log(setSongScores1)
-            results.tracks.data.map((item, key) => {
-                if(songScores1[key] != null){
-                    songScores1[key] = -1
-                }
-                axios.post("/song/add",
-                {title: item.title, artist: results.artist.name, id: item.id, score: songScores1[key], profile: profile, duration: songDurationArr[key], bpm: songBpmArr[key]})
-                return 0;
-            });
-
-            //formulate tracks into 
-
-            results.tracks.data.map((item, key) => (
-                arr.push(item.id)
-            ))
-            const ratings = [time]
-            axios.post("/album/add", 
-                {title: title, profile: profile, artist: artist, country: country, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, artwork: artwork, expectation: expectation, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, delivery: delivery, music: music, notes: notes, ratings: ratings, songs: arr} ).then((res) => {
+                axios.post("/rating/add",
+                    {date: time, total_score: totalScore, notes: notes} ).then((res) => {
                     console.log(res)
-                    navigate(`/homepage/${profile}`);
                 });
+
+                //add tracks to database
+
+                setSongScores1(songScoresArr)
+                console.log(setSongScores1)
+                results.tracks.data.map((item, key) => {
+                    if(songScores1[key] != null){
+                        songScores1[key] = -1
+                    }
+                    axios.post("/song/add",
+                    {title: item.title, artist: results.artist.name, id: item.id, score: songScores1[key], profile: profile, duration: songDurationArr[key], bpm: songBpmArr[key]})
+                    return 0;
+                });
+
+                //formulate tracks into 
+
+                results.tracks.data.map((item, key) => (
+                    arr.push(item.id)
+                ))
+                const ratings = [time]
+                axios.post("/album/add", 
+                    {title: title, profile: profile, artist: artist, country: country, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, artwork: artwork, expectation: expectation, in_queue: "false", originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, delivery: delivery, music: music, notes: notes, ratings: ratings, songs: arr} ).then((res) => {
+                        console.log(res)
+                        navigate(`/homepage/${profile}`);
+                    });
+            }
         return 0
     }
 
@@ -326,7 +340,7 @@ const AddAlbum = (props) => {
             setSongScores1(songScoresArr)
             setSongsDuration(res.data, songDurationArr, songBpmArr)
             if(title === "" || artist === "" || genre === ""|| releaseDate === ""){
-                toggle()
+                toggleDetails()
             }
             console.log(res.data)
         };
@@ -391,7 +405,7 @@ const AddAlbum = (props) => {
                     <p> Country: {results.country}</p>
                     <p> {results.release_date}</p>
                     <p> {results.genres.data[0].name}</p>
-                    <div className="alterDetails" onClick={toggle}>
+                    <div className="alterDetails" onClick={toggleDetails}>
                         <SettingsSuggestIcon />
                     </div>
                 </div>
@@ -426,45 +440,58 @@ const AddAlbum = (props) => {
                             <TextField id="standard-basic" label="Genre" variant="standard" onChange={handleInputChangeGenre} defaultValue={results.genres.data[0].name}/>
                         </Grid>
                     </div>
-                    <div className="alterDetails" onClick={toggle}>
+                    <div className="alterDetails" onClick={toggleDetails}>
                         <p>Done</p>
                     </div>
                 </div>
                 
             )}
 
-                <div className="Expectation">
-                    <Typography id="input-slider" gutterBottom>
-                    Expectation
-                    </Typography>
-                    <Box sx={{ width: 250 }}>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs>
-                            <Slider
-                                value={typeof expectation === 'number' ? expectation : 50}
-                                onChange={handleSliderChangeExpectation}
-                                aria-labelledby="input-slider"
-                            />
-                            </Grid>
-                            <Grid item>
-                            <Input
-                                value={expectation}
-                                size="small"
-                                onChange={handleInputChangeExpectation}
-                                onBlur={handleBlurExpectation}
-                                inputProps={{
-                                    style: { color: "white" },
-                                    step: 5,
-                                    min: 0,
-                                    max: 100,
-                                    type: 'number',
-                                    'aria-labelledby': 'input-slider',
-                                }}
-                            />
-                            </Grid>
+            <div className="Expectation">
+                <Typography id="input-slider" gutterBottom>
+                Expectation
+                </Typography>
+                <Box sx={{ width: 250 }}>
+                    <Grid container spacing={2} alignItems="center">
+                        <Grid item xs>
+                        <Slider
+                            value={typeof expectation === 'number' ? expectation : 50}
+                            onChange={handleSliderChangeExpectation}
+                            aria-labelledby="input-slider"
+                        />
                         </Grid>
-                    </Box>
-                </div>
+                        <Grid item>
+                        <Input
+                            value={expectation}
+                            size="small"
+                            onChange={handleInputChangeExpectation}
+                            onBlur={handleBlurExpectation}
+                            inputProps={{
+                                style: { color: "white" },
+                                step: 5,
+                                min: 0,
+                                max: 100,
+                                type: 'number',
+                                'aria-labelledby': 'input-slider',
+                            }}
+                        />
+                        </Grid>
+                    </Grid>
+                </Box>
+            </div>
+
+
+
+            <FormControlLabel control={<Switch onChange={toggleQueue}/>} label="Review it" />
+            {toQueue && (
+                <>
+                <Button variant="text" onClick = {handleUpdate}>Add to your Queue</Button>
+                </>
+            )}
+
+            {!toQueue && (
+                <div className="rateIt">
+
 
 
             <div className="alterDetails" onClick={toggleSongs}>
@@ -472,288 +499,291 @@ const AddAlbum = (props) => {
             </div>
             
 
-            {displaySongs && (
-                <>
-               <h1>Rate Songs</h1>
-               {results.tracks.data.map((item, key) => (
-                    <Box sx={{ width: 250 }}>
-                        <Grid container spacing={2} alignItems="center">
-                                <Grid item xs>
-                                    <Typography id="song-input" gutterBottom>
-                                        {item.title}
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs>
+                {displaySongs && (
+                    <>
+                        <h1>Rate Songs</h1>
+                        {results.tracks.data.map((item, key) => (
+                                <Box sx={{ width: 250 }}>
+                                    <Grid container spacing={2} alignItems="center">
+                                            <Grid item xs>
+                                                <Typography id="song-input" gutterBottom>
+                                                    {item.title}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs>
+                                                <Input
+                                                    defaultValue={songScores1[key]}
+                                                    size="small"
+                                                    onChange= {songScoresArr = songScores1, (e) => songScoresArr[key] = e.target.value}
+                                                    onBlur={handleBlurSongs}
+                                                    inputProps={{
+                                                        style: { color: "white" },
+                                                        step: 1,
+                                                        min: 0,
+                                                        max: 10,
+                                                        type: 'number',
+                                                        'aria-labelledby': 'input-slider',
+                                                    }}
+                                                />
+                                            </Grid>
+                                    </Grid>
+                            </Box>
+                            ))
+                        }
+                    </>
+                )}
+
+
+                {!displaySongs && (
+                    <div className="rating">
+                        <h1>Rate Album</h1>
+
+                        <div className="Originality">
+                            <Typography id="input-slider" gutterBottom>
+                                Originality
+                            </Typography>
+                            <Box sx={{ width: 250 }}>
+                                <Grid container spacing={2} alignItems="center">
+                                    <Grid item xs>
+                                    <Slider
+                                        value={typeof originality === 'number' ? originality : 50}
+                                        onChange={handleSliderChangeOriginality}
+                                        aria-labelledby="input-slider"
+                                    />
+                                    </Grid>
+                                    <Grid item>
                                     <Input
-                                        defaultValue={songScores1[key]}
+                                        value={originality}
                                         size="small"
-                                        onChange= {songScoresArr = songScores1, (e) => songScoresArr[key] = e.target.value}
-                                        onBlur={handleBlurSongs}
+                                        onChange={handleInputChangeOriginality}
+                                        onBlur={handleBlurOriginality}
                                         inputProps={{
                                             style: { color: "white" },
-                                            step: 1,
+                                            step: 5,
                                             min: 0,
-                                            max: 10,
+                                            max: 100,
                                             type: 'number',
                                             'aria-labelledby': 'input-slider',
                                         }}
                                     />
+                                    </Grid>
                                 </Grid>
-                        </Grid>
-                   </Box>
-                ))
-                }
-            </>
-            )}
+                            </Box>
+                        </div>
 
+                        <div className="Flow">
+                            <Typography id="input-slider" gutterBottom>
+                                Flow
+                            </Typography>
+                            <Box sx={{ width: 250 }}>
+                                <Grid container spacing={2} alignItems="center">
+                                    <Grid item xs>
+                                    <Slider
+                                        value={typeof flow === 'number' ? flow : 50}
+                                        onChange={handleSliderChangeFlow}
+                                        aria-labelledby="input-slider"
+                                    />
+                                    </Grid>
+                                    <Grid item>
+                                    <Input
+                                        value={flow}
+                                        size="small"
+                                        onChange={handleInputChangeFlow}
+                                        onBlur={handleBlurFlow}
+                                        inputProps={{
+                                            style: { color: "white" },
+                                            step: 5,
+                                            min: 0,
+                                            max: 100,
+                                            type: 'number',
+                                            'aria-labelledby': 'input-slider',
+                                        }}
+                                    />
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </div>
 
-            {!displaySongs && (
-            <div className="rating">
-                <h1>Rate Album</h1>
+                        <div className="Lyrics">
+                            <Typography id="input-slider" gutterBottom>
+                                Lyrics
+                            </Typography>
+                            <Box sx={{ width: 250 }}>
+                                <Grid container spacing={2} alignItems="center">
+                                    <Grid item xs>
+                                    <Slider
+                                        value={typeof lyrics === 'number' ? lyrics : 0}
+                                        onChange={handleSliderChangeLyrics}
+                                        aria-labelledby="input-slider"
+                                    />
+                                    </Grid>
+                                    <Grid item>
+                                    <Input
+                                        value={lyrics}
+                                        size="small"
+                                        onChange={handleInputChangeLyrics}
+                                        onBlur={handleBlurLyrics}
+                                        inputProps={{
+                                            style: { color: "white" },
+                                            step: 5,
+                                            min: 0,
+                                            max: 100,
+                                            type: 'number',
+                                            'aria-labelledby': 'input-slider',
+                                        }}
+                                    />
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </div>
 
-                <div className="Originality">
-                    <Typography id="input-slider" gutterBottom>
-                        Originality
-                    </Typography>
-                    <Box sx={{ width: 250 }}>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs>
-                            <Slider
-                                value={typeof originality === 'number' ? originality : 50}
-                                onChange={handleSliderChangeOriginality}
-                                aria-labelledby="input-slider"
-                            />
-                            </Grid>
-                            <Grid item>
-                            <Input
-                                value={originality}
-                                size="small"
-                                onChange={handleInputChangeOriginality}
-                                onBlur={handleBlurOriginality}
-                                inputProps={{
-                                    style: { color: "white" },
-                                    step: 5,
-                                    min: 0,
-                                    max: 100,
-                                    type: 'number',
-                                    'aria-labelledby': 'input-slider',
-                                }}
-                            />
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </div>
+                        <div className="HowCaptivating">
+                            <Typography id="input-slider" gutterBottom>
+                                HowCaptivating
+                            </Typography>
+                            <Box sx={{ width: 250 }}>
+                                <Grid container spacing={2} alignItems="center">
+                                    <Grid item xs>
+                                    <Slider
+                                        value={typeof howCaptivating === 'number' ? howCaptivating : 0}
+                                        onChange={handleSliderChangeHowCaptivating}
+                                        aria-labelledby="input-slider"
+                                    />
+                                    </Grid>
+                                    <Grid item>
+                                    <Input
+                                        value={howCaptivating}
+                                        size="small"
+                                        onChange={handleInputChangeHowCaptivating}
+                                        onBlur={handleBlurHowCaptivating}
+                                        inputProps={{
+                                            style: { color: "white" },
+                                            step: 5,
+                                            min: 0,
+                                            max: 100,
+                                            type: 'number',
+                                            'aria-labelledby': 'input-slider',
+                                        }}
+                                    />
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </div>
 
-                <div className="Flow">
-                    <Typography id="input-slider" gutterBottom>
-                        Flow
-                    </Typography>
-                    <Box sx={{ width: 250 }}>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs>
-                            <Slider
-                                value={typeof flow === 'number' ? flow : 50}
-                                onChange={handleSliderChangeFlow}
-                                aria-labelledby="input-slider"
-                            />
-                            </Grid>
-                            <Grid item>
-                            <Input
-                                value={flow}
-                                size="small"
-                                onChange={handleInputChangeFlow}
-                                onBlur={handleBlurFlow}
-                                inputProps={{
-                                    style: { color: "white" },
-                                    step: 5,
-                                    min: 0,
-                                    max: 100,
-                                    type: 'number',
-                                    'aria-labelledby': 'input-slider',
-                                }}
-                            />
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </div>
+                        <div className="Timelessness">
+                            <Typography id="input-slider" gutterBottom>
+                                Timelessness
+                            </Typography>
+                            <Box sx={{ width: 250 }}>
+                                <Grid container spacing={2} alignItems="center">
+                                    <Grid item xs>
+                                    <Slider
+                                        value={typeof timelessness === 'number' ? timelessness : 50}
+                                        onChange={handleSliderChangeTimelessness}
+                                        aria-labelledby="input-slider"
+                                    />
+                                    </Grid>
+                                    <Grid item>
+                                    <Input
+                                        value={timelessness}
+                                        size="small"
+                                        onChange={handleInputChangeTimelessness}
+                                        onBlur={handleBlurTimelessness}
+                                        inputProps={{
+                                            style: { color: "white" },
+                                            step: 5,
+                                            min: 0,
+                                            max: 100,
+                                            type: 'number',
+                                            'aria-labelledby': 'input-slider',
+                                        }}
+                                    />
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </div>
 
-                <div className="Lyrics">
-                    <Typography id="input-slider" gutterBottom>
-                        Lyrics
-                    </Typography>
-                    <Box sx={{ width: 250 }}>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs>
-                            <Slider
-                                value={typeof lyrics === 'number' ? lyrics : 0}
-                                onChange={handleSliderChangeLyrics}
-                                aria-labelledby="input-slider"
-                            />
-                            </Grid>
-                            <Grid item>
-                            <Input
-                                value={lyrics}
-                                size="small"
-                                onChange={handleInputChangeLyrics}
-                                onBlur={handleBlurLyrics}
-                                inputProps={{
-                                    style: { color: "white" },
-                                    step: 5,
-                                    min: 0,
-                                    max: 100,
-                                    type: 'number',
-                                    'aria-labelledby': 'input-slider',
-                                }}
-                            />
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </div>
+                        <div className="Delivery">
+                            <Typography id="input-slider" gutterBottom>
+                                Delivery
+                            </Typography>
+                            <Box sx={{ width: 250 }}>
+                                <Grid container spacing={2} alignItems="center">
+                                    <Grid item xs>
+                                    <Slider
+                                        value={typeof delivery === 'number' ? delivery : 50}
+                                        onChange={handleSliderChangeDelivery}
+                                        aria-labelledby="input-slider"
+                                    />
+                                    </Grid>
+                                    <Grid item>
+                                    <Input
+                                        value={delivery}
+                                        size="small"
+                                        onChange={handleInputChangeDelivery}
+                                        onBlur={handleBlurDelivery}
+                                        inputProps={{
+                                            style: { color: "white" },
+                                            step: 5,
+                                            min: 0,
+                                            max: 100,
+                                            type: 'number',
+                                            'aria-labelledby': 'input-slider',
+                                        }}
+                                    />
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </div>
 
-                <div className="HowCaptivating">
-                    <Typography id="input-slider" gutterBottom>
-                        HowCaptivating
-                    </Typography>
-                    <Box sx={{ width: 250 }}>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs>
-                            <Slider
-                                value={typeof howCaptivating === 'number' ? howCaptivating : 0}
-                                onChange={handleSliderChangeHowCaptivating}
-                                aria-labelledby="input-slider"
-                            />
-                            </Grid>
-                            <Grid item>
-                            <Input
-                                value={howCaptivating}
-                                size="small"
-                                onChange={handleInputChangeHowCaptivating}
-                                onBlur={handleBlurHowCaptivating}
-                                inputProps={{
-                                    style: { color: "white" },
-                                    step: 5,
-                                    min: 0,
-                                    max: 100,
-                                    type: 'number',
-                                    'aria-labelledby': 'input-slider',
-                                }}
-                            />
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </div>
+                        <div className="Music">
+                            <Typography id="input-slider" gutterBottom>
+                            Music
+                            </Typography>
+                            <Box sx={{ width: 250 }}>
+                                <Grid container spacing={2} alignItems="center">
+                                    <Grid item xs>
+                                    <Slider
+                                        value={typeof music === 'number' ? music : 50}
+                                        onChange={handleSliderChangeMusic}
+                                        aria-labelledby="input-slider"
+                                    />
+                                    </Grid>
+                                    <Grid item>
+                                    <Input
+                                        value={music}
+                                        size="small"
+                                        onChange={handleInputChangeMusic}
+                                        onBlur={handleBlurMusic}
+                                        inputProps={{
+                                            style: { color: "white" },
+                                            step: 5,
+                                            min: 0,
+                                            max: 100,
+                                            type: 'number',
+                                            'aria-labelledby': 'input-slider',
+                                        }}
+                                    />
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </div>
 
-                <div className="Timelessness">
-                    <Typography id="input-slider" gutterBottom>
-                        Timelessness
-                    </Typography>
-                    <Box sx={{ width: 250 }}>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs>
-                            <Slider
-                                value={typeof timelessness === 'number' ? timelessness : 50}
-                                onChange={handleSliderChangeTimelessness}
-                                aria-labelledby="input-slider"
-                            />
-                            </Grid>
-                            <Grid item>
-                            <Input
-                                value={timelessness}
-                                size="small"
-                                onChange={handleInputChangeTimelessness}
-                                onBlur={handleBlurTimelessness}
-                                inputProps={{
-                                    style: { color: "white" },
-                                    step: 5,
-                                    min: 0,
-                                    max: 100,
-                                    type: 'number',
-                                    'aria-labelledby': 'input-slider',
-                                }}
-                            />
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </div>
-
-                <div className="Delivery">
-                    <Typography id="input-slider" gutterBottom>
-                        Delivery
-                    </Typography>
-                    <Box sx={{ width: 250 }}>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs>
-                            <Slider
-                                value={typeof delivery === 'number' ? delivery : 50}
-                                onChange={handleSliderChangeDelivery}
-                                aria-labelledby="input-slider"
-                            />
-                            </Grid>
-                            <Grid item>
-                            <Input
-                                value={delivery}
-                                size="small"
-                                onChange={handleInputChangeDelivery}
-                                onBlur={handleBlurDelivery}
-                                inputProps={{
-                                    style: { color: "white" },
-                                    step: 5,
-                                    min: 0,
-                                    max: 100,
-                                    type: 'number',
-                                    'aria-labelledby': 'input-slider',
-                                }}
-                            />
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </div>
-
-                <div className="Music">
-                    <Typography id="input-slider" gutterBottom>
-                    Music
-                    </Typography>
-                    <Box sx={{ width: 250 }}>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs>
-                            <Slider
-                                value={typeof music === 'number' ? music : 50}
-                                onChange={handleSliderChangeMusic}
-                                aria-labelledby="input-slider"
-                            />
-                            </Grid>
-                            <Grid item>
-                            <Input
-                                value={music}
-                                size="small"
-                                onChange={handleInputChangeMusic}
-                                onBlur={handleBlurMusic}
-                                inputProps={{
-                                    style: { color: "white" },
-                                    step: 5,
-                                    min: 0,
-                                    max: 100,
-                                    type: 'number',
-                                    'aria-labelledby': 'input-slider',
-                                }}
-                            />
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </div>
-
-                <div className="notes">
-                    <Box sx={{ width: 250 }}>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs>
-                            <TextField id="outlined-multiline-flexible" value={notes} label="Notes" onChange={handleInputChangeNotes} inputProps={{ style: { color: "white" } }} multiline focused />
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </div>
-                <Button variant="text" onClick = {handleUpdate}>Submit Rating</Button>
+                        <div className="notes">
+                            <Box sx={{ width: 250 }}>
+                                <Grid container spacing={2} alignItems="center">
+                                    <Grid item xs>
+                                    <TextField id="outlined-multiline-flexible" value={notes} label="Notes" onChange={handleInputChangeNotes} inputProps={{ style: { color: "white" } }} multiline focused />
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </div>
+                        <Button variant="text" onClick = {handleUpdate}>Submit Rating</Button>
+                    </div>
+                )}
             </div>
             )}
+
         </header>
         <Foot />
     </div>

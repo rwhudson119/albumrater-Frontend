@@ -27,12 +27,7 @@ const AlbumDetails = (props) => {
 
 
 
-    const [displayDetails, setDisplayDetails] = useState(false);
-      
-    function toggle() {
-        setDisplayDetails(wasDetails => !wasDetails);
-    }
-
+    const [displayDetails, setDisplayDetails] = useState(false); 
     const [displaySongs, setDisplaySongs] = useState(false);
 
     let params = useParams()
@@ -67,10 +62,12 @@ const AlbumDetails = (props) => {
     const navigate  = useNavigate ();
     var songArray = []
 
+    function toggleDetails() {
+        setDisplayDetails(wasDetails => !wasDetails);
+    }
 
     function toggleSongs() {
         setDisplaySongs(wasSongs => !wasSongs);
-        console.log(songArrayFinal)
     }
 
     const handleSliderChangeArtwork = (event, newValue) => {
@@ -465,7 +462,7 @@ const AlbumDetails = (props) => {
                     <p> Country: {album.country}</p>
                     <p> {album.release_date}</p>
                     <p> {album.genre}</p>
-                    <div className="alterDetails" onClick={toggle}>
+                    <div className="alterDetails" onClick={toggleDetails}>
                         <SettingsSuggestIcon />
                     </div>
                 </div>
@@ -500,7 +497,7 @@ const AlbumDetails = (props) => {
                             <TextField id="standard-basic" label="Genre" variant="standard" onChange={handleInputChangeGenre} defaultValue={album.genre}/>
                         </Grid>
                     </div>
-                    <div className="boxTitle" onClick={toggle}>
+                    <div className="boxTitle" onClick={toggleDetails}>
                         Done
                     </div>
                 </div>
@@ -540,6 +537,7 @@ const AlbumDetails = (props) => {
                     </Box>
                 </div>
             </div>
+
 
             <div className="alterDetails" onClick={toggleSongs}>
                 <p>Rate songs</p>
