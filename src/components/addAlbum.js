@@ -267,20 +267,23 @@ const AddAlbum = (props) => {
 
 
         const handleUpdate = (e) => {
-            console.log("title   " + title + "  profile   " + profile + "  artist   " + artist + "  country   " + country + "  genre   " + genre 
+            /*console.log("title   " + title + "  profile   " + profile + "  artist   " + artist + "  country   " + country + "  genre   " + genre 
             + "  releaseDate   " + releaseDate + "  coverPhoto   " + coverPhoto + "  artwork   " + artwork + "  originality   " + originality + "  flow   " + flow + "  lyrics   " 
             + lyrics + "  howCaptivating   " + howCaptivating + "  timelessness   " + timelessness + "  delivery   " + delivery + "  music   " + music + "  notes  " + notes)
-
+*/
             e.preventDefault();
             const totalScore = (originality + flow + lyrics + howCaptivating + timelessness + delivery + music)/7
             if(toQueue === true){
+                console.log("title   " + title + "  profile   " + profile + "  artist   " + artist + "  country   " + country + "  genre   " + genre 
+                + "  releaseDate   " + releaseDate + "  coverPhoto   " + coverPhoto + "  artwork   " + artwork)
                 axios.post("/album/add", 
-                    {title: title, profile: profile, artist: artist, country: country, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, artwork: artwork, expectation: expectation, in_queue: "true"} ).then((res) => {
+                    {title: title, profile: profile, artist: artist, country: country, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, artwork: artwork, expectation: expectation, in_queue: "yes"} ).then((res) => {
                         console.log(res)
                         navigate(`/homepage/${profile}`);
                     });
             }
             if(toQueue === false){
+               
 
                 //Post album rating
 
@@ -309,7 +312,7 @@ const AddAlbum = (props) => {
                 ))
                 const ratings = [time]
                 axios.post("/album/add", 
-                    {title: title, profile: profile, artist: artist, country: country, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, artwork: artwork, expectation: expectation, in_queue: "false", originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, delivery: delivery, music: music, notes: notes, ratings: ratings, songs: arr} ).then((res) => {
+                    {title: title, profile: profile, artist: artist, country: country, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, artwork: artwork, expectation: expectation, in_queue: "no", originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, delivery: delivery, music: music, notes: notes, ratings: ratings, songs: arr} ).then((res) => {
                         console.log(res)
                         navigate(`/homepage/${profile}`);
                     });
