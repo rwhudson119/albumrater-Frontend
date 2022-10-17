@@ -148,6 +148,7 @@ a:visited {
 
 .toggle_box {
   padding-top: 3%;
+  max-width: 700px;
   width: 70%;
   margin: auto;
 }
@@ -155,7 +156,6 @@ a:visited {
 .album-display-box {
   width: 900;
 }
-
 
  .trending{
   padding-top: 5%;

@@ -10,6 +10,8 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 import NavBar from './navBar';
 import Foot from './footer';
@@ -37,6 +39,7 @@ const HomePage = (props) => {
     const [sortTypeSong, setSortTypeSong] = useState('');
 
     const [displaySongs, setDisplaySongs] = useState(false);
+    const [displayQueue, setDisplayQueue] = useState(false);
     const [displayStats, setDisplayStats] = useState(false);
 
     const [displayedAlbums, setDisplayedAlbums] = useState([]);
@@ -51,6 +54,7 @@ const HomePage = (props) => {
     const [artistScore, setArtistScore] = useState([]);
     const [genreScore, setGenreScore] = useState([]);
     const [topAlbums, setTopAlbums] = useState([]);
+    const [inQueueList, setInQueueList] = useState([]);
     //const [topGenreStat, setTopGenreStat] = useState('');
     const [topSongs, setTopSongs] = useState([]);
     const [recentlyRated, setRecentlyRated] = useState([]);
@@ -231,15 +235,16 @@ const HomePage = (props) => {
     var profile = params.profile
     localStorage.clear();
     localStorage.profile = profile
-    console.log("PROFILE")
-    console.log(profile)
-    console.log(localStorage.profile)
 
     //functions ----------------------------------------------------------------------
 
     //hidden info
-    function toggle() {
+    function toggleSongs() {
         setDisplaySongs(wasSongs => !wasSongs);
+    }
+
+    function toggleQueued() {
+        setDisplayQueue(wasQueue => !wasQueue);
     }
 
     //Functions for search feature
@@ -285,6 +290,15 @@ const HomePage = (props) => {
         setTopAlbums(topAlbumsTemp);
     };
 
+    const getInQueueList = () => {
+        var newInQueueList = albums.filter(function(item)
+        {
+         return item.in_queue === "yes";
+        });
+        setInQueueList(newInQueueList)
+    };
+
+
     const sortArrayTrend = (trendsTemp) => {
         var TUDTst;
 
@@ -292,7 +306,6 @@ const HomePage = (props) => {
             return b.trendScore- a.trendScore;
         });
         try{
-            console.log("KHJEBGFSakbs")
             var trendingUpDataTest1 = {album: trendingUpTemp[0].album, change: trendingUpTemp[0].trendScore}
             var trendingUpDataTest2 = {album: trendingUpTemp[1].album, change: trendingUpTemp[1].trendScore}
             var trendingUpDataTest3 = {album: trendingUpTemp[2].album, change: trendingUpTemp[2].trendScore}
@@ -301,7 +314,6 @@ const HomePage = (props) => {
             setTrendingUpData(TUDTst);
         
         }catch{
-            console.log("KHJEBGFSakbs")
             console.log("setTrendUp err")
             setTrendingUpData([])
         }
@@ -321,19 +333,20 @@ const HomePage = (props) => {
 
             setDisplayStats(true)
         }catch{
-            console.log("trenddown")
+            console.log("trenddown err")
         }
     };
 
     const sortArrayRecentlyRated = () => {
         const recentlyRatedTemp = [...albums].sort((a, b) => {
+            var a_date, b_date
             if(a.in_queue === "yes"){
                 a_date = 0
             }else{
                 var a_noSec = a.ratings[a.ratings.length - 1].split(",");
                 var [a_day, a_month, a_year] = a_noSec[0].split('/');
                 var [a_hours, a_minutes, a_seconds] = a_noSec[1].split(':');
-                var a_date = new Date(+a_year, a_month - 1, +a_day, +a_hours, +a_minutes, +a_seconds);
+                a_date = new Date(+a_year, a_month - 1, +a_day, +a_hours, +a_minutes, +a_seconds);
             }
             if(b.in_queue === "yes"){
                 b_date = 0
@@ -341,7 +354,7 @@ const HomePage = (props) => {
                 var b_noSec = b.ratings[b.ratings.length - 1].split(",");
                 var [b_day, b_month, b_year] = b_noSec[0].split('/');
                 var [b_hours, b_minutes, b_seconds] = b_noSec[1].split(':');
-                var b_date = new Date(+b_year, b_month - 1, +b_day, +b_hours, +b_minutes, +b_seconds);
+                b_date = new Date(+b_year, b_month - 1, +b_day, +b_hours, +b_minutes, +b_seconds);
             }
             return b_date - a_date;
         });
@@ -409,7 +422,6 @@ const HomePage = (props) => {
         axios.get(`/album/${params.profile}`).then(res => {
             setAlbums(res.data);
             setSortType('title')
-            //setSortTypeType(types[sortType])
             res.data.map((item, key) => {
                 GetRankStats(item)
                 getArtistRank(item)
@@ -497,7 +509,6 @@ const HomePage = (props) => {
             axios.get(`/rating/date/${urlencode(singularAlbum.ratings[singularAlbum.ratings.length - 1])}`).then(res => {
                 rating1 = res.data.total_score  
                 axios.get(`/rating/date/${urlencode(singularAlbum.ratings[singularAlbum.ratings.length - 2])}`).then(res2 => {
-                    console.log("is this even working")
                     rating2 = res2.data.total_score
                     var arrayTemp = trends
                     arrayTemp.push({album: singularAlbum, trendScore: (rating1 - rating2)})
@@ -555,11 +566,21 @@ const HomePage = (props) => {
                     return b[sortProperty] - a[sortProperty];
                 }
             });
-            setAlbumData(sorted);
-            setDisplayedAlbums(sorted);
+            if(!displayQueue){
+                var newSorted = sorted.filter(function(item)
+                {
+                return item.in_queue !== "yes";
+                })
+                setAlbumData(newSorted);
+                setDisplayedAlbums(newSorted);
+            }else{
+                setAlbumData(sorted);
+                setDisplayedAlbums(sorted);
+            }
+            
           };
           sortArray(sortType);
-    }, [sortType]) 
+    }, [sortType, displayQueue]) 
 
     useEffect(() => {
         const sortSongArray = type => {
@@ -579,9 +600,11 @@ const HomePage = (props) => {
                     return b[sortProperty] - a[sortProperty];
                 }
             });
+            
             setSongData(sorted);
           };
           sortArrayTopAlbums();
+          getInQueueList();
           sortArrayRecentlyRated();
           sortArrayTopSongs();
           sortSongArray(sortTypeSong);
@@ -641,157 +664,173 @@ const HomePage = (props) => {
                 </div>
 
                 <h1 className="topRated">
-                Top Rated
+                    Top Rated
                 </h1>
 
                 <div className="top_Albums">
                 
-                {topAlbums.slice(0, 10).map((item, key) => (
-                    <div className="top_Album_Individual">
-                        <a href={`/albumdetails/${item._id}`}>
-                              <img src= {item.cover_photo} alt= ""/>
-                            <p>{key + 1}</p><br></br>
-                            <p>{item.title}</p><br></br>
-                            <p>{GetTotalScore(item).toFixed(2)}/100</p><br></br>
-                        </a>
-                        
-                    </div>
-                ))}
+                    {topAlbums.slice(0, 10).map((item, key) => (
+                        <div className="top_Album_Individual">
+                            <a href={`/albumdetails/${item._id}`}>
+                                <img src= {item.cover_photo} alt= ""/>
+                                <p>{key + 1}</p><br></br>
+                                <p>{item.title}</p><br></br>
+                                <p>{GetTotalScore(item).toFixed(2)}/100</p><br></br>
+                            </a>
+                            
+                        </div>
+                    ))}
                 </div>
 
                 <h1 className="topRated">
-                Recently Rated
+                    Recently Rated
                 </h1>
 
                 <div className="top_Albums">
                 
-                {recentlyRated.slice(0, 10).map((item, key) => (
-                    <div className="top_Album_Individual">
-                        <a href={`/albumdetails/${item._id}`}>
-                              <img src= {item.cover_photo} alt= ""/>
-                            <p>{item.title}</p><br></br>
-                            <p>{GetTotalScore(item).toFixed(2)}/100</p><br></br>
-                        </a>
-                        
-                    </div>
-                ))}
+                    {recentlyRated.slice(0, 10).map((item, key) => (
+                        <div className="top_Album_Individual">
+                            <a href={`/albumdetails/${item._id}`}>
+                                <img src= {item.cover_photo} alt= ""/>
+                                <p>{item.title}</p><br></br>
+                                <p>{GetTotalScore(item).toFixed(2)}/100</p><br></br>
+                            </a>
+                            
+                        </div>
+                    ))}
+                </div>
+
+                <h1 className="inQueue">
+                    Your Queue
+                </h1>
+
+                <div className="top_Albums">
+                
+                    {inQueueList.map((item, key) => (
+                        <div className="top_Album_Individual">
+                            <a href={`/albumdetails/${item._id}`}>
+                                <img src= {item.cover_photo} alt= ""/>
+                                <p>{item.title}</p><br></br>
+                                <p>{item.expectation}/100</p><br></br>
+                            </a>
+                            
+                        </div>
+                    ))}
                 </div>
                     
                             
                 
-                    {!displaySongs && (
-                        <>
+                {!displaySongs && (
+                    <>
+                        <div className="toggle_box">
+                            <Grid container spacing={2} alignItems="center">
+                                <Grid item xs>
+                                    <h2>Albums</h2>
+                                </Grid><Grid item xs>
+                                    <h2 onClick={toggleSongs}>Songs</h2>
+                        </Grid></Grid></div>
 
-                        
 
-
-                        <FormControl sx={{ m: 1, minWidth: 150 }}>
-
-                        <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
-                        <Select value={sortType}  variant="filled"
-                            onChange={(e) => setSortType(e.target.value)} color="primary">
-                                <MenuItem  value="title">Title</MenuItem >
-                                <MenuItem  value="artist">Artist</MenuItem >
-                                <MenuItem  value="flow">Flow</MenuItem >
-                                <MenuItem  value="lyrics">Lyrics</MenuItem >
-                                <MenuItem  value="how_captivating">How Captivating</MenuItem >
-                                <MenuItem  value="originality">Originality</MenuItem >
-                                <MenuItem  value="timelessness">Timelessness</MenuItem >
-                                <MenuItem  value="delivery">Delivery</MenuItem >
-                                <MenuItem  value="music">Music</MenuItem >
-                                <MenuItem  value="total_score">Total</MenuItem >
-
+                        <Grid container spacing={2} alignItems="center" maxWidth={400}>
+                            <Grid item xs={8}>
+                                <TextField 
+                                id="standard-basic" 
+                                sx={{ label: { color: 'white' }}} 
+                                label="Search Rated" 
+                                variant="outlined"
+                                onChange={onChangeSearch}/>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <div className="testselect">
+                            <FormControl sx={{ m: 1, minWidth: 100}}>
+                                <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
+                                <Select value={sortType}  variant="filled"
+                                    onChange={(e) => setSortType(e.target.value)} color="primary">
+                                    <MenuItem  value="title">Title</MenuItem >
+                                    <MenuItem  value="artist">Artist</MenuItem >
+                                    <MenuItem  value="flow">Flow</MenuItem >
+                                    <MenuItem  value="lyrics">Lyrics</MenuItem >
+                                    <MenuItem  value="how_captivating">How Captivating</MenuItem >
+                                    <MenuItem  value="originality">Originality</MenuItem >
+                                    <MenuItem  value="timelessness">Timelessness</MenuItem >
+                                    <MenuItem  value="delivery">Delivery</MenuItem >
+                                    <MenuItem  value="music">Music</MenuItem >
+                                    <MenuItem  value="total_score">Total</MenuItem >
                             </Select></FormControl>
+                            </div>
+                        </Grid></Grid>
+                        <FormControlLabel control={<Checkbox onChange={toggleQueued} />} label="Show Queued" />
 
-                            <div className="toggle_box">
-                                <Grid container spacing={2} alignItems="center">
-                                    <Grid item xs>
-                                        <h2>Albums</h2>
-                                    </Grid><Grid item xs>
-                                        <h2 onClick={toggle}>Songs</h2>
-                            </Grid></Grid></div>
-                            <TextField 
-                            id="standard-basic" 
-                            sx={{ label: { color: 'white' }}} 
-                            label="Search Rated" 
-                            variant="outlined"
-                            onChange={onChangeSearch}/>
+                        <div className="album-list-entire">
 
-                            <div className="album-list-entire">
+                        {displayedAlbums.map((item, key) => (
+                            <div className="album_display">
+                                <a href={`/albumdetails/${item._id}`}>
+                                    <div className="album-display-box">
+                                        <Grid container spacing={3} alignItems="center">
+                                            <Grid item xs>
+                                                <div className="album_display_image">
+                                                    <img src= {item.cover_photo} alt= ""/>
+                                                </div>
+                                            </Grid><Grid item xs>
+                                                <p>{item.title}</p>
+                                                <p>{item.artist}</p>
+                                                <div className="scores">
+                                                    <p>Flow: {item.flow} Lyrics: {item.lyrics}</p>
+                                                    <p>How Captivating: {item.how_captivating}   Originality: {item.originality}</p>
+                                                    <p>Timelessness: {item.timelessness} Delivery: {item.delivery} Music: {item.music}</p>
+                                                </div>
+                                            </Grid><Grid item xs>
+                                                <p>{GetTotalScore(item).toFixed(2)}/100</p>
+                                    </Grid></Grid></div>
+                                </a>
+                            </div>
+                        ))}
+                    </div></>
+                )}
 
-                            {displayedAlbums.map((item, key) => (
-                                <div className="album_display">
-                                    <a href={`/albumdetails/${item._id}`}>
-                                        <div className="album-display-box">
-                                            <Grid container spacing={3} alignItems="center">
-                                                <Grid item xs>
-                                                    <div className="album_display_image">
-                                                        <img src= {item.cover_photo} alt= ""/>
-                                                    </div>
-                                                </Grid><Grid item xs>
-                                                    <p>{item.title}</p>
-                                                    <p>{item.artist}</p>
-                                                    <div className="scores">
-                                                        <p>Flow: {item.flow} Lyrics: {item.lyrics}</p>
-                                                        <p>How Captivating: {item.how_captivating}   Originality: {item.originality}</p>
-                                                        <p>Timelessness: {item.timelessness} Delivery: {item.delivery} Music: {item.music}</p>
-                                                    </div>
-                                                </Grid><Grid item xs>
-                                                    <p>{GetTotalScore(item).toFixed(2)}/100</p>
-                                        </Grid></Grid></div>
-                                    </a>
-                                </div>
-                            ))}
-                        </div></>
-                    )}
+                {displaySongs && (
+                    <>
 
-                    {displaySongs && (
-                        <>
-
-                            <FormControl sx={{ m: 1, minWidth: 150 }}>
-
+                        <div className="toggle_box">
+                            <Grid container spacing={2} alignItems="center">
+                                <Grid item xs>
+                                    <h2 onClick={toggleSongs}>Albums</h2>
+                            </Grid><Grid item xs>
+                                <h2> Songs</h2>
+                        </Grid></Grid></div>
+                        <FormControl sx={{ m: 1, minWidth: 150 }}>
                             <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
                             <Select value={sortTypeSong}  variant="filled"
                                 onChange={(e) => setSortTypeSong(e.target.value)} color="primary">
-                                    <MenuItem value="title">Title</MenuItem>
-                                    <MenuItem value="artist">Artist</MenuItem>
-                                    <MenuItem value="score">Score</MenuItem>
-                                </Select></FormControl>
+                                <MenuItem value="title">Title</MenuItem>
+                                <MenuItem value="artist">Artist</MenuItem>
+                                <MenuItem value="score">Score</MenuItem>
+                        </Select></FormControl>
 
+                        <div className="album-list-entire">
 
-
-                            
-                            <div className="toggle_box">
-                                <Grid container spacing={2} alignItems="center">
-                                    <Grid item xs>
-                                        <h2 onClick={toggle}>Albums</h2>
-                                </Grid><Grid item xs>
-                                    <h2> Songs</h2>
-                            </Grid></Grid></div>
-
-                            <div className="album-list-entire">
-
-                            {songData.map((item, key) => (
-                                <a href={`/songdetails/${item._id}`}>
-                                    <div className="album_display">
-                                        
-                                        <div className="album-display-box">
-                                            <Grid container spacing={2} alignItems="center">
-                                                <Grid item xs={8}>
-                                                    <div className="songInfo">
-                                                        <p>{item.title}</p>
-                                                        <p1>{item.artist}</p1> 
-                                                    </div>                                   
-                                                </Grid><Grid item xs={4}>
-                                                    <div className="scores">
-                                                        <h1>{item.score}</h1>
-                                                    </div>
-                                        </Grid></Grid></div>
-                                    </div>
-                                </a>
-                            ))}
-                        </div></>
-                    )}
+                        {songData.map((item, key) => (
+                            <a href={`/songdetails/${item._id}`}>
+                                <div className="album_display">
+                                    
+                                    <div className="album-display-box">
+                                        <Grid container spacing={2} alignItems="center">
+                                            <Grid item xs={8}>
+                                                <div className="songInfo">
+                                                    <p>{item.title}</p>
+                                                    <p1>{item.artist}</p1> 
+                                                </div>                                   
+                                            </Grid><Grid item xs={4}>
+                                                <div className="scores">
+                                                    <h1>{item.score}</h1>
+                                                </div>
+                                    </Grid></Grid></div>
+                                </div>
+                            </a>
+                        ))}
+                    </div></>
+                )}
 
             </header>
 
