@@ -306,12 +306,14 @@ const HomePage = (props) => {
             return b.trendScore- a.trendScore;
         });
         try{
-            var trendingUpDataTest1 = {album: trendingUpTemp[0].album, change: trendingUpTemp[0].trendScore}
-            var trendingUpDataTest2 = {album: trendingUpTemp[1].album, change: trendingUpTemp[1].trendScore}
-            var trendingUpDataTest3 = {album: trendingUpTemp[2].album, change: trendingUpTemp[2].trendScore}
-            TUDTst = [trendingUpDataTest1,trendingUpDataTest2,trendingUpDataTest3]
+            if(trendingUpTemp[0] !== undefined && trendingUpTemp[1] !== undefined && trendingUpTemp[2] !== undefined){
+                var trendingUpDataTest1 = {album: trendingUpTemp[0].album, change: trendingUpTemp[0].trendScore}
+                var trendingUpDataTest2 = {album: trendingUpTemp[1].album, change: trendingUpTemp[1].trendScore}
+                var trendingUpDataTest3 = {album: trendingUpTemp[2].album, change: trendingUpTemp[2].trendScore}
+                TUDTst = [trendingUpDataTest1,trendingUpDataTest2,trendingUpDataTest3]
 
-            setTrendingUpData(TUDTst);
+                setTrendingUpData(TUDTst);
+            }
         
         }catch{
             console.log("setTrendUp err")
@@ -323,15 +325,16 @@ const HomePage = (props) => {
         });
         
         try{
+            if(trendingDownTemp[0] !== undefined && trendingDownTemp[1] !== undefined && trendingDownTemp[2] !== undefined){
+                var trendingDownDataTest1 = {album: trendingDownTemp[0].album, change: trendingDownTemp[0].trendScore}
+                var trendingDownDataTest2 = {album: trendingDownTemp[1].album, change: trendingDownTemp[1].trendScore}
+                var trendingDownDataTest3 = {album: trendingDownTemp[2].album, change: trendingDownTemp[2].trendScore}
+                TUDTst = [trendingDownDataTest1,trendingDownDataTest2,trendingDownDataTest3]
 
-            var trendingDownDataTest1 = {album: trendingDownTemp[0].album, change: trendingDownTemp[0].trendScore}
-            var trendingDownDataTest2 = {album: trendingDownTemp[1].album, change: trendingDownTemp[1].trendScore}
-            var trendingDownDataTest3 = {album: trendingDownTemp[2].album, change: trendingDownTemp[2].trendScore}
-            TUDTst = [trendingDownDataTest1,trendingDownDataTest2,trendingDownDataTest3]
+                setTrendingDownData(TUDTst);
 
-            setTrendingDownData(TUDTst);
-
-            setDisplayStats(true)
+                setDisplayStats(true)
+            }
         }catch{
             console.log("trenddown err")
         }
