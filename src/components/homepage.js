@@ -171,7 +171,7 @@ const HomePage = (props) => {
             {artistScore.slice(0, 1).map((item, key) => (
             <div key={key}>
                 <img src={topArtistPhoto} alt= ""></img>
-                <Typography gutterBottom>
+                <Typography gutterBottom component={'span'} variant={'body2'}>
                     {artistScore[getMax(artistScore)].name}
                 </Typography>
             </div>
@@ -200,13 +200,11 @@ const HomePage = (props) => {
             {
             <div>
                 <img src={averageDiff.albumImage} alt= ""></img>
-                <p>
-                    {averageDiff.album}
-                    </p>
-                <Typography gutterBottom>
+                <p>{averageDiff.album}</p>
+                <Typography gutterBottom component={'span'} variant={'body2'}>
                     <p>You rated it: {(+averageDiff.profScore).toFixed(2)} </p>
                 </Typography>
-                <Typography gutterBottom>
+                <Typography gutterBottom component={'span'} variant={'body2'}>
                     <p>Average Rating:    {(+averageDiff.averageScore).toFixed(2)} </p>
                 </Typography>
                 

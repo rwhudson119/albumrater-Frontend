@@ -130,7 +130,7 @@ const SongDetails = (props) => {
 
 
             <div className="Song details">
-                <Typography id="input-slider" gutterBottom>
+                <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                     Change Score
                 </Typography>
                 <Box sx={{ width: 250 }}>
@@ -164,7 +164,7 @@ const SongDetails = (props) => {
 
             <Button variant="Contained" onClick = {handleUpdate}>Update Rating</Button>
             
-            <Typography id="input-slider" gutterBottom>
+            <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                     From: 
                     <a href={`/albumdetails/${parentAlbum._id}`}>
                     <div> 

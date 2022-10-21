@@ -370,7 +370,7 @@ const AddAlbum = (props) => {
         <header className="App-header">
             <img className="album_deets_image" src= {results.cover} alt= ""/>
             <div className="Artwork">
-                <Typography id="input-slider" gutterBottom>
+                <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                 Artwork
                 </Typography>
                 <Box sx={{ width: 250 }}>
@@ -451,7 +451,7 @@ const AddAlbum = (props) => {
             )}
 
             <div className="Expectation">
-                <Typography id="input-slider" gutterBottom>
+                <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                 Expectation
                 </Typography>
                 <Box sx={{ width: 250 }}>
@@ -509,7 +509,7 @@ const AddAlbum = (props) => {
                                 <Box sx={{ width: 250 }}>
                                     <Grid container spacing={2} alignItems="center">
                                             <Grid item xs>
-                                                <Typography id="song-input" gutterBottom>
+                                                <Typography id="song-input" gutterBottom component={'span'} variant={'body2'}>
                                                     {item.title}
                                                 </Typography>
                                             </Grid>
@@ -542,7 +542,7 @@ const AddAlbum = (props) => {
                         <h1>Rate Album</h1>
 
                         <div className="Originality">
-                            <Typography id="input-slider" gutterBottom>
+                            <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                                 Originality
                             </Typography>
                             <Box sx={{ width: 250 }}>
@@ -575,7 +575,7 @@ const AddAlbum = (props) => {
                         </div>
 
                         <div className="Flow">
-                            <Typography id="input-slider" gutterBottom>
+                            <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                                 Flow
                             </Typography>
                             <Box sx={{ width: 250 }}>
@@ -608,7 +608,7 @@ const AddAlbum = (props) => {
                         </div>
 
                         <div className="Lyrics">
-                            <Typography id="input-slider" gutterBottom>
+                            <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                                 Lyrics
                             </Typography>
                             <Box sx={{ width: 250 }}>
@@ -641,7 +641,7 @@ const AddAlbum = (props) => {
                         </div>
 
                         <div className="HowCaptivating">
-                            <Typography id="input-slider" gutterBottom>
+                            <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                                 HowCaptivating
                             </Typography>
                             <Box sx={{ width: 250 }}>
@@ -674,7 +674,7 @@ const AddAlbum = (props) => {
                         </div>
 
                         <div className="Timelessness">
-                            <Typography id="input-slider" gutterBottom>
+                            <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                                 Timelessness
                             </Typography>
                             <Box sx={{ width: 250 }}>
@@ -707,7 +707,7 @@ const AddAlbum = (props) => {
                         </div>
 
                         <div className="Delivery">
-                            <Typography id="input-slider" gutterBottom>
+                            <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                                 Delivery
                             </Typography>
                             <Box sx={{ width: 250 }}>
@@ -740,7 +740,7 @@ const AddAlbum = (props) => {
                         </div>
 
                         <div className="Music">
-                            <Typography id="input-slider" gutterBottom>
+                            <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                             Music
                             </Typography>
                             <Box sx={{ width: 250 }}>
