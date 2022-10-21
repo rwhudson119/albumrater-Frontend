@@ -41,7 +41,6 @@ function Login() {
     const GetProfiles = () =>{
         axios.get(`/profile/`).then(res => {
         setProfiles(res.data);
-        console.log(res.data);
         });
     }
     useEffect(() => {
@@ -58,7 +57,6 @@ function Login() {
                 variant="outlined" 
                 onChange={onChangeUsername}
                 onKeyPress={(ev) => {
-                    console.log(`Pressed keyCode ${ev.key}`);
                     if (ev.key === 'Enter') {
                         if(usernameValid) {
                             navigate(`/homepage/${usernameID}`);
@@ -69,7 +67,7 @@ function Login() {
                 />
                 <div className="userLogin">
                     {usernameValid && (
-                        <div classname="badUser">
+                        <div className="badUser">
                             <Button variant="outlined"  onClick={() => { navigate(`/homepage/${usernameID}`)}} >Login</Button>
                         </div>
                     )}
@@ -86,11 +84,6 @@ function Login() {
                     <p>Ask Robbie :)</p>
                 )}
                 </div>
-                {/*}
-                <h2>Profiles</h2>
-                {profiles.map((item, key) => (
-                    <a className="App-link" href= {`/homepage/${item._id}`} >{item.username}</a>
-                ))} */}
             </header>
             <Foot />
         </div>
