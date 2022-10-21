@@ -421,7 +421,7 @@ const AlbumDetails = (props) => {
             <img className="album_deets_image" src= {album.cover_photo} alt= ""/>
 
             <div className="Artwork">
-                <Typography id="input-slider" gutterBottom>
+                <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                 Artwork
                 </Typography>
                 <div className="statBox">
@@ -504,7 +504,7 @@ const AlbumDetails = (props) => {
             )}
 
             <div className="Expectation">
-                <Typography id="input-slider" gutterBottom>
+                <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                 Expectation
                 </Typography>
                 <div className="statBox">
@@ -551,7 +551,7 @@ const AlbumDetails = (props) => {
                         <Box sx={{ width: 250 }}>
                             <Grid container spacing={2} alignItems="center">
                                     <Grid item xs={9}>
-                                        <Typography id="song-input" gutterBottom>
+                                        <Typography id="song-input" gutterBottom component={'span'} variant={'body2'}>
                                             {item.title}
                                         </Typography>
                                     </Grid>
@@ -587,7 +587,7 @@ const AlbumDetails = (props) => {
                 <h1>Rate it</h1>
 
                 <div className="Originality">
-                    <Typography id="input-slider" gutterBottom>
+                    <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                         Originality
                     </Typography>
                     <div className="statBox">
@@ -623,7 +623,7 @@ const AlbumDetails = (props) => {
                 </div>
 
                 <div className="Flow">
-                    <Typography id="input-slider" gutterBottom>
+                    <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                         Flow
                     </Typography>
                     <div className="statBox">
@@ -658,7 +658,7 @@ const AlbumDetails = (props) => {
                 </div>
 
                 <div className="Lyrics">
-                    <Typography id="input-slider" gutterBottom>
+                    <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                         Lyrics
                     </Typography>
                     <div className="statBox">
@@ -693,7 +693,7 @@ const AlbumDetails = (props) => {
                 </div>
 
                 <div className="HowCaptivating">
-                    <Typography id="input-slider" gutterBottom>
+                    <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                         HowCaptivating
                     </Typography>
                     <div className="statBox">
@@ -728,7 +728,7 @@ const AlbumDetails = (props) => {
                 </div>
 
                 <div className="Timelessness">
-                    <Typography id="input-slider" gutterBottom>
+                    <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                         Timelessness
                     </Typography>
                     <div className="statBox">
@@ -763,7 +763,7 @@ const AlbumDetails = (props) => {
                 </div>
 
                 <div className="Delivery">
-                    <Typography id="input-slider" gutterBottom>
+                    <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                         Delivery
                     </Typography>
                     <div className="statBox">
@@ -798,7 +798,7 @@ const AlbumDetails = (props) => {
                 </div>
 
                 <div className="Music">
-                    <Typography id="input-slider" gutterBottom>
+                    <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
                     Music
                     </Typography>
                     <div className="statBox">
