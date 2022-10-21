@@ -497,7 +497,15 @@ const HomePage = (props) => {
     const GetVariationStats = (albums) => {        
         axios.get(`/album/`).then(res => {
             
-            const albumsSingular = _.groupBy(res.data, function(alb){ return alb.title});
+
+            const albumsSingularFilt = res.data.filter(function(item)
+            {
+            return item.in_queue !== "yes";
+            });
+
+            const albumsSingular = _.groupBy(albumsSingularFilt, function(alb){ return alb.title})
+            
+
             const albumsSingVal = Object.values(albumsSingular);
 
             UseVariationStats(albumsSingVal);
