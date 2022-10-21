@@ -37,7 +37,7 @@ const NewAlbum = (props) => {
             <h2>{params.album}</h2>
             {results.map((item, key) => (
                 <>
-                    <p> {item.title} {item.artist.name}</p> 
+                    <p> {item.title} - {item.artist.name}</p> 
 
                     <a href={`/addalbum/${item.id}`}><img src= {item.cover} alt= ""/> </a>
                 </>

@@ -52,6 +52,8 @@ const AlbumDetails = (props) => {
     const [expectation, setExpectation] = useState(50);
     const [songArrayFinal, setSongArrayFinal] = useState([]);
     const [ratingData, setRatingData] = useState([]);
+    const [totalDuration, setTotalDuration] = useState(null);
+
 
     const ratingDataTesttt = [{name: '15/03/2022, 12:08:43', score: 65.8}, {name: '15/03/2022, 12:09:43', score: 60.8}]
 
@@ -270,12 +272,9 @@ const AlbumDetails = (props) => {
                 {date: time, total_score: totalScore, notes: notes} ).then((res) => {
             });
 
-            console.log("songs: " + songArrayFinal)
-
             songArrayFinal.map((item, key) => (
                 axios.post(`/song/update/${item._id}`, 
-                {score: item.score} ).then((res) => {
-                })))
+                {score: item.score} )))
 
 
             var ratings = []
@@ -308,14 +307,15 @@ const AlbumDetails = (props) => {
         const getSongData = async (albumSongs) => {
             console.log("GETTING SONGS")
             var songArrayTest = []
+            var totalDur
             albumSongs.map((item, key) => (
                 axios.get(`/song/${item}`)
                 .then((res) => {
-                    songArrayTest[key] = res.data
+                    console.log("res.data")
                     console.log(res.data)
-                })
-
-            ))
+                    songArrayTest[key] = res.data
+                    setTotalDuration(totalDuration + res.data.duration)
+            })))
             setSongArrayFinal(songArrayTest)
             console.log("got SONGS")
             console.log(songArrayTest)
@@ -457,11 +457,12 @@ const AlbumDetails = (props) => {
 
             {!displayDetails && (
                 <div className="albumInfo">
-                    <p> {album.title}</p>
-                    <p> {album.artist}</p>
-                    <p> Country: {album.country}</p>
-                    <p> {album.release_date}</p>
-                    <p> {album.genre}</p>
+                    <p> {title}</p>
+                    <p> {artist}</p>
+                    <p> {country}</p>
+                    <p> {release_date}</p>
+                    <p> {genre}</p>
+                    {totalDuration && <p>Duration: {totalDuration}</p>}
                     <div className="alterDetails" onClick={toggleDetails}>
                         <SettingsSuggestIcon />
                     </div>
@@ -472,31 +473,32 @@ const AlbumDetails = (props) => {
                 <div className="changeDetails">
                     <div className="change_details_items">
                         <Grid container spacing={2} alignItems="center">
-                            <TextField id="standard-basic" label="Title" variant="standard" onChange={handleInputChangeTitle} defaultValue={album.title}/>
+                            <TextField id="standard-basic" label="Title" variant="standard" onChange={handleInputChangeTitle} defaultValue={title}/>
                         </Grid>
                     </div>
                     <div className="change_details_items">
                         <Grid container spacing={2} alignItems="center">    
-                            <TextField id="standard-basic" label="Artist" variant="standard" onChange={handleInputChangeArtist} defaultValue={album.artist} />
+                            <TextField id="standard-basic" label="Artist" variant="standard" onChange={handleInputChangeArtist} defaultValue={artist} />
                         </Grid>
                     </div>
 
                     <div className="change_details_items">
                         <Grid container spacing={2} alignItems="center">
-                            <TextField id="standard-basic" label="Country" variant="standard" onChange={handleInputChangeCountry} defaultValue={album.country}/>
+                            <TextField id="standard-basic" label="Country" variant="standard" onChange={handleInputChangeCountry} defaultValue={country}/>
                         </Grid>
                     </div>
 
                     <div className="change_details_items">
                         <Grid container spacing={2} alignItems="center">
-                            <TextField id="standard-basic" label="Release Date" variant="standard" onChange={handleInputChangeRelease_Date} defaultValue={album.release_date}/>
+                            <TextField id="standard-basic" label="Release Date" variant="standard" onChange={handleInputChangeRelease_Date} defaultValue={release_date}/>
                         </Grid>
                     </div>
                     <div className="change_details_items">
                         <Grid container spacing={2} alignItems="center">
-                            <TextField id="standard-basic" label="Genre" variant="standard" onChange={handleInputChangeGenre} defaultValue={album.genre}/>
+                            <TextField id="standard-basic" label="Genre" variant="standard" onChange={handleInputChangeGenre} defaultValue={genre}/>
                         </Grid>
                     </div>
+                    {totalDuration && <div className="albumInfo"><p>Duration: {totalDuration}</p></div>}
                     <div className="boxTitle" onClick={toggleDetails}>
                         Done
                     </div>

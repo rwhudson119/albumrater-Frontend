@@ -820,7 +820,7 @@ const HomePage = (props) => {
                         <div className="album-list-entire">
 
                         {songData.map((item, key) => (
-                            <a href={`/songdetails/${item._id}`}>
+                            <a href={`/songdetails/${item.id}`}>
                                 <div className="album_display">
                                     
                                     <div className="album-display-box">

@@ -122,9 +122,10 @@ const SongDetails = (props) => {
     <div className="App">
         <NavBar />
         <header className="App-header">
-            <div className="albumInfo">
+            <div className="albumInfoo">
                 <p> {song.title}</p>
                 <p> {song.artist}</p>
+                <p> {song.duration}</p>
             </div>
 
 

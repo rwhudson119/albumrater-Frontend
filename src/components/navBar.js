@@ -70,7 +70,6 @@ const theme = createTheme({
                 <TextField 
                 id="standard-basic" 
                 onKeyPress={(ev) => {
-                  console.log(`Pressed keyCode ${ev.key}`);
                   if (ev.key === 'Enter' && search !== "") {
                     console.log("SEARCHING... " + search)
                     navigate(`/newalbum/${search}`);
