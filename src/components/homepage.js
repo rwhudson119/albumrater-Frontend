@@ -366,7 +366,6 @@ const HomePage = (props) => {
             try{
             artistScore.slice(0, 1).map((item, key) => (
                 axios.get(`/deezer/artist/${artistScore[getMax(artistScore)].name}`).then(res => {
-                    console.log(res.data.data[0])
                     setTopArtistPhoto(res.data.data[0].picture_big)
                 }
             ))
@@ -482,7 +481,6 @@ const HomePage = (props) => {
                 profileScore = totalScore
             }else{
                 averageScore = averageScore + totalScore
-                console.log(item);
             }
             return 0;
         })

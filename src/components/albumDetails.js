@@ -53,10 +53,6 @@ const AlbumDetails = (props) => {
     const [songArrayFinal, setSongArrayFinal] = useState([]);
     const [ratingData, setRatingData] = useState([]);
     const [totalDuration, setTotalDuration] = useState(null);
-
-
-    const ratingDataTesttt = [{name: '15/03/2022, 12:08:43', score: 65.8}, {name: '15/03/2022, 12:09:43', score: 60.8}]
-
     const [averageRating, setAverageRating] = useState(0);
 
 
@@ -303,21 +299,15 @@ const AlbumDetails = (props) => {
 
     useEffect(() => {
 
-
         const getSongData = async (albumSongs) => {
-            console.log("GETTING SONGS")
             var songArrayTest = []
             albumSongs.map((item, key) => (
                 axios.get(`/song/${item}`)
                 .then((res) => {
-                    console.log("res.data")
-                    console.log(res.data)
                     songArrayTest[key] = res.data
                     setTotalDuration(totalDuration + res.data.duration)
             })))
             setSongArrayFinal(songArrayTest)
-            console.log("got SONGS")
-            console.log(songArrayTest)
         }
 
         const getAllAlbumData = async (title) => {
@@ -341,7 +331,6 @@ const AlbumDetails = (props) => {
                 'Access-Control-Allow-Origin': '*',
                 },
             }).then((res) => {
-                console.log(res.data.total_score) 
                 var ratingDataTest = ratingData
                 ratingDataTest.push({name: rating.split(' ')[0], score: res.data.total_score})
                 setRatingData(ratingDataTest)
@@ -358,8 +347,6 @@ const AlbumDetails = (props) => {
                 return new Date(a.name) - new Date(b.name);
             });
             setRatingData(ratingDataSorted)
-            console.log("Sorted")
-            console.log(ratingDataSorted)
         }
         
 
@@ -854,8 +841,6 @@ const AlbumDetails = (props) => {
             )}
 
             {ratingData[1] && (
-                 console.log(ratingData),
-                 console.log(ratingDataTesttt),
                 <>
                     <LineChart width={500} height={300} data={ratingData}>
                         <CartesianGrid strokeDasharray="3 3" />

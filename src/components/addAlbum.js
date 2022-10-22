@@ -271,10 +271,6 @@ const AddAlbum = (props) => {
 
 
         const handleUpdate = (e) => {
-            /*console.log("title   " + title + "  profile   " + profile + "  artist   " + artist + "  country   " + country + "  genre   " + genre 
-            + "  releaseDate   " + releaseDate + "  coverPhoto   " + coverPhoto + "  artwork   " + artwork + "  originality   " + originality + "  flow   " + flow + "  lyrics   " 
-            + lyrics + "  howCaptivating   " + howCaptivating + "  timelessness   " + timelessness + "  delivery   " + delivery + "  music   " + music + "  notes  " + notes)
-*/
             e.preventDefault();
             const totalScore = (originality + flow + lyrics + howCaptivating + timelessness + delivery + music)/7
             if(toQueue === true){
@@ -282,7 +278,6 @@ const AddAlbum = (props) => {
                 + "  releaseDate   " + releaseDate + "  coverPhoto   " + coverPhoto + "  artwork   " + artwork)
                 axios.post("/album/add", 
                     {title: title, profile: profile, artist: artist, country: country, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, artwork: artwork, expectation: expectation, in_queue: "yes"} ).then((res) => {
-                        console.log(res)
                         navigate(`/homepage/${profile}`);
                     });
             }
@@ -293,7 +288,6 @@ const AddAlbum = (props) => {
 
                 axios.post("/rating/add",
                     {date: time, total_score: totalScore, notes: notes} ).then((res) => {
-                    console.log(res)
                 });
 
                 //add tracks to database
@@ -316,7 +310,6 @@ const AddAlbum = (props) => {
                 const ratings = [time]
                 axios.post("/album/add", 
                     {title: title, profile: profile, artist: artist, country: country, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, artwork: artwork, expectation: expectation, in_queue: "no", originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, delivery: delivery, music: music, notes: notes, ratings: ratings, songs: arr} ).then((res) => {
-                        console.log(res)
                         navigate(`/homepage/${profile}`);
                     });
             }
@@ -327,7 +320,6 @@ const AddAlbum = (props) => {
 
     useEffect(() => {
         const URL = `https://album-rater-backend.herokuapp.com/deezer/albumid/${params.albumId}`
-    
         const GetAlbum = async () => {
 
             const res = await axios({
@@ -348,7 +340,6 @@ const AddAlbum = (props) => {
             if(title === "" || artist === "" || genre === ""|| releaseDate === ""){
                 toggleDetails()
             }
-            console.log(res.data)
         };
         GetAlbum();
     }, []);
