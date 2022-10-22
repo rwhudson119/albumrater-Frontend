@@ -307,7 +307,6 @@ const AlbumDetails = (props) => {
         const getSongData = async (albumSongs) => {
             console.log("GETTING SONGS")
             var songArrayTest = []
-            var totalDur
             albumSongs.map((item, key) => (
                 axios.get(`/song/${item}`)
                 .then((res) => {

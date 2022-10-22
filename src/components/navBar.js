@@ -82,7 +82,7 @@ const theme = createTheme({
                 variant="outlined" 
                 onChange={onChangeSearch}/>
                 
-                <ul class="nav-links">
+                <ul className="nav-links">
                     <li><a href={`/profiledetails/`}>Profile</a></li>
                     <li><a href={`/`}>Logout</a></li>
                     
