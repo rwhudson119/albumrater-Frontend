@@ -306,17 +306,23 @@ const HomePage = (props) => {
 
     const sortArrayRecentlyRated = () => {
         const recentlyRatedTemp = [...albums].sort((a, b) => {
-
-            var a_noSec = a.ratings[a.ratings.length - 1].split(",");
-            var [a_day, a_month, a_year] = a_noSec[0].split('/');
-            var [a_hours, a_minutes, a_seconds] = a_noSec[1].split(':');
-            var a_date = new Date(+a_year, a_month - 1, +a_day, +a_hours, +a_minutes, +a_seconds);
-
-
-            var b_noSec = b.ratings[b.ratings.length - 1].split(",");
-            var [b_day, b_month, b_year] = b_noSec[0].split('/');
-            var [b_hours, b_minutes, b_seconds] = b_noSec[1].split(':');
-            var b_date = new Date(+b_year, b_month - 1, +b_day, +b_hours, +b_minutes, +b_seconds);
+            var a_date, b_date
+            if(a.in_queue == "yes"){
+                a_date = 0
+            }else{
+                var a_noSec = a.ratings[a.ratings.length - 1].split(",");
+                var [a_day, a_month, a_year] = a_noSec[0].split('/');
+                var [a_hours, a_minutes, a_seconds] = a_noSec[1].split(':');
+                a_date = new Date(+a_year, a_month - 1, +a_day, +a_hours, +a_minutes, +a_seconds);
+            }
+            if(b.in_queue == "yes"){
+                b_date = 0
+            }else{
+                var b_noSec = b.ratings[b.ratings.length - 1].split(",");
+                var [b_day, b_month, b_year] = b_noSec[0].split('/');
+                var [b_hours, b_minutes, b_seconds] = b_noSec[1].split(':');
+                b_date = new Date(+b_year, b_month - 1, +b_day, +b_hours, +b_minutes, +b_seconds);
+            }
             
             return b_date - a_date;
         });
