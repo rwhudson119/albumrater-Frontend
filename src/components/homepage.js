@@ -41,6 +41,7 @@ const HomePage = (props) => {
     const [displayStats, setDisplayStats] = useState(false);
 
     const [displayedAlbums, setDisplayedAlbums] = useState([]);
+    const [displayedSongs, setDisplayedSongs] = useState([]);
 
     //stats
 
@@ -48,7 +49,6 @@ const HomePage = (props) => {
     const [trendingDownData, setTrendingDownData] = useState([]);
     const [trends, setTrends] = useState([]);
     const [topArtistPhoto, setTopArtistPhoto] = useState('');
-    const [artistScore, setArtistScore] = useState([]);
     const [genreScore, setGenreScore] = useState([]);
     const [topAlbums, setTopAlbums] = useState([]);
     const [topSongs, setTopSongs] = useState([]);
@@ -57,7 +57,7 @@ const HomePage = (props) => {
 
 
 
-    var artistScoreTemp = []
+    var artistScore = {}
     var genreScoreTemp = []
     
 
@@ -141,16 +141,12 @@ const HomePage = (props) => {
         <div className="data_title">
             <p>Top Artist</p>
         <div className="top-artist">
-            {artistScore.slice(0, 1).map((item, key) => (
-            <div key={key}>
                 <img src={topArtistPhoto} alt= ""></img>
                 <Typography gutterBottom>
-                    {artistScore[getMax(artistScore)].name}
+                    {getMax2(artistScore)}
                 </Typography>
             </div>
-            ))
-        }
-        </div></div>
+        </div>
       )
 
       const StatPanelTG = () => (
@@ -190,7 +186,7 @@ const HomePage = (props) => {
       )
 
 
-      
+    //gat max index of an array
     const getMax = (array) => {
         var max = 0
         array.map((item, key) => {
@@ -200,6 +196,18 @@ const HomePage = (props) => {
             return 0;
         })
         return max;
+    }
+
+    const getMax2 = (object) => {
+        var bool = 0
+        var max_name
+        for (const property in object) {
+            if(object[property] > object[max_name] || bool === 0){
+                bool = 1
+                max_name = property
+            }
+        }
+        return max_name
     }
 
 
@@ -220,8 +228,13 @@ const HomePage = (props) => {
 
     const onChangeSearch = (e) => {
         var search = e.target.value;
-        setDisplayedAlbums(albumData)
         setDisplayedAlbums(albumData.filter(obj => {
+            return obj.title.toLowerCase().includes(search.toLowerCase()) || obj.artist.toLowerCase().includes(search.toLowerCase())
+        }))
+    }
+    const onChangeSearchSongs = (e) => {
+        var search = e.target.value;
+        setDisplayedSongs(songData.filter(obj => {
             return obj.title.toLowerCase().includes(search.toLowerCase()) || obj.artist.toLowerCase().includes(search.toLowerCase())
         }))
     }
@@ -235,10 +248,8 @@ const HomePage = (props) => {
                 bTrend = -1
             } else{
                 bTrend = b.score
-                
             } if(a.score === undefined){
                 aTrend = -1
-                
             } else{
                 aTrend = a.score
             }
@@ -249,58 +260,45 @@ const HomePage = (props) => {
 
     const sortArrayTopAlbums = () => {
 
-        const topAlbumsTemp = [...albums].sort((a, b) => {
-
+        setTopAlbums([...albums].sort((a, b) => {
             var aTrend = (a.originality + a.flow + a.lyrics + a.how_captivating + a.timelessness)/5
             var bTrend = (b.originality + b.flow + b.lyrics + b.how_captivating + b.timelessness)/5
-
             return bTrend - aTrend;
-        });
-        setTopAlbums(topAlbumsTemp);
+        })
+        );
     };
 
     const sortArrayTrend = (trendsTemp) => {
-        var TUDTst;
+        var TUDTst, TUDTst2;
 
-        const trendingUpTemp = [...trendsTemp].sort((a, b) => {
+        var trendingUpTemp = [...trendsTemp].sort((a, b) => {
             return b.trendScore- a.trendScore;
         });
         try{
-            console.log("KHJEBGFSakbs")
             var trendingUpDataTest1 = {album: trendingUpTemp[0].album, change: trendingUpTemp[0].trendScore}
             var trendingUpDataTest2 = {album: trendingUpTemp[1].album, change: trendingUpTemp[1].trendScore}
             var trendingUpDataTest3 = {album: trendingUpTemp[2].album, change: trendingUpTemp[2].trendScore}
+            var trendingDownDataTest1 = {album: trendingUpTemp[trendsTemp.length - 1].album, change: trendingUpTemp[trendingUpTemp.length - 1].trendScore}
+            var trendingDownDataTest2 = {album: trendingUpTemp[trendsTemp.length - 2].album, change: trendingUpTemp[trendingUpTemp.length - 2].trendScore}
+            var trendingDownDataTest3 = {album: trendingUpTemp[trendsTemp.length - 3].album, change: trendingUpTemp[trendingUpTemp.length - 3].trendScore}
             TUDTst = [trendingUpDataTest1,trendingUpDataTest2,trendingUpDataTest3]
+            TUDTst2 = [trendingDownDataTest1,trendingDownDataTest2,trendingDownDataTest3]
 
             setTrendingUpData(TUDTst);
-        
-        }catch{
-            console.log("KHJEBGFSakbs")
-            console.log("setTrendUp err")
-            setTrendingUpData([])
-        }
-
-        const trendingDownTemp = [...trendsTemp].sort((a, b) => {
-            return a.trendScore - b.trendScore;
-        });
-        
-        try{
-
-            var trendingDownDataTest1 = {album: trendingDownTemp[0].album, change: trendingDownTemp[0].trendScore}
-            var trendingDownDataTest2 = {album: trendingDownTemp[1].album, change: trendingDownTemp[1].trendScore}
-            var trendingDownDataTest3 = {album: trendingDownTemp[2].album, change: trendingDownTemp[2].trendScore}
-            TUDTst = [trendingDownDataTest1,trendingDownDataTest2,trendingDownDataTest3]
-
-            setTrendingDownData(TUDTst);
-
+            setTrendingDownData(TUDTst2);
             setDisplayStats(true)
+        
         }catch{
-            console.log("trenddown")
+            console.log("setTrend err")
+            setTrendingUpData([])
+            setTrendingDownData([])
         }
+        trendingUpTemp = []
     };
 
+
     const sortArrayRecentlyRated = () => {
-        const recentlyRatedTemp = [...albums].sort((a, b) => {
+        var recentlyRatedTemp = [...albums].sort((a, b) => {
             var a_date, b_date
             if(a.in_queue === "yes"){
                 a_date = 0
@@ -322,43 +320,39 @@ const HomePage = (props) => {
             return b_date - a_date;
         });
         setRecentlyRated(recentlyRatedTemp);
+        recentlyRatedTemp = []
     };
 
-        const GetTopArtist = () => {
-            try{
-            artistScore.slice(0, 1).map((item, key) => (
-                axios.get(`/deezer/artist/${artistScore[getMax(artistScore)].name}`).then(res => {
-                    console.log(res.data.data[0])
-                    setTopArtistPhoto(res.data.data[0].picture_big)
-                }
-            ))
+    const GetTopArtist = () => {
+        try{
+            console.log("HALPPP")
+            var artist_name = getMax2(artistScore)
+            console.log(artist_name)
+            axios.get(`/deezer/artist/${artist_name}`).then(res => {
+                setTopArtistPhoto(res.data.data[0].picture_big)
+                console.log(res.data.data[0].picture_big)
+                console.log("topArtistPhoto")
+            }
         )}catch{
             console.log("unable to find artist")
         }
     }
 
-
-
-
-
-
     
-    const getArtistRank = (singularAlbum) => {
-        var bool = -1
-        artistScoreTemp.map((item, key) => {
-            if(item.name === singularAlbum.artist){
-                bool = key
-            }
-            return 0;
-        })
-        const totalScore = (singularAlbum.originality + singularAlbum.flow + singularAlbum.lyrics + singularAlbum.how_captivating + singularAlbum.timelessness)/5
-        if(bool > -1){
-            artistScoreTemp[bool].score = artistScoreTemp[bool].score + totalScore
+    const getArtistRank = (gAlbums) => {
+        var total = (gAlbums.originality + gAlbums.flow + gAlbums.lyrics + gAlbums.how_captivating + gAlbums.timelessness)/5
+        if(artistScore[gAlbums.artist] === undefined){
+            artistScore[gAlbums.artist] = total
         }else{
-            artistScoreTemp.push({name: singularAlbum.artist, score: totalScore})
+            artistScore[gAlbums.artist] = artistScore[gAlbums.artist] + total
         }
-        setArtistScore(artistScoreTemp)
     }
+
+
+
+
+
+    //------------------------------------------------ OPTIMIZED UP TO HERE
 
     const getGenreRank = (singularAlbum) => {
         var bool = -1
@@ -392,7 +386,8 @@ const HomePage = (props) => {
                 getGenreRank(item)
                 return 0;
             })
-            //sortArtistRank()
+            GetTopArtist();
+            
         });
         return 0;
     }
@@ -563,12 +558,12 @@ const HomePage = (props) => {
                 }
             });
             setSongData(sorted);
+            setDisplayedSongs(sorted);
           };
           sortArrayTopAlbums();
           sortArrayRecentlyRated();
           sortArrayTopSongs();
           sortSongArray(sortTypeSong);
-          GetTopArtist();
           GetVariationStats(albums);
 
     }, [sortTypeSong]) 
@@ -585,12 +580,12 @@ const HomePage = (props) => {
 
                 <div className="album-stats-entire">
                     <Carousel slide={false}>
-                        {artistScore[0] &&
+                        {topArtistPhoto !== '' &&
                         <Carousel.Item>
                         <div className="stats-buttonless">
                         <StatPanelTA /></div>
                         </Carousel.Item>
-                        }{!artistScore[0] &&
+                        }{topArtistPhoto === '' &&
                         <div className="stats-buttonless">
                         <p>Rate some Albums to view your stats</p></div>
                         }
@@ -742,9 +737,16 @@ const HomePage = (props) => {
                                 <Button disabled><h2> Songs</h2></Button>
                             </Grid></Grid></div>
 
+                            <TextField 
+                            id="standard-basic" 
+                            sx={{ label: { color: 'white' }}} 
+                            label="Search Rated" 
+                            variant="outlined"
+                            onChange={onChangeSearchSongs}/>
+
                             <div className="album-list-entire">
 
-                            {songData.map((item, key) => (
+                            {displayedSongs.map((item, key) => (
                                 <a href={`/songdetails/${item._id}`} key={item._id}>
                                     <div className="album_display" key={item._id}>
                                         
