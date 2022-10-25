@@ -217,58 +217,89 @@ nav{
 
 .top_Albums {
   position:relative;
-  padding: 10px 10px 50px 10px;
+  padding: 10px 10px 10px 10px;
   width: 80%;
   display: flex;
-  flex-wrap: nowrap;
+  /*flex-wrap: nowrap;*/
+  display: flex;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   overflow-y: hidden;
 }
 
 .top_Albums::-webkit-scrollbar {
-  display: none;
+  width: 5px;
+}
+
+
+.top_Albums::-webkit-scrollbar-track:hover {
+  -webkit-box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.575); 
+  border-radius: 10px;
+}
+
+
+.top_Albums::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(2, 149, 247);
 }
 
 
 .top_Album_Individual {
+  text-align: left;
   position: relative;
   max-block-size: 290px;
   width: 300px;
   height: 290px;
+  font-size: calc(15px + 1vmin);
+  color: white;
+  text-decoration: none;
 }
 
 .top_Album_Individual p {
-  position: relative;
-  text-align: center;
-  display: none;
-  color: white;
+  visibility: hidden;
   padding: 14px;
-  text-decoration: none;
   max-height: 100px;
+  color: white;
 }
 
+.top_Album_Individual p1 {
+  visibility: visible;
+  position: relative;
+  top: -275px;
+  display: inline-flex;
+  padding: 0px;
+  font-size: calc(20px + 2vmin);
+  margin-left: 25px;
+  font-weight: bold;
+}
+
+.top_Album_Individual:hover p1 {
+  visibility: hidden;
+}
+
+
+/*.TA_rank {
+  visibility: visible
+}*/
+
+.top_Album_Individual:hover {
+  visibility: visible;
+  text-align: center;
+  position: relative;
+
+}
 
 
 .top_Album_Individual:hover img {
   display: inline-block;
-  color: white;
-  text-align: center;
-  padding: 14px;
-  text-decoration: none;
-  min-width: 300px;
   opacity: 30%;
 }
 .top_Album_Individual:hover p {
+  visibility: visible;
   position: relative;
   top: -275px;
-  font-size: calc(15px + 1vmin);
   display: inline-flex;
-  color: white;
-  text-align: center;
   padding: 14px;
-  text-decoration: none;
-  opacity: 100%;
 }
 
 .top_Albums_border {
@@ -429,9 +460,34 @@ nav{
 
   .top_Album_Individual {
     position: relative;
+    visibility: visible;
+    text-align: center;
     max-block-size: 290px;
     width: 200px;
     height: 200px;
+    text-align: left;
+    position: relative;
+    font-size: calc(9px + 1vmin);
+    color: white;
+    text-decoration: none;
+  }
+
+  .top_Album_Individual:hover p {
+    visibility: visible;
+    position: relative;
+    top: -190px;
+    display: inline-flex;
+    padding: 14px;
+  }
+
+  .top_Album_Individual p1 {
+    visibility: visible;
+    position: relative;
+    top: -190px;
+    display: inline-flex;
+    font-size: calc(15px + 2vmin);
+    margin-left: 20px;
+    font-weight: bold;
   }
 
 
@@ -443,6 +499,8 @@ nav{
     padding: 15px 0px 0px 0;
   }
 
-
+  .top_Albums::-webkit-scrollbar {
+    display: none;
+  }
 
 }

@@ -230,7 +230,7 @@ const AddAlbum = (props) => {
             setCoverPhoto(res.data.cover_big)
             setSongScores1(songScoresArr)
             if((title === "" || artist === "" || genre === ""|| releaseDate === "") === ""){
-               displayDetails = true 
+               toggle()
             }
             console.log(res.data)
         };
@@ -262,8 +262,8 @@ const AddAlbum = (props) => {
                     <p> {results.artist.name}</p>
                     <p> {results.release_date}</p>
                     <p> {results.genres.data[0].name}</p>
-                    <div className="alterDetails" onClick={toggle}>
-                        <SettingsSuggestIcon />
+                    <div className="alterDetails">
+                        <Button onClick={toggle}><SettingsSuggestIcon /></Button>
                     </div>
                 </div>
             )}
@@ -292,17 +292,12 @@ const AddAlbum = (props) => {
                             <TextField id="standard-basic" label="Genre" variant="standard" onChange={handleInputChangeGenre} defaultValue={results.genres.data[0].name}/>
                         </Grid>
                     </div>
-                    <div className="alterDetails" onClick={toggle}>
-                        <p>Done</p>
+                    <div className="alterDetails">
+                        <Button onClick={toggle}>Done</Button>
                     </div>
                 </div>
                 
             )}
-
-
-            <div className="alterDetails" onClick={toggleSongs}>
-                <p>Rate Songs</p>
-            </div>
             
 
             {displaySongs && (
@@ -336,6 +331,9 @@ const AddAlbum = (props) => {
                    </Box>
                 ))
                 }
+                <div className="alterDetails">
+                    <Button onClick={toggleSongs}><p>Back to Album</p></Button>
+                </div>
             </>
             )}
 
@@ -516,9 +514,12 @@ const AddAlbum = (props) => {
                         </Grid>
                     </Box>
                 </div>
-                <Button variant="text" onClick = {handleUpdate}>Submit Rating</Button>
+                <div className="alterDetails">
+                    <Button onClick={toggleSongs}><p>Rate songs</p></Button>
+                </div>
             </div>
             )}
+            <Button variant="text" onClick = {handleUpdate}>Submit Rating</Button>
         </header>
         <Foot />
     </div>

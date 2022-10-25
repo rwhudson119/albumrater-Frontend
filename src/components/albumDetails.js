@@ -53,8 +53,6 @@ const AlbumDetails = (props) => {
     const [songArrayFinal, setSongArrayFinal] = useState([]);
     const [ratingData, setRatingData] = useState([]);
 
-    const ratingDataTesttt = [{name: '15/03/2022, 12:08:43', score: 65.8}, {name: '15/03/2022, 12:09:43', score: 60.8}]
-
     const [averageRating, setAverageRating] = useState(0);
 
 
@@ -342,8 +340,8 @@ const AlbumDetails = (props) => {
                     <p> {album.artist}</p>
                     <p> {album.release_date}</p>
                     <p> {album.genre}</p>
-                    <div className="alterDetails" onClick={toggle}>
-                        <SettingsSuggestIcon />
+                    <div className="alterDetails">
+                        <Button onClick={toggle}><SettingsSuggestIcon /></Button>
                     </div>
                 </div>
             )}
@@ -370,15 +368,12 @@ const AlbumDetails = (props) => {
                             <TextField id="standard-basic" label="Genre" variant="standard" onChange={handleInputChangeGenre} defaultValue={album.genre}/>
                         </Grid>
                     </div>
-                    <div className="boxTitle" onClick={toggle}>
-                        Done
+                    <div className="boxTitle">
+                        <Button onClick={toggle}>Done</Button>
                     </div>
                 </div>
             )}
 
-            <div className="alterDetails" onClick={toggleSongs}>
-                <p>Rate songs</p>
-            </div>
                 
             {displaySongs && (
                 <>
@@ -397,6 +392,7 @@ const AlbumDetails = (props) => {
                                          size="small"
                                          onChange={songArray = songArrayFinal, (e) => songArray[key].score = Number(e.target.value)}
                                          onBlur={handleBlurTest}
+                                         onWheel={(e) => e.target.blur()}
                                          inputProps={{
                                             style: { color: "white" },
                                             step: 1,
@@ -411,9 +407,10 @@ const AlbumDetails = (props) => {
                     </Box>
                  ))
                 }
+                <div className="alterDetails">
+                    <Button onClick={toggleSongs}><p>Back to Album</p></Button>
+                </div>
              </>
-                
-
             )}
 
 
@@ -440,6 +437,7 @@ const AlbumDetails = (props) => {
                                 size="small"
                                 onChange={handleInputChangeOriginality}
                                 onBlur={handleBlurOriginality}
+                                onWheel={(e) => e.target.blur()}
                                 inputProps={{
                                     style: { color: "white" },
                                     step: 5,
@@ -473,6 +471,7 @@ const AlbumDetails = (props) => {
                                 size="small"
                                 onChange={handleInputChangeFlow}
                                 onBlur={handleBlurFlow}
+                                onWheel={(e) => e.target.blur()}
                                 inputProps={{
                                     style: { color: "white" },
                                     step: 5,
@@ -506,6 +505,7 @@ const AlbumDetails = (props) => {
                                 size="small"
                                 onChange={handleInputChangeLyrics}
                                 onBlur={handleBlurLyrics}
+                                onWheel={(e) => e.target.blur()}
                                 inputProps={{
                                     style: { color: "white" },
                                     step: 5,
@@ -539,6 +539,7 @@ const AlbumDetails = (props) => {
                                 size="small"
                                 onChange={handleInputChangeHowCaptivating}
                                 onBlur={handleBlurHowCaptivating}
+                                onWheel={(e) => e.target.blur()}
                                 inputProps={{
                                     style: { color: "white" },
                                     step: 5,
@@ -572,6 +573,7 @@ const AlbumDetails = (props) => {
                                 size="small"
                                 onChange={handleInputChangeTimelessness}
                                 onBlur={handleBlurTimelessness}
+                                onWheel={(e) => e.target.blur()}
                                 inputProps={{
                                     style: { color: "white" },
                                     step: 5,
@@ -600,15 +602,15 @@ const AlbumDetails = (props) => {
                         </Grid>
                     </Box>
                 </div>
-                <Button variant="text" onClick = {handleUpdate}>Update Rating</Button>
-                
+                <div className="alterDetails">
+                    <Button onClick={toggleSongs}><p>Rate songs</p></Button>
+                </div>
             </div>
             )}
 
+            <Button variant="text" onClick = {handleUpdate}>Update Rating</Button>
+
             {ratingData[1] && (
-                console.log("DADTATD"),
-                 console.log(ratingData),
-                 console.log(ratingDataTesttt),
                 <>
                     <LineChart width={500} height={300} data={ratingData}>
                         <CartesianGrid strokeDasharray="3 3" />

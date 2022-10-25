@@ -3,7 +3,6 @@ import React from "react";
 import axios from "../services/backendApi.js";
 import { useParams } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import urlencode from 'urlencode';
 import Typography from '@mui/material/Typography';
@@ -11,6 +10,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
+import Button from '@mui/material/Button';
 
 import NavBar from './navBar';
 import Foot from './footer';
@@ -47,12 +47,10 @@ const HomePage = (props) => {
     const [trendingUpData, setTrendingUpData] = useState([]);
     const [trendingDownData, setTrendingDownData] = useState([]);
     const [trends, setTrends] = useState([]);
-    //const [artistStat, setArtistStat] = useState('');
     const [topArtistPhoto, setTopArtistPhoto] = useState('');
     const [artistScore, setArtistScore] = useState([]);
     const [genreScore, setGenreScore] = useState([]);
     const [topAlbums, setTopAlbums] = useState([]);
-    //const [topGenreStat, setTopGenreStat] = useState('');
     const [topSongs, setTopSongs] = useState([]);
     const [recentlyRated, setRecentlyRated] = useState([]);
     const [averageDiff, setAverageDiff] = useState({});
@@ -177,12 +175,12 @@ const HomePage = (props) => {
                 <img src={averageDiff.albumImage} alt= ""></img>
                 <p>
                     {averageDiff.album}
-                    </p>
+                </p>
                 <Typography gutterBottom>
                     <p>You rated it: {averageDiff.profScore} </p>
                 </Typography>
                 <Typography gutterBottom>
-                    <p>Average Rating:    {averageDiff.averageScore} </p>
+                    <p>Average Rating:    {(+averageDiff.averageScore).toFixed(2)} </p>
                 </Typography>
                 
             </div>
@@ -210,9 +208,6 @@ const HomePage = (props) => {
     var profile = params.profile
     localStorage.clear();
     localStorage.profile = profile
-    console.log("PROFILE")
-    console.log(profile)
-    console.log(localStorage.profile)
 
     //functions ----------------------------------------------------------------------
 
@@ -307,7 +302,7 @@ const HomePage = (props) => {
     const sortArrayRecentlyRated = () => {
         const recentlyRatedTemp = [...albums].sort((a, b) => {
             var a_date, b_date
-            if(a.in_queue == "yes"){
+            if(a.in_queue === "yes"){
                 a_date = 0
             }else{
                 var a_noSec = a.ratings[a.ratings.length - 1].split(",");
@@ -315,7 +310,7 @@ const HomePage = (props) => {
                 var [a_hours, a_minutes, a_seconds] = a_noSec[1].split(':');
                 a_date = new Date(+a_year, a_month - 1, +a_day, +a_hours, +a_minutes, +a_seconds);
             }
-            if(b.in_queue == "yes"){
+            if(b.in_queue === "yes"){
                 b_date = 0
             }else{
                 var b_noSec = b.ratings[b.ratings.length - 1].split(",");
@@ -446,7 +441,7 @@ const HomePage = (props) => {
         //console.log(diffSort)
         //console.log("sorted ratings diff^^")
         
-        var averageScore = 0, profileScore = -1;
+        var averageScore = 0, profileScore = -1, total=0;
         diffSort[0].map((item, key) => {
             var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness)/5)
             if(item.profile === params.profile){
@@ -454,11 +449,12 @@ const HomePage = (props) => {
             }else{
                 averageScore = averageScore + totalScore
                 console.log(item);
+                total++
             }
             return 0;
         })
 
-        var testobj = { album: diffSort[0][0].title, averageScore: averageScore, profScore: profileScore, albumImage: diffSort[0][0].cover_photo}
+        var testobj = { album: diffSort[0][0].title, averageScore: averageScore/total, profScore: profileScore, albumImage: diffSort[0][0].cover_photo}
 
 
         setAverageDiff(testobj);
@@ -637,7 +633,7 @@ const HomePage = (props) => {
                     <div className="top_Album_Individual">
                         <a href={`/albumdetails/${item._id}`}>
                               <img src= {item.cover_photo} alt= ""/>
-                            <p>{key + 1}</p><br></br>
+                            <p1>{key + 1}</p1><br></br>
                             <p>{item.title}</p><br></br>
                             <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p><br></br>
                         </a>
@@ -669,9 +665,6 @@ const HomePage = (props) => {
                     {!displaySongs && (
                         <>
 
-                        
-
-
                         <FormControl sx={{ m: 1, minWidth: 150 }}>
 
                         <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
@@ -691,9 +684,9 @@ const HomePage = (props) => {
                             <div className="toggle_box">
                                 <Grid container spacing={2} alignItems="center">
                                     <Grid item xs>
-                                        <h2>Albums</h2>
+                                        <Button disabled><h2>Albums</h2></Button>
                                     </Grid><Grid item xs>
-                                        <h2 onClick={toggle}>Songs</h2>
+                                        <Button onClick={toggle}><h2>Songs</h2></Button>
                             </Grid></Grid></div>
                             <TextField 
                             id="standard-basic" 
@@ -732,9 +725,7 @@ const HomePage = (props) => {
 
                     {displaySongs && (
                         <>
-
                             <FormControl sx={{ m: 1, minWidth: 150 }}>
-
                             <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
                             <Select value={sortTypeSong}  variant="filled"
                                 onChange={(e) => setSortTypeSong(e.target.value)} color="primary">
@@ -743,22 +734,19 @@ const HomePage = (props) => {
                                     <MenuItem value="score">Score</MenuItem>
                                 </Select></FormControl>
 
-
-
-                            
                             <div className="toggle_box">
                                 <Grid container spacing={2} alignItems="center">
                                     <Grid item xs>
-                                        <h2 onClick={toggle}>Albums</h2>
+                                    <Button onClick={toggle} ><h2>Albums</h2></Button>
                                 </Grid><Grid item xs>
-                                    <h2> Songs</h2>
+                                <Button disabled><h2> Songs</h2></Button>
                             </Grid></Grid></div>
 
                             <div className="album-list-entire">
 
                             {songData.map((item, key) => (
-                                <a href={`/songdetails/${item._id}`}>
-                                    <div className="album_display">
+                                <a href={`/songdetails/${item._id}`} key={item._id}>
+                                    <div className="album_display" key={item._id}>
                                         
                                         <div className="album-display-box">
                                             <Grid container spacing={2} alignItems="center">
