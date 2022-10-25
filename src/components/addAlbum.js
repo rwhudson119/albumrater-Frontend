@@ -201,7 +201,7 @@ const AddAlbum = (props) => {
             ))
             const ratings = [time]
             axios.post("/album/add", 
-                {title: title, profile: profile, artist: artist, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, notes: notes, ratings: ratings, songs: arr} ).then((res) => {
+                {title: title, profile: profile, artist: artist, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, notes: notes, ratings: ratings, in_queue: "no", songs: arr} ).then((res) => {
                     console.log(res)
                     navigate(`/homepage/${profile}`);
                 });
