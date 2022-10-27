@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import React from "react";
 import axios from "../services/backendApi.js";
 import { useParams } from 'react-router-dom';
@@ -11,7 +11,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Button from '@mui/material/Button';
-
 import NavBar from './navBar';
 import Foot from './footer';
 //import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -21,6 +20,7 @@ import 'pure-react-carousel/dist/react-carousel.es.css';
 import _ from 'underscore';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import SearchIcon from '@mui/icons-material/Search';
 
 
 
@@ -47,18 +47,19 @@ const HomePage = (props) => {
 
     const [trendingUpData, setTrendingUpData] = useState([]);
     const [trendingDownData, setTrendingDownData] = useState([]);
-    const [trends, setTrends] = useState([]);
+    //const [trends, setTrends] = useState([]);
     const [topArtistPhoto, setTopArtistPhoto] = useState('');
-    const [genreScore, setGenreScore] = useState([]);
+    const [topArtist, setTopArtist] = useState('');
+    const [topGenre, setTopGenre] = useState('');
     const [topAlbums, setTopAlbums] = useState([]);
     const [topSongs, setTopSongs] = useState([]);
     const [recentlyRated, setRecentlyRated] = useState([]);
     const [averageDiff, setAverageDiff] = useState({});
 
 
-
+    var trends = []
     var artistScore = {}
-    var genreScoreTemp = []
+    var genreScore = {}
     
 
 
@@ -143,7 +144,7 @@ const HomePage = (props) => {
         <div className="top-artist">
                 <img src={topArtistPhoto} alt= ""></img>
                 <Typography gutterBottom>
-                    {getMax2(artistScore)}
+                    {topArtist}
                 </Typography>
             </div>
         </div>
@@ -153,12 +154,15 @@ const HomePage = (props) => {
         <div className="data_title">
             <p>Top Genre</p>
         <div className="top-genre">
-            {genreScore.slice(0, 1).map((item, key) => (
+            <Typography gutterBottom>
+                    {topGenre}
+            </Typography>
+            {/*genreScore.slice(0, 1).map((item, key) => (
             <div key={key}>
                 <p>{genreScore[getMax(genreScore)].genre}</p>
             </div>
             ))
-        }
+            */}
         </div></div>
       )
 
@@ -325,13 +329,11 @@ const HomePage = (props) => {
 
     const GetTopArtist = () => {
         try{
-            console.log("HALPPP")
-            var artist_name = getMax2(artistScore)
-            console.log(artist_name)
-            axios.get(`/deezer/artist/${artist_name}`).then(res => {
+            var top_Artist_Name = getMax2(artistScore)
+            setTopArtist(top_Artist_Name)
+            artistScore = {}
+            axios.get(`/deezer/artist/${top_Artist_Name}`).then(res => {
                 setTopArtistPhoto(res.data.data[0].picture_big)
-                console.log(res.data.data[0].picture_big)
-                console.log("topArtistPhoto")
             }
         )}catch{
             console.log("unable to find artist")
@@ -346,29 +348,18 @@ const HomePage = (props) => {
         }else{
             artistScore[gAlbums.artist] = artistScore[gAlbums.artist] + total
         }
-    }
+        }
 
 
-
-
-
-    //------------------------------------------------ OPTIMIZED UP TO HERE
 
     const getGenreRank = (singularAlbum) => {
-        var bool = -1
-        genreScoreTemp.map((item, key) => {
-            if(item.genre === singularAlbum.genre){
-                bool = key
-            }
-            return 0;
-        })
-        const totalScore = (singularAlbum.originality + singularAlbum.flow + singularAlbum.lyrics + singularAlbum.how_captivating + singularAlbum.timelessness)/5
-        if(bool > -1){
-            genreScoreTemp[bool].score = genreScoreTemp[bool].score + totalScore
+        var totalScore = (singularAlbum.originality + singularAlbum.flow + singularAlbum.lyrics + singularAlbum.how_captivating + singularAlbum.timelessness)/5
+        if(genreScore[singularAlbum.genre] === undefined){
+            genreScore[singularAlbum.genre] = totalScore
         }else{
-            genreScoreTemp.push({genre: singularAlbum.genre, score: totalScore})
+            genreScore[singularAlbum.genre] = genreScore[singularAlbum.genre] + totalScore
         }
-        setGenreScore(genreScoreTemp)
+        setTopGenre(getMax2(genreScore))
         return 0;
     }
 
@@ -386,8 +377,8 @@ const HomePage = (props) => {
                 getGenreRank(item)
                 return 0;
             })
-            GetTopArtist();
-            
+            GetTopArtist(topArtist);
+            trends = []
         });
         return 0;
     }
@@ -408,63 +399,47 @@ const HomePage = (props) => {
                 profileVal = totalScore
             }else{
                 sumScore = sumScore + totalScore
-            }
-            return 0;
+            } return 0;
         })
+        var scores = {profileVal: profileVal, averageDiff: Math.abs(sumScore/(albums.length - 1) - profileVal)}
         
         if(profileVal === -1){
             return 0;
         }else{
             if(albums.length - 1 > 0){
-                //console.log((sumScore/(albums.length - 1)) - profileVal)
-                return (sumScore/(albums.length - 1)) - profileVal
+                return scores
             }else{
-            return 0
+                return 0
             }
-            
-        }
-        
-        }catch{
+        }}catch{
             console.log("nope" + params.profile);
         }
         return 0;
     }
 
     const UseVariationStats = (everyAlbum) => {
-        //return an object with the average rating and the profile rating so i can display it easier
-        const diffSort = everyAlbum.sort((a,b) => { return Math.abs(GetAverageDiff(b)) - Math.abs(GetAverageDiff(a))});
-        //console.log(diffSort)
-        //console.log("sorted ratings diff^^")
-        
-        var averageScore = 0, profileScore = -1, total=0;
-        diffSort[0].map((item, key) => {
-            var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness)/5)
-            if(item.profile === params.profile){
-                profileScore = totalScore
-            }else{
-                averageScore = averageScore + totalScore
-                console.log(item);
-                total++
+        var max= 0, itemKey, profileScore = -1
+        everyAlbum.map((item, key) => {
+            var result = GetAverageDiff(item)
+            var score = result.averageDiff
+            if(score > max){
+                max = score
+                itemKey = key
+                profileScore = result.profileVal
             }
-            return 0;
+            return 0
         })
 
-        var testobj = { album: diffSort[0][0].title, averageScore: averageScore/total, profScore: profileScore, albumImage: diffSort[0][0].cover_photo}
-
+        var testobj = { album: everyAlbum[itemKey][0].title, averageScore: max, profScore: profileScore, albumImage: everyAlbum[itemKey][0].cover_photo}
 
         setAverageDiff(testobj);
-     
-        //console.log("HERE:")
-        //console.log(averageDiff)
-        //console.log("THERE^^")
     }
 
-    const GetVariationStats = (albums) => {        
+    const GetVariationStats = () => {        
         axios.get(`/album/`).then(res => {
-            
-            const albumsSingular = _.groupBy(res.data, function(alb){ return alb.title});
-            const albumsSingVal = Object.values(albumsSingular);
-
+            var albumsSingular = _.groupBy(res.data, function(alb){ return alb.title});
+            var albumsSingVal = Object.values(albumsSingular);
+            albumsSingular = {}
             UseVariationStats(albumsSingVal);
         });
     }
@@ -473,28 +448,23 @@ const HomePage = (props) => {
         var rating1 = 0, rating2 = 0
 
         if((singularAlbum.ratings.length) > 1){
-
             axios.get(`/rating/date/${urlencode(singularAlbum.ratings[singularAlbum.ratings.length - 1])}`).then(res => {
                 rating1 = res.data.total_score  
                 axios.get(`/rating/date/${urlencode(singularAlbum.ratings[singularAlbum.ratings.length - 2])}`).then(res2 => {
-                    console.log("is this even working")
                     rating2 = res2.data.total_score
                     var arrayTemp = trends
                     arrayTemp.push({album: singularAlbum, trendScore: (rating1 - rating2)})
                     
-                    setTrends(arrayTemp)
+                    trends = arrayTemp
                     sortArrayTrend(arrayTemp)
-                    
-                    
                 })
             })
         }else{
             setTrendingUpData([])
             setTrendingDownData([])
         }
-
-        
     }
+    //MADE EFFICIENT UP TO HERE =----------------------------------------------------------------------------------------------------- ISHH..
 
 
     //UseEffect ----------------------------------------------------------------------------
@@ -564,7 +534,7 @@ const HomePage = (props) => {
           sortArrayRecentlyRated();
           sortArrayTopSongs();
           sortSongArray(sortTypeSong);
-          GetVariationStats(albums);
+          GetVariationStats();
 
     }, [sortTypeSong]) 
 
@@ -589,7 +559,7 @@ const HomePage = (props) => {
                         <div className="stats-buttonless">
                         <p>Rate some Albums to view your stats</p></div>
                         }
-                        {genreScore[0] &&
+                        {topGenre &&
                         <Carousel.Item>
                         <div className="stats-buttonless">
                         <StatPanelTG /></div>
@@ -659,9 +629,8 @@ const HomePage = (props) => {
                 
                     {!displaySongs && (
                         <>
-
+                        <div className="sort_by">
                         <FormControl sx={{ m: 1, minWidth: 150 }}>
-
                         <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
                         <Select value={sortType}  variant="filled"
                             onChange={(e) => setSortType(e.target.value)} color="primary">
@@ -674,7 +643,7 @@ const HomePage = (props) => {
                                 <MenuItem  value="timelessness">Timelessness</MenuItem >
                                 <MenuItem  value="total_score">Total</MenuItem >
 
-                            </Select></FormControl>
+                            </Select></FormControl></div>
 
                             <div className="toggle_box">
                                 <Grid container spacing={2} alignItems="center">
@@ -686,7 +655,11 @@ const HomePage = (props) => {
                             <TextField 
                             id="standard-basic" 
                             sx={{ label: { color: 'white' }}} 
-                            label="Search Rated" 
+                            label={
+                                <Fragment>
+                                <SearchIcon className="myIcon" fontSize="small" />
+                                &nbsp; Search Rated
+                            </Fragment>}
                             variant="outlined"
                             onChange={onChangeSearch}/>
 
