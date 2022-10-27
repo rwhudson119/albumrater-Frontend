@@ -18,7 +18,7 @@
 
 .App-header {
   padding: 5% 0% 10% 0%;
-  background-color: #282c34;
+  background-color: #181818;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -26,6 +26,13 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.sort_by {
+  background-color: #ffffff;
+  opacity: 40%;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .App-link {
