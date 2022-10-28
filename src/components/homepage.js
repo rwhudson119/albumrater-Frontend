@@ -155,12 +155,6 @@ const HomePage = (props) => {
             <Typography gutterBottom>
                     {topGenre}
             </Typography>
-            {/*genreScore.slice(0, 1).map((item, key) => (
-            <div key={key}>
-                <p>{genreScore[getMax(genreScore)].genre}</p>
-            </div>
-            ))
-            */}
         </div></div>
       )
 
@@ -186,21 +180,7 @@ const HomePage = (props) => {
         }
         </div></div>
       )
-
-
-    //gat max index of an array
-    const getMax = (array) => {
-        var max = 0
-        array.map((item, key) => {
-            if(item.score > array[max].score){
-                max = key
-            }
-            return 0;
-        })
-        return max;
-    }
-
-    const getMax2 = (object) => {
+    const getMaxProp = (object) => {
         var bool = 0
         var max_name
         for (const property in object) {
@@ -327,7 +307,7 @@ const HomePage = (props) => {
 
     const GetTopArtist = () => {
         try{
-            var top_Artist_Name = getMax2(artistScore)
+            var top_Artist_Name = getMaxProp(artistScore)
             setTopArtist(top_Artist_Name)
             artistScore = {}
             axios.get(`/deezer/artist/${top_Artist_Name}`).then(res => {
@@ -357,7 +337,7 @@ const HomePage = (props) => {
         }else{
             genreScore[singularAlbum.genre] = genreScore[singularAlbum.genre] + totalScore
         }
-        setTopGenre(getMax2(genreScore))
+        setTopGenre(getMaxProp(genreScore))
         return 0;
     }
 
@@ -368,7 +348,6 @@ const HomePage = (props) => {
         axios.get(`/album/${params.profile}`).then(res => {
             setAlbums(res.data);
             setSortType('title')
-            //setSortTypeType(types[sortType])
             res.data.map((item, key) => {
                 GetRankStats(item)
                 getArtistRank(item)
@@ -462,8 +441,6 @@ const HomePage = (props) => {
             setTrendingDownData([])
         }
     }
-    //MADE EFFICIENT UP TO HERE =----------------------------------------------------------------------------------------------------- ISHH..
-
 
     //UseEffect ----------------------------------------------------------------------------
 
@@ -508,7 +485,7 @@ const HomePage = (props) => {
                 artist: 'artist',
                 score: 'score',
             };
-            const sortProperty = types[type];
+            var sortProperty = types[type];
             setDisplayedSongs([...songs].sort((a, b) => {
                 if(sortProperty === 'title' || sortProperty === 'artist'){
                     return a[sortProperty].localeCompare(b[sortProperty]);

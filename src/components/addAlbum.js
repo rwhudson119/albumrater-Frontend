@@ -54,7 +54,7 @@ const AddAlbum = (props) => {
     const [howCaptivating, setHowCaptivating] = useState(50);
     const [timelessness, setTimelessness] = useState(50);
     const [notes, setNotes] = useState("");
-    const [songScores1, setSongScores1] = useState([]);
+    const [songScores, setSongScores] = useState([]);
 
 
     const profile = localStorage.profile
@@ -165,7 +165,7 @@ const AddAlbum = (props) => {
                 }
                 return 0
             })
-            setSongScores1(songScoresArr)
+            setSongScores(songScoresArr)
           }
 
 
@@ -184,12 +184,11 @@ const AddAlbum = (props) => {
 
             //add tracks to database
 
-            setSongScores1(songScoresArr)
-            console.log(setSongScores1)
+            setSongScores(songScoresArr)
             results.tracks.data.map((item, key) => {
-                if(songScores1[key] != null){
+                if(songScores[key] != null){
                     axios.post("/song/add",
-                    {title: item.title, artist: results.artist.name, id: item.id, score: songScores1[key], profile: profile} )
+                    {title: item.title, artist: results.artist.name, id: item.id, score: songScores[key], profile: profile} )
                 }
                 return 0;
             });
@@ -228,7 +227,7 @@ const AddAlbum = (props) => {
             setGenre(res.data.genres.data[0].name)
             setReleaseDate(res.data.release_date)
             setCoverPhoto(res.data.cover_big)
-            setSongScores1(songScoresArr)
+            setSongScores(songScoresArr)
             if((title === "" || artist === "" || genre === ""|| releaseDate === "") === ""){
                toggle()
             }
@@ -313,9 +312,9 @@ const AddAlbum = (props) => {
                                 </Grid>
                                 <Grid item xs>
                                     <Input
-                                        defaultValue={songScores1[key]}
+                                        defaultValue={songScores[key]}
                                         size="small"
-                                        onChange= {songScoresArr = songScores1, (e) => songScoresArr[key] = e.target.value}
+                                        onChange= {songScoresArr = songScores, (e) => songScoresArr[key] = e.target.value}
                                         onBlur={handleBlurSongs}
                                         inputProps={{
                                             style: { color: "white" },

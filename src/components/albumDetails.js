@@ -232,7 +232,6 @@ const AlbumDetails = (props) => {
                 axios.get(`/song/${item}`)
                 .then((res) => {
                     songArrayTest[key] = res.data
-                    console.log(res.data)
                 })
 
             ))
