@@ -18,6 +18,7 @@ import Foot from './footer';
 
 
 
+
 const Input = styled(MuiInput)`
 width: 42px;
 `;
@@ -39,19 +40,26 @@ const AlbumDetails = (props) => {
     const time = new Date().toLocaleString()
 
     const [album, setAlbum] = useState(null)
-    const [notes, setNotes] = useState("");
+    const [ratingData, setRatingData] = useState([]);
 
+    const [songArrayFinal, setSongArrayFinal] = useState([]);
     const [artist, setArtist] = useState("");
+    const [country, setCountry] = useState("");
     const [title, setTitle] = useState("");
-    const [release_date, setRelease_Date] = useState("");
+    const [releaseDate, setReleaseDate] = useState("");
     const [genre, setGenre] = useState("");
+    const [artwork, setArtwork] = useState(5);
     const [originality, setOriginality] = useState(50);
     const [flow, setFlow] = useState(50);
     const [lyrics, setLyrics] = useState(50);
     const [howCaptivating, setHowCaptivating] = useState(50);
     const [timelessness, setTimelessness] = useState(50);
-    const [songArrayFinal, setSongArrayFinal] = useState([]);
-    const [ratingData, setRatingData] = useState([]);
+    const [music, setMusic] = useState(50);
+    const [delivery, setDelivery] = useState(50);
+    const [expectation, setExpectation] = useState(50);
+    const [notes, setNotes] = useState("");
+    const [songDuration, setSongDuration] = useState([]);
+    const [totalDuration, setTotalDuration] = useState(null);
 
     const [averageRating, setAverageRating] = useState(0);
 
@@ -63,11 +71,25 @@ const AlbumDetails = (props) => {
 
     function toggleSongs() {
         setDisplaySongs(wasSongs => !wasSongs);
-        console.log(songArrayFinal)
     }
 
+        const handleSliderChangeArtwork = (event, newValue) => {
+            setArtwork(newValue);
+        };
 
-    const handleSliderChangeOriginality = (event, newValue) => {
+        const handleInputChangeArtwork = (event) => {
+            setArtwork(event.target.value === '' ? '' : Number(event.target.value));
+        };
+
+        const handleSliderChangeExpectation = (event, newValue) => {
+            setExpectation(newValue);
+        };
+
+        const handleInputChangeExpectation = (event) => {
+            setExpectation(event.target.value === '' ? '' : Number(event.target.value));
+        };
+
+        const handleSliderChangeOriginality = (event, newValue) => {
             setOriginality(newValue);
         };
         
@@ -107,6 +129,22 @@ const AlbumDetails = (props) => {
             setTimelessness(event.target.value === '' ? '' : Number(event.target.value));
         };
 
+        const handleSliderChangeDelivery = (event, newValue) => {
+            setDelivery(newValue);
+        };
+    
+        const handleInputChangeDelivery = (event) => {
+            setDelivery(event.target.value === '' ? '' : Number(event.target.value));
+        };
+    
+        const handleSliderChangeMusic = (event, newValue) => {
+            setMusic(newValue);
+        };
+    
+        const handleInputChangeMusic = (event) => {
+            setMusic(event.target.value === '' ? '' : Number(event.target.value));
+        };
+
          const handleInputChangeNotes = (event) => {
             setNotes(event.target.value);
         };
@@ -116,11 +154,14 @@ const AlbumDetails = (props) => {
         const handleInputChangeArtist = (event) => {
             setArtist(event.target.value);
         };
+        const handleInputChangeCountry = (event) => {
+            setCountry(event.target.value);
+        };
         const handleInputChangeGenre = (event) => {
             setGenre(event.target.value);
         };
-        const handleInputChangeRelease_Date = (event) => {
-            setRelease_Date(event.target.value);
+        const handleInputChangeReleaseDate = (event) => {
+            setReleaseDate(event.target.value);
         };
 
         const getAverageRating = (allUserAlbum) => {
@@ -130,6 +171,22 @@ const AlbumDetails = (props) => {
                 totalRat = totalRat + (item.originality + item.flow + item.lyrics + item.how_captivating + item.timelessness)/5
             ));
             setAverageRating(totalRat/allUserAlbum.length);
+        };
+
+        const handleBlurArtwork = () => {
+            if (artwork < 0) {
+                setArtwork(0);
+            } else if (artwork > 10) {
+                setArtwork(10);
+            }
+        };
+    
+        const handleBlurExpectation = () => {
+            if (expectation < 0) {
+                setExpectation(0);
+            } else if (expectation > 100) {
+                setExpectation(100);
+            }
         };
 
         const handleBlurOriginality = () => {
@@ -168,6 +225,22 @@ const AlbumDetails = (props) => {
             }
           };
 
+          const handleBlurDelivery = () => {
+            if (delivery < 0) {
+                setDelivery(0);
+            } else if (delivery > 100) {
+                setDelivery(100);
+            }
+        };
+    
+        const handleBlurMusic = () => {
+            if (music < 0) {
+                setMusic(0);
+            } else if (music > 100) {
+                setMusic(100);
+            }
+        };
+
           const handleBlurTest = () => {
             songArray.map((item, key) => {
                 if(item > 10){
@@ -204,7 +277,7 @@ const AlbumDetails = (props) => {
             ))
             ratings.push(time)
             axios.post(`/album/update/${params.albumId}`, 
-                {title: title, artist: artist, genre: genre, release_date: release_date, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, ratings: ratings, notes: notes} ).then((res) => {
+                {title: title, artist: artist, genre: genre, release_date: releaseDate, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, ratings: ratings, notes: notes} ).then((res) => {
                     navigate(`/homepage/${profile}`);
                 });
     }
@@ -303,7 +376,7 @@ const AlbumDetails = (props) => {
                 setArtist(res.data.artist)
                 setGenre(res.data.genre)
                 setNotes(res.data.notes)
-                setRelease_Date(res.data.release_date)
+                setReleaseDate(res.data.release_date)
                 getSongData(res.data.songs)
                 getAllAlbumData(res.data.title)
                 
@@ -333,6 +406,41 @@ const AlbumDetails = (props) => {
         <NavBar />
         <header className="App-header">
             <img className="album_deets_image" src= {album.cover_photo} alt= ""/>
+
+            <div className="Artwork">
+                    <Typography id="input-slider" gutterBottom>
+                        Artwork
+                    </Typography>
+                    <Box sx={{ width: 250 }}>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs>
+                            <Slider
+                                value={typeof artwork === 'number' ? artwork : 5}
+                                max={10}
+                                onChange={handleSliderChangeArtwork}
+                                aria-labelledby="input-slider"
+                            />
+                            </Grid>
+                            <Grid item>
+                            <Input
+                                value={artwork}
+                                size="small"
+                                onChange={handleInputChangeArtwork}
+                                onBlur={handleBlurArtwork}
+                                inputProps={{
+                                    style: { color: "white" },
+                                    step: 1,
+                                    min: 0,
+                                    max: 10,
+                                    type: 'number',
+                                    'aria-labelledby': 'input-slider',
+                                }}
+                            />
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </div>
+
             {!displayDetails && (
                 <div className="albumInfo">
                     <p> {album.title}</p>
@@ -359,7 +467,7 @@ const AlbumDetails = (props) => {
                     </div>
                     <div className="change_details_items">
                         <Grid container spacing={2} alignItems="center">
-                            <TextField id="standard-basic" label="Release Date" variant="standard" onChange={handleInputChangeRelease_Date} defaultValue={album.release_date}/>
+                            <TextField id="standard-basic" label="Release Date" variant="standard" onChange={handleInputChangeReleaseDate} defaultValue={album.release_date}/>
                         </Grid>
                     </div>
                     <div className="change_details_items">
@@ -372,6 +480,39 @@ const AlbumDetails = (props) => {
                     </div>
                 </div>
             )}
+
+                <div className="Expectation">
+                    <Typography id="input-slider" gutterBottom>
+                        Expectation
+                    </Typography>
+                    <Box sx={{ width: 250 }}>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs>
+                            <Slider
+                                value={typeof expectation === 'number' ? expectation : 50}
+                                onChange={handleSliderChangeExpectation}
+                                aria-labelledby="input-slider"
+                            />
+                            </Grid>
+                            <Grid item>
+                            <Input
+                                value={expectation}
+                                size="small"
+                                onChange={handleInputChangeExpectation}
+                                onBlur={handleBlurExpectation}
+                                inputProps={{
+                                    style: { color: "white" },
+                                    step: 5,
+                                    min: 0,
+                                    max: 100,
+                                    type: 'number',
+                                    'aria-labelledby': 'input-slider',
+                                }}
+                            />
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </div>
 
                 
             {displaySongs && (
@@ -573,6 +714,72 @@ const AlbumDetails = (props) => {
                                 onChange={handleInputChangeTimelessness}
                                 onBlur={handleBlurTimelessness}
                                 onWheel={(e) => e.target.blur()}
+                                inputProps={{
+                                    style: { color: "white" },
+                                    step: 5,
+                                    min: 0,
+                                    max: 100,
+                                    type: 'number',
+                                    'aria-labelledby': 'input-slider',
+                                }}
+                            />
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </div>
+
+                <div className="Delivery">
+                    <Typography id="input-slider" gutterBottom>
+                        Delivery
+                    </Typography>
+                    <Box sx={{ width: 250 }}>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs>
+                            <Slider
+                                value={typeof delivery === 'number' ? delivery : 50}
+                                onChange={handleSliderChangeDelivery}
+                                aria-labelledby="input-slider"
+                            />
+                            </Grid>
+                            <Grid item>
+                            <Input
+                                value={delivery}
+                                size="small"
+                                onChange={handleInputChangeDelivery}
+                                onBlur={handleBlurDelivery}
+                                inputProps={{
+                                    style: { color: "white" },
+                                    step: 5,
+                                    min: 0,
+                                    max: 100,
+                                    type: 'number',
+                                    'aria-labelledby': 'input-slider',
+                                }}
+                            />
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </div>
+
+                <div className="Music">
+                    <Typography id="input-slider" gutterBottom>
+                        Music
+                    </Typography>
+                    <Box sx={{ width: 250 }}>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs>
+                            <Slider
+                                value={typeof music === 'number' ? music : 50}
+                                onChange={handleSliderChangeMusic}
+                                aria-labelledby="input-slider"
+                            />
+                            </Grid>
+                            <Grid item>
+                            <Input
+                                value={music}
+                                size="small"
+                                onChange={handleInputChangeMusic}
+                                onBlur={handleBlurMusic}
                                 inputProps={{
                                     style: { color: "white" },
                                     step: 5,
