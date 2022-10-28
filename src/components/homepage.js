@@ -30,11 +30,9 @@ const HomePage = (props) => {
     //definitions --------------------------------------------------------------------
 
     const [albums, setAlbums] = useState([]);
-    const [albumData, setAlbumData] = useState([]);
     const [sortType, setSortType] = useState('');
 
     const [songs, setSongs] = useState([]);
-    const [songData, setSongData] = useState([]);
     const [sortTypeSong, setSortTypeSong] = useState('');
 
     const [displaySongs, setDisplaySongs] = useState(false);
@@ -232,13 +230,13 @@ const HomePage = (props) => {
 
     const onChangeSearch = (e) => {
         var search = e.target.value;
-        setDisplayedAlbums(albumData.filter(obj => {
+        setDisplayedAlbums(albums.filter(obj => {
             return obj.title.toLowerCase().includes(search.toLowerCase()) || obj.artist.toLowerCase().includes(search.toLowerCase())
         }))
     }
     const onChangeSearchSongs = (e) => {
         var search = e.target.value;
-        setDisplayedSongs(songData.filter(obj => {
+        setDisplayedSongs(songs.filter(obj => {
             return obj.title.toLowerCase().includes(search.toLowerCase()) || obj.artist.toLowerCase().includes(search.toLowerCase())
         }))
     }
@@ -487,24 +485,18 @@ const HomePage = (props) => {
                 timelessness: 'timelessness',
                 total_score: 'total_score',
             };
-            const sortProperty = types[type];
-            const sorted = [...albums].sort((a, b) => {
-                if(sortProperty === 'title'){
-                    return a.title.localeCompare(b.title);
-                }
-                else if(sortProperty === 'artist') {
-                    return a.artist.localeCompare(b.artist);
+            var sortProperty = types[type];
+            setDisplayedAlbums([...albums].sort((a, b) => {
+                if(sortProperty === 'title' || sortProperty === 'artist'){
+                    return a[sortProperty].localeCompare(b[sortProperty]);
                 }else if(sortProperty === 'total_score'){
                     var aTrend1 = (a.originality + a.flow + a.lyrics + a.how_captivating + a.timelessness)/5
                     var bTrend1 = (b.originality + b.flow + b.lyrics + b.how_captivating + b.timelessness)/5
-        
                     return bTrend1 - aTrend1;
                 }else {
                     return b[sortProperty] - a[sortProperty];
                 }
-            });
-            setAlbumData(sorted);
-            setDisplayedAlbums(sorted);
+            }))
           };
           sortArray(sortType);
     }, [sortType]) 
@@ -517,19 +509,15 @@ const HomePage = (props) => {
                 score: 'score',
             };
             const sortProperty = types[type];
-            const sorted = [...songs].sort((a, b) => {
-                if(sortProperty === 'title'){
-                    return a.title.localeCompare(b.title);
-                }
-                else if(sortProperty === 'artist') {
-                    return a.artist.localeCompare(b.artist);
+            setDisplayedSongs([...songs].sort((a, b) => {
+                if(sortProperty === 'title' || sortProperty === 'artist'){
+                    return a[sortProperty].localeCompare(b[sortProperty]);
                 }else {
                     return b[sortProperty] - a[sortProperty];
                 }
-            });
-            setSongData(sorted);
-            setDisplayedSongs(sorted);
+            }))
           };
+          
           sortArrayTopAlbums();
           sortArrayRecentlyRated();
           sortArrayTopSongs();
@@ -629,19 +617,19 @@ const HomePage = (props) => {
                 
                     {!displaySongs && (
                         <>
-                        <div className="sort_by">
-                        <FormControl sx={{ m: 1, minWidth: 150 }}>
-                        <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
-                        <Select value={sortType}  variant="filled"
-                            onChange={(e) => setSortType(e.target.value)} color="primary">
-                                <MenuItem  value="title">Title</MenuItem >
-                                <MenuItem  value="artist">Artist</MenuItem >
-                                <MenuItem  value="flow">Flow</MenuItem >
-                                <MenuItem  value="lyrics">Lyrics</MenuItem >
-                                <MenuItem  value="how_captivating">How Captivating</MenuItem >
-                                <MenuItem  value="originality">Originality</MenuItem >
-                                <MenuItem  value="timelessness">Timelessness</MenuItem >
-                                <MenuItem  value="total_score">Total</MenuItem >
+                            <div className="sort_by">
+                                <FormControl sx={{ m: 1, minWidth: 150 }}>
+                                <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
+                                <Select value={sortType}  variant="filled"
+                                    onChange={(e) => setSortType(e.target.value)} color="primary">
+                                    <MenuItem  value="title">Title</MenuItem >
+                                    <MenuItem  value="artist">Artist</MenuItem >
+                                    <MenuItem  value="flow">Flow</MenuItem >
+                                    <MenuItem  value="lyrics">Lyrics</MenuItem >
+                                    <MenuItem  value="how_captivating">How Captivating</MenuItem >
+                                    <MenuItem  value="originality">Originality</MenuItem >
+                                    <MenuItem  value="timelessness">Timelessness</MenuItem >
+                                    <MenuItem  value="total_score">Total</MenuItem >
 
                             </Select></FormControl></div>
 
@@ -693,14 +681,15 @@ const HomePage = (props) => {
 
                     {displaySongs && (
                         <>
-                            <FormControl sx={{ m: 1, minWidth: 150 }}>
-                            <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
-                            <Select value={sortTypeSong}  variant="filled"
-                                onChange={(e) => setSortTypeSong(e.target.value)} color="primary">
-                                    <MenuItem value="title">Title</MenuItem>
-                                    <MenuItem value="artist">Artist</MenuItem>
-                                    <MenuItem value="score">Score</MenuItem>
-                                </Select></FormControl>
+                            <div className="sort_by">
+                                <FormControl sx={{ m: 1, minWidth: 150 }}>
+                                <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
+                                <Select value={sortTypeSong}  variant="filled"
+                                    onChange={(e) => setSortTypeSong(e.target.value)} color="primary">
+                                        <MenuItem value="title">Title</MenuItem>
+                                        <MenuItem value="artist">Artist</MenuItem>
+                                        <MenuItem value="score">Score</MenuItem>
+                                </Select></FormControl></div>
 
                             <div className="toggle_box">
                                 <Grid container spacing={2} alignItems="center">
@@ -713,7 +702,11 @@ const HomePage = (props) => {
                             <TextField 
                             id="standard-basic" 
                             sx={{ label: { color: 'white' }}} 
-                            label="Search Rated" 
+                            label={
+                                <Fragment>
+                                <SearchIcon className="myIcon" fontSize="small" />
+                                &nbsp; Search Rated
+                            </Fragment>}
                             variant="outlined"
                             onChange={onChangeSearchSongs}/>
 
