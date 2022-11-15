@@ -58,6 +58,8 @@ const AlbumDetails = (props) => {
     const [delivery, setDelivery] = useState(50);
     const [expectation, setExpectation] = useState(50);
     const [notes, setNotes] = useState("");
+
+
     const [songDuration, setSongDuration] = useState([]);
     const [totalDuration, setTotalDuration] = useState(null);
 
@@ -372,6 +374,10 @@ const AlbumDetails = (props) => {
                 setLyrics(res.data.lyrics)
                 setHowCaptivating(res.data.how_captivating)
                 setTimelessness(res.data.timelessness)
+                setDelivery(res.data.delivery)
+                setArtwork(res.data.artwork)
+                setExpectation(res.data.expectation)
+                setMusic(res.data.music)
                 setTitle(res.data.title)
                 setArtist(res.data.artist)
                 setGenre(res.data.genre)
