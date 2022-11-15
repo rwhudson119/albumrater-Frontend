@@ -14,6 +14,7 @@ import NavBar from './navBar';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 import urlencode from 'urlencode';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
+import Switch from '@mui/material/Switch'
 import Foot from './footer';
 
 
@@ -29,12 +30,19 @@ const AlbumDetails = (props) => {
 
 
     const [displayDetails, setDisplayDetails] = useState(false);
+    const [toQueue, setToQueue] = useState(true);
       
     function toggle() {
         setDisplayDetails(wasDetails => !wasDetails);
     }
+    
+
+    function toggleQueue() {
+        setToQueue(wasQueue => !wasQueue);
+    }
 
     const [displaySongs, setDisplaySongs] = useState(false);
+    
 
     let params = useParams()
     const time = new Date().toLocaleString()
@@ -261,6 +269,7 @@ const AlbumDetails = (props) => {
         const handleUpdate = (e) => {
             e.preventDefault();
             const totalScore = (originality + flow + lyrics + howCaptivating + timelessness)/5
+
             axios.post("/rating/add",
                 {date: time, total_score: totalScore, notes: notes} ).then((res) => {
             });
