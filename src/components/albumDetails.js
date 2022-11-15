@@ -30,15 +30,9 @@ const AlbumDetails = (props) => {
 
 
     const [displayDetails, setDisplayDetails] = useState(false);
-    const [toQueue, setToQueue] = useState(true);
       
     function toggle() {
         setDisplayDetails(wasDetails => !wasDetails);
-    }
-    
-
-    function toggleQueue() {
-        setToQueue(wasQueue => !wasQueue);
     }
 
     const [displaySongs, setDisplaySongs] = useState(false);
@@ -288,7 +282,7 @@ const AlbumDetails = (props) => {
             ))
             ratings.push(time)
             axios.post(`/album/update/${params.albumId}`, 
-                {title: title, artist: artist, genre: genre, release_date: releaseDate, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, ratings: ratings, notes: notes} ).then((res) => {
+                {title: title, artist: artist, genre: genre, release_date: releaseDate, artwork: artwork, expectation: expectation, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, delivery: delivery, music: music, ratings: ratings, in_queue: "no", notes: notes} ).then((res) => {
                     navigate(`/homepage/${profile}`);
                 });
     }
