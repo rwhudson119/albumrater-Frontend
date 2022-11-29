@@ -642,13 +642,13 @@ const HomePage = (props) => {
                                                 </Grid><Grid item xs>
                                                     <p>{item.title}</p>
                                                     <p>{item.artist}</p>
-                                                    <div className="scores">
-                                                        <p>Flow: {item.flow} Lyrics: {item.lyrics}</p>
-                                                        <p>How Captivating: {item.how_captivating}   Originality: {item.originality}</p>
-                                                        <p>Timelessness: {item.timelessness}</p>
-                                                    </div>
                                                 </Grid><Grid item xs>
-                                                    <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p>
+                                                    {sortType !== 'title' && sortType !==  'artist' && sortType !==  'total' && (
+                                                        <p>{sortType}:  {item[sortType]}</p>
+
+                                                    )}
+                                                        <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p>
+                                                      
                                         </Grid></Grid></div>
                                     </a>
                                 </div>

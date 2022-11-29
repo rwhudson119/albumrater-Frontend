@@ -172,7 +172,7 @@ const AlbumDetails = (props) => {
             var totalRat = 0
             
             allUserAlbum.map((item, key) => (
-                totalRat = totalRat + (item.originality + item.flow + item.lyrics + item.how_captivating + item.timelessness)/5
+                totalRat = totalRat + (item.originality + item.flow + item.lyrics + item.how_captivating + item.timelessness + item.delivery + item.music)/7
             ));
             setAverageRating(totalRat/allUserAlbum.length);
         };
@@ -262,7 +262,7 @@ const AlbumDetails = (props) => {
 
         const handleUpdate = (e) => {
             e.preventDefault();
-            const totalScore = (originality + flow + lyrics + howCaptivating + timelessness)/5
+            const totalScore = (originality + flow + lyrics + howCaptivating + timelessness + delivery + music)/7
 
             axios.post("/rating/add",
                 {date: time, total_score: totalScore, notes: notes} ).then((res) => {
@@ -802,7 +802,7 @@ const AlbumDetails = (props) => {
                         </Grid>
                     </Box>
                 </div>
-                <p>Current Total: {((originality + flow + lyrics + howCaptivating + timelessness)/5).toFixed(2)} </p>
+                <p>Current Total: {((originality + flow + lyrics + howCaptivating + timelessness + delivery + music)/7).toFixed(2)} </p>
                 {averageRating !== 0 && (
                     <p>Average Rating {averageRating.toFixed(2)}</p>
                 )}

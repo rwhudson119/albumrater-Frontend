@@ -69,7 +69,7 @@ function Login() {
                 />
                 <div className="userLogin">
                     {usernameValid && (
-                        <div classname="badUser">
+                        <div className="badUser">
                             <Button variant="outlined"  onClick={() => { navigate(`/homepage/${usernameID}`)}} >Login</Button>
                         </div>
                     )}
