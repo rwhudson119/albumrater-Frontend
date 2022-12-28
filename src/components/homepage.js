@@ -589,6 +589,26 @@ const HomePage = (props) => {
                     </div>
                 ))}
                 </div>
+
+                <h1 className="topRated">
+                In Queue
+                </h1>
+
+                <div className="top_Albums">
+                
+                {recentlyRated.filter(obj => {
+                    return obj.in_queue === "yes"
+                }).slice(0, 10).map((item, key) => (
+                    <div className="top_Album_Individual">
+                        <a href={`/albumdetails/${item._id}`}>
+                              <img src= {item.cover_photo} alt= ""/>
+                            <p>{item.title}</p><br></br>
+                            <p>{item.expectation}/100</p><br></br>
+                        </a>
+                        
+                    </div>
+                ))}
+                </div>
                     
                             
                 
