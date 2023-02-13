@@ -80,7 +80,6 @@ function Login() {
                     )}
                 </div>
                 <div className="login_text">
-                <a className="App-link" href= { `/homepage/61e4ea023c3ce3320a16d1db` }>View Site <br></br></a>
                 <a className="App-link" href= {`/createAccount`}>Create Account</a>
                 <p onClick={toggleFU} >Forgot Username?</p>
                 {forgotUsername && (
