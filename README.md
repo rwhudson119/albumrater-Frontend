@@ -23,7 +23,7 @@ In the project directory, you can run:
 
 ## Help
 
-The deplyed version of the app has encountered some memory management issues which are currently being worked on.
+The most updated version of this app has encountered some memory management issues which are currently being worked on however the current deployed version on the website should not have this problem.
 
 ## Authors
 
