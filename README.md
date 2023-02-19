@@ -5,7 +5,7 @@ This app is used to keep track of album ratings and to see compare different alb
 The app is deployed with heroku and can be found at:
 https://albumrater.herokuapp.com/
 
-##Description
+## Description
 
 This project allows a user to login and create ratings for albums, these ratings will be stored for the user to view at any time. The website takes all rating data and provides the user with statistics and information about their preferences and rating history, this is displayed on the home page along with the currently rated albums. The website allows a user to search for an album to rate, album information such as artist, release date, genre, songs etc is already filled out for the user by utilizing the Deezer API. Users can also rate songs which are also ranked and displayed.
 
