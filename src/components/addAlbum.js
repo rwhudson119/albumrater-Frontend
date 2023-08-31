@@ -16,21 +16,6 @@ import Switch from '@mui/material/Switch'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
 import Foot from './footer';
-/*import {results, setResults, setArtist, country, setCountry, title, setTitle, releaseDate, setReleaseDate,
-    setCoverPhoto, genre, setGenre, setArtwork, originality, setOriginality, flow, setFlow, lyrics, setLyrics,
-    howCaptivating, setHowCaptivating, timelessness, setTimelessness, music, setMusic, setDelivery,
-    expectation, setExpectation, notes, setNotes, songScores, setSongScores, songDuration, setSongDuration, 
-    totalDuration, setTotalDuration} from "./sliderfunc.js";
-
-import {handleSliderChangeArtwork, handleInputChangeArtwork, handleSliderChangeExpectation, handleInputChangeExpectation, 
-    handleSliderChangeOriginality, handleInputChangeOriginality, handleSliderChangeFlow, handleInputChangeFlow, 
-    handleSliderChangeLyrics, handleInputChangeLyrics, handleSliderChangeHowCaptivating, handleInputChangeHowCaptivating, 
-    handleSliderChangeTimelessness, handleInputChangeTimelessness, handleSliderChangeDelivery, handleInputChangeDelivery, 
-    handleSliderChangeMusic, handleInputChangeMusic, handleInputChangeNotes, handleInputChangeTitle, handleInputChangeArtist, 
-    handleInputChangeCountry, handleInputChangeGenre, handleInputChangeRelease_Date, handleBlurArtwork, handleBlurExpectation, 
-    handleBlurOriginality, handleBlurFlow, handleBlurLyrics, handleBlurHowCaptivating, handleBlurTimelessness, handleBlurDelivery, 
-    handleBlurMusic} from "./sliderfunc.js"*/
-
 
 
 const Input = styled(MuiInput)`
@@ -63,7 +48,7 @@ const AddAlbum = (props) => {
 
     const [results, setResults] = useState(null);
     const [artist, setArtist] = useState("");
-    const [country, setCountry] = useState("");
+    const [country] = useState("");
     const [title, setTitle] = useState("");
     const [releaseDate, setReleaseDate] = useState("");
     const [coverPhoto, setCoverPhoto] = useState("");
@@ -79,8 +64,8 @@ const AddAlbum = (props) => {
     const [expectation, setExpectation] = useState(50);
     const [notes, setNotes] = useState("");
     const [songScores, setSongScores] = useState([]);
-    const [songDuration, setSongDuration] = useState([]);
-    const [totalDuration, setTotalDuration] = useState(null);
+    //const [songDuration, setSongDuration] = useState([]);
+    //const [totalDuration, setTotalDuration] = useState(null);
 
 
     const profile = localStorage.profile
@@ -173,9 +158,9 @@ const AddAlbum = (props) => {
         setArtist(event.target.value);
     };
 
-    const handleInputChangeCountry = (event) => {
+    /*const handleInputChangeCountry = (event) => {
         setCountry(event.target.value);
-    };
+    };*/
 
 
     const handleInputChangeGenre = (event) => {
@@ -321,28 +306,21 @@ const AddAlbum = (props) => {
 
 
     useEffect(() => {
-        const URL = `https://album-rater-backend.herokuapp.com/deezer/albumid/${params.albumId}`
     
         const GetAlbum = async () => {
-
-            const res = await axios({
-                method: 'get',
-                url: URL,
-                headers: {
-                  'Access-Control-Allow-Origin': '*',
-                },
+            axios.get(`/deezer/albumid/${params.albumId}`).then((res) => {
+                setResults(res.data)
+                setTitle(res.data.title)
+                setArtist(res.data.artist.name)
+                setGenre(res.data.genres.data[0].name)
+                setReleaseDate(res.data.release_date)
+                setCoverPhoto(res.data.cover_big)
+                setSongScores(songScoresArr)
+                if((title === "" || artist === "" || genre === ""|| releaseDate === "") === ""){
+                toggle()
+                }
+                console.log(res.data)
             });
-            setResults(res.data)
-            setTitle(res.data.title)
-            setArtist(res.data.artist.name)
-            setGenre(res.data.genres.data[0].name)
-            setReleaseDate(res.data.release_date)
-            setCoverPhoto(res.data.cover_big)
-            setSongScores(songScoresArr)
-            if((title === "" || artist === "" || genre === ""|| releaseDate === "") === ""){
-               toggle()
-            }
-            console.log(res.data)
         };
         GetAlbum();
     }, []);

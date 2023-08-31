@@ -169,10 +169,10 @@ const HomePage = (props) => {
                     {averageDiff.album}
                 </p>
                 <Typography gutterBottom>
-                    <p>You rated it: {averageDiff.profScore} </p>
+                    You rated it: {averageDiff.profScore}
                 </Typography>
                 <Typography gutterBottom>
-                    <p>Average Rating:    {(+averageDiff.averageScore).toFixed(2)} </p>
+                    Average Rating:    {(+averageDiff.averageScore).toFixed(2)}
                 </Typography>
                 
             </div>
@@ -348,7 +348,7 @@ const HomePage = (props) => {
         axios.get(`/album/${params.profile}`).then(res => {
             setAlbums(res.data);
             setSortType('title')
-            res.data.map((item, key) => {
+            res.data.map((item) => {
                 GetRankStats(item)
                 getArtistRank(item)
                 getGenreRank(item)
@@ -370,7 +370,7 @@ const HomePage = (props) => {
     const GetAverageDiff = (albums) => {
         var sumScore = 0, profileVal = -1;
         try{
-        albums.map((item, key) => {
+        albums.map((item) => {
             var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness)/5)
             if(item.profile === params.profile){
                 profileVal = totalScore
@@ -434,8 +434,12 @@ const HomePage = (props) => {
                     
                     trends = arrayTemp
                     sortArrayTrend(arrayTemp)
-                })
-            })
+                }, () => {
+                    console.log("Cant find album rating")
+                });
+            }, () => {
+                console.log("Cant find album rating")
+            });
         }else{
             setTrendingUpData([])
             setTrendingDownData([])
@@ -560,10 +564,10 @@ const HomePage = (props) => {
                 <div className="top_Albums">
                 
                 {topAlbums.slice(0, 10).map((item, key) => (
-                    <div className="top_Album_Individual">
+                    <div className="top_Album_Individual" key={key}>
                         <a href={`/albumdetails/${item._id}`}>
                               <img src= {item.cover_photo} alt= ""/>
-                            <p1>{key + 1}</p1><br></br>
+                            <p>{key + 1}</p><br></br>
                             <p>{item.title}</p><br></br>
                             <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p><br></br>
                         </a>
@@ -579,7 +583,7 @@ const HomePage = (props) => {
                 <div className="top_Albums">
                 
                 {recentlyRated.slice(0, 10).map((item, key) => (
-                    <div className="top_Album_Individual">
+                    <div key={key} className="top_Album_Individual">
                         <a href={`/albumdetails/${item._id}`}>
                               <img src= {item.cover_photo} alt= ""/>
                             <p>{item.title}</p><br></br>
@@ -599,7 +603,7 @@ const HomePage = (props) => {
                 {recentlyRated.filter(obj => {
                     return obj.in_queue === "yes"
                 }).slice(0, 10).map((item, key) => (
-                    <div className="top_Album_Individual">
+                    <div key={key} className="top_Album_Individual">
                         <a href={`/albumdetails/${item._id}`}>
                               <img src= {item.cover_photo} alt= ""/>
                             <p>{item.title}</p><br></br>
@@ -651,7 +655,7 @@ const HomePage = (props) => {
                             <div className="album-list-entire">
 
                             {displayedAlbums.map((item, key) => (
-                                <div className="album_display">
+                                <div key={key} className="album_display">
                                     <a href={`/albumdetails/${item._id}`}>
                                         <div className="album-display-box">
                                             <Grid container spacing={3} alignItems="center">
@@ -710,7 +714,7 @@ const HomePage = (props) => {
                             <div className="album-list-entire">
 
                             {displayedSongs.map((item, key) => (
-                                <a href={`/songdetails/${item._id}`} key={item._id}>
+                                <a href={`/songdetails/${item._id}`} key={key}>
                                     <div className="album_display" key={item._id}>
                                         
                                         <div className="album-display-box">
@@ -718,7 +722,7 @@ const HomePage = (props) => {
                                                 <Grid item xs={8}>
                                                     <div className="songInfo">
                                                         <p>{item.title}</p>
-                                                        <p1>{item.artist}</p1> 
+                                                        <p>{item.artist}</p> 
                                                     </div>                                   
                                                 </Grid><Grid item xs={4}>
                                                     <div className="scores">

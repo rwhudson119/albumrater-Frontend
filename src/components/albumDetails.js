@@ -14,11 +14,7 @@ import NavBar from './navBar';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 import urlencode from 'urlencode';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
-import Switch from '@mui/material/Switch'
 import Foot from './footer';
-
-
-
 
 const Input = styled(MuiInput)`
 width: 42px;
@@ -26,8 +22,6 @@ width: 42px;
 
 
 const AlbumDetails = (props) => {
-
-
 
     const [displayDetails, setDisplayDetails] = useState(false);
       
@@ -46,7 +40,7 @@ const AlbumDetails = (props) => {
 
     const [songArrayFinal, setSongArrayFinal] = useState([]);
     const [artist, setArtist] = useState("");
-    const [country, setCountry] = useState("");
+    //const [country, setCountry] = useState("");
     const [title, setTitle] = useState("");
     const [releaseDate, setReleaseDate] = useState("");
     const [genre, setGenre] = useState("");
@@ -62,8 +56,8 @@ const AlbumDetails = (props) => {
     const [notes, setNotes] = useState("");
 
 
-    const [songDuration, setSongDuration] = useState([]);
-    const [totalDuration, setTotalDuration] = useState(null);
+    //const [songDuration, setSongDuration] = useState([]);
+    //const [totalDuration, setTotalDuration] = useState(null);
 
     const [averageRating, setAverageRating] = useState(0);
 
@@ -77,214 +71,214 @@ const AlbumDetails = (props) => {
         setDisplaySongs(wasSongs => !wasSongs);
     }
 
-        const handleSliderChangeArtwork = (event, newValue) => {
-            setArtwork(newValue);
-        };
+    const handleSliderChangeArtwork = (event, newValue) => {
+        setArtwork(newValue);
+    };
 
-        const handleInputChangeArtwork = (event) => {
-            setArtwork(event.target.value === '' ? '' : Number(event.target.value));
-        };
+    const handleInputChangeArtwork = (event) => {
+        setArtwork(event.target.value === '' ? '' : Number(event.target.value));
+    };
 
-        const handleSliderChangeExpectation = (event, newValue) => {
-            setExpectation(newValue);
-        };
+    const handleSliderChangeExpectation = (event, newValue) => {
+        setExpectation(newValue);
+    };
 
-        const handleInputChangeExpectation = (event) => {
-            setExpectation(event.target.value === '' ? '' : Number(event.target.value));
-        };
+    const handleInputChangeExpectation = (event) => {
+        setExpectation(event.target.value === '' ? '' : Number(event.target.value));
+    };
 
-        const handleSliderChangeOriginality = (event, newValue) => {
-            setOriginality(newValue);
-        };
-        
-        const handleInputChangeOriginality = (event) => {
-            setOriginality(event.target.value === '' ? '' : Number(event.target.value));
-        };
-
-        const handleSliderChangeFlow = (event, newValue) => {
-            setFlow(newValue);
-        };
-        
-        const handleInputChangeFlow = (event) => {
-            setFlow(event.target.value === '' ? '' : Number(event.target.value));
-        };
-
-        const handleSliderChangeLyrics = (event, newValue) => {
-            setLyrics(newValue);
-        };
-        
-        const handleInputChangeLyrics = (event) => {
-            setLyrics(event.target.value === '' ? '' : Number(event.target.value));
-        };
-
-        const handleSliderChangeHowCaptivating = (event, newValue) => {
-            setHowCaptivating(newValue);
-        };
-        
-        const handleInputChangeHowCaptivating = (event) => {
-            setHowCaptivating(event.target.value === '' ? '' : Number(event.target.value));
-        };
-
-        const handleSliderChangeTimelessness = (event, newValue) => {
-            setTimelessness(newValue);
-        };
-        
-        const handleInputChangeTimelessness = (event) => {
-            setTimelessness(event.target.value === '' ? '' : Number(event.target.value));
-        };
-
-        const handleSliderChangeDelivery = (event, newValue) => {
-            setDelivery(newValue);
-        };
+    const handleSliderChangeOriginality = (event, newValue) => {
+        setOriginality(newValue);
+    };
     
-        const handleInputChangeDelivery = (event) => {
-            setDelivery(event.target.value === '' ? '' : Number(event.target.value));
-        };
+    const handleInputChangeOriginality = (event) => {
+        setOriginality(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+    const handleSliderChangeFlow = (event, newValue) => {
+        setFlow(newValue);
+    };
     
-        const handleSliderChangeMusic = (event, newValue) => {
-            setMusic(newValue);
-        };
+    const handleInputChangeFlow = (event) => {
+        setFlow(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+    const handleSliderChangeLyrics = (event, newValue) => {
+        setLyrics(newValue);
+    };
     
-        const handleInputChangeMusic = (event) => {
-            setMusic(event.target.value === '' ? '' : Number(event.target.value));
-        };
+    const handleInputChangeLyrics = (event) => {
+        setLyrics(event.target.value === '' ? '' : Number(event.target.value));
+    };
 
-         const handleInputChangeNotes = (event) => {
-            setNotes(event.target.value);
-        };
-        const handleInputChangeTitle = (event) => {
-            setTitle(event.target.value);
-        };
-        const handleInputChangeArtist = (event) => {
-            setArtist(event.target.value);
-        };
-        const handleInputChangeCountry = (event) => {
-            setCountry(event.target.value);
-        };
-        const handleInputChangeGenre = (event) => {
-            setGenre(event.target.value);
-        };
-        const handleInputChangeReleaseDate = (event) => {
-            setReleaseDate(event.target.value);
-        };
-
-        const getAverageRating = (allUserAlbum) => {
-            var totalRat = 0
-            
-            allUserAlbum.map((item, key) => (
-                totalRat = totalRat + (item.originality + item.flow + item.lyrics + item.how_captivating + item.timelessness + item.delivery + item.music)/7
-            ));
-            setAverageRating(totalRat/allUserAlbum.length);
-        };
-
-        const handleBlurArtwork = () => {
-            if (artwork < 0) {
-                setArtwork(0);
-            } else if (artwork > 10) {
-                setArtwork(10);
-            }
-        };
+    const handleSliderChangeHowCaptivating = (event, newValue) => {
+        setHowCaptivating(newValue);
+    };
     
-        const handleBlurExpectation = () => {
-            if (expectation < 0) {
-                setExpectation(0);
-            } else if (expectation > 100) {
-                setExpectation(100);
-            }
-        };
+    const handleInputChangeHowCaptivating = (event) => {
+        setHowCaptivating(event.target.value === '' ? '' : Number(event.target.value));
+    };
 
-        const handleBlurOriginality = () => {
-            if (originality < 0) {
-                setOriginality(0);
-            } else if (originality > 100) {
-                setOriginality(100);
-            }
-          };
-          const handleBlurFlow = () => {
-            if (flow < 0) {
-                setFlow(0);
-            } else if (flow > 100) {
-                setFlow(100);
-            }
-          };
-          const handleBlurLyrics = () => {
-            if (lyrics < 0) {
-                setLyrics(0);
-            } else if (lyrics > 100) {
-                setLyrics(100);
-            }
-          };
-          const handleBlurHowCaptivating = () => {
-            if (howCaptivating < 0) {
-                setHowCaptivating(0);
-            } else if (howCaptivating > 100) {
-                setHowCaptivating(100);
-            }
-          };
-          const handleBlurTimelessness = () => {
-            if (timelessness < 0) {
-                setTimelessness(0);
-            } else if (timelessness > 100) {
-                setTimelessness(100);
-            }
-          };
-
-          const handleBlurDelivery = () => {
-            if (delivery < 0) {
-                setDelivery(0);
-            } else if (delivery > 100) {
-                setDelivery(100);
-            }
-        };
+    const handleSliderChangeTimelessness = (event, newValue) => {
+        setTimelessness(newValue);
+    };
     
-        const handleBlurMusic = () => {
-            if (music < 0) {
-                setMusic(0);
-            } else if (music > 100) {
-                setMusic(100);
-            }
+    const handleInputChangeTimelessness = (event) => {
+        setTimelessness(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+    const handleSliderChangeDelivery = (event, newValue) => {
+        setDelivery(newValue);
+    };
+
+    const handleInputChangeDelivery = (event) => {
+        setDelivery(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+    const handleSliderChangeMusic = (event, newValue) => {
+        setMusic(newValue);
+    };
+
+    const handleInputChangeMusic = (event) => {
+        setMusic(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+        const handleInputChangeNotes = (event) => {
+        setNotes(event.target.value);
+    };
+    const handleInputChangeTitle = (event) => {
+        setTitle(event.target.value);
+    };
+    const handleInputChangeArtist = (event) => {
+        setArtist(event.target.value);
+    };
+    /*const handleInputChangeCountry = (event) => {
+        setCountry(event.target.value);
+    };*/
+    const handleInputChangeGenre = (event) => {
+        setGenre(event.target.value);
+    };
+    const handleInputChangeReleaseDate = (event) => {
+        setReleaseDate(event.target.value);
+    };
+
+    const getAverageRating = (allUserAlbum) => {
+        var totalRat = 0
+        
+        allUserAlbum.map((item, key) => (
+            totalRat = totalRat + (item.originality + item.flow + item.lyrics + item.how_captivating + item.timelessness + item.delivery + item.music)/7
+        ));
+        setAverageRating(totalRat/allUserAlbum.length);
+    };
+
+    const handleBlurArtwork = () => {
+        if (artwork < 0) {
+            setArtwork(0);
+        } else if (artwork > 10) {
+            setArtwork(10);
+        }
+    };
+
+    const handleBlurExpectation = () => {
+        if (expectation < 0) {
+            setExpectation(0);
+        } else if (expectation > 100) {
+            setExpectation(100);
+        }
+    };
+
+    const handleBlurOriginality = () => {
+        if (originality < 0) {
+            setOriginality(0);
+        } else if (originality > 100) {
+            setOriginality(100);
+        }
+        };
+        const handleBlurFlow = () => {
+        if (flow < 0) {
+            setFlow(0);
+        } else if (flow > 100) {
+            setFlow(100);
+        }
+        };
+        const handleBlurLyrics = () => {
+        if (lyrics < 0) {
+            setLyrics(0);
+        } else if (lyrics > 100) {
+            setLyrics(100);
+        }
+        };
+        const handleBlurHowCaptivating = () => {
+        if (howCaptivating < 0) {
+            setHowCaptivating(0);
+        } else if (howCaptivating > 100) {
+            setHowCaptivating(100);
+        }
+        };
+        const handleBlurTimelessness = () => {
+        if (timelessness < 0) {
+            setTimelessness(0);
+        } else if (timelessness > 100) {
+            setTimelessness(100);
+        }
         };
 
-          const handleBlurTest = () => {
-            songArray.map((item, key) => {
-                if(item > 10){
-                    songArray[key] = "10"
-                }if(item < 0){
-                    songArray[key] = "0"
-                }
-                return 0
-            })
-            setSongArrayFinal(songArray)
-            return 0
-          }
+        const handleBlurDelivery = () => {
+        if (delivery < 0) {
+            setDelivery(0);
+        } else if (delivery > 100) {
+            setDelivery(100);
+        }
+    };
+
+    const handleBlurMusic = () => {
+        if (music < 0) {
+            setMusic(0);
+        } else if (music > 100) {
+            setMusic(100);
+        }
+    };
+
+    const handleBlurTest = () => {
+    songArray.map((item, key) => {
+        if(item > 10){
+            songArray[key] = "10"
+        }if(item < 0){
+            songArray[key] = "0"
+        }
+        return 0
+    })
+    setSongArrayFinal(songArray)
+    return 0
+    }
 
 
 
-        const handleUpdate = (e) => {
-            e.preventDefault();
-            const totalScore = (originality + flow + lyrics + howCaptivating + timelessness + delivery + music)/7
+    const handleUpdate = (e) => {
+        e.preventDefault();
+        const totalScore = (originality + flow + lyrics + howCaptivating + timelessness + delivery + music)/7
 
-            axios.post("/rating/add",
-                {date: time, total_score: totalScore, notes: notes} ).then((res) => {
+        axios.post("/rating/add",
+            {date: time, total_score: totalScore, notes: notes} ).then((res) => {
+        });
+
+        console.log("songs: " + songArrayFinal)
+
+        songArrayFinal.map((item, key) => (
+            axios.post(`/song/update/${item._id}`, 
+            {score: item.score} ).then((res) => {
+            })))
+
+
+        var ratings = []
+        album.ratings.map((item, key) => (
+            ratings.push(item)
+        ))
+        ratings.push(time)
+        axios.post(`/album/update/${params.albumId}`, 
+            {title: title, artist: artist, genre: genre, release_date: releaseDate, artwork: artwork, expectation: expectation, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, delivery: delivery, music: music, ratings: ratings, in_queue: "no", notes: notes} ).then((res) => {
+                navigate(`/homepage/${profile}`);
             });
-
-            console.log("songs: " + songArrayFinal)
-
-            songArrayFinal.map((item, key) => (
-                axios.post(`/song/update/${item._id}`, 
-                {score: item.score} ).then((res) => {
-                })))
-
-
-            var ratings = []
-            album.ratings.map((item, key) => (
-                ratings.push(item)
-            ))
-            ratings.push(time)
-            axios.post(`/album/update/${params.albumId}`, 
-                {title: title, artist: artist, genre: genre, release_date: releaseDate, artwork: artwork, expectation: expectation, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, delivery: delivery, music: music, ratings: ratings, in_queue: "no", notes: notes} ).then((res) => {
-                    navigate(`/homepage/${profile}`);
-                });
     }
 
     class CustomizedLabel extends PureComponent {
@@ -297,11 +291,10 @@ const AlbumDetails = (props) => {
             </text>
           );
         }
-      }
+    }
 
 
     useEffect(() => {
-
 
         const getSongData = async (albumSongs) => {
             console.log("GETTING SONGS")
@@ -404,10 +397,10 @@ const AlbumDetails = (props) => {
     if (album instanceof Error) {
         console.error(album);
         return (
-                    <div>
-                        <h1>Error.</h1>
-                    </div>
-                );
+            <div>
+                <h1>Error.</h1>
+            </div>
+        );
     }
 
     return (
