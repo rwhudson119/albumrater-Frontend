@@ -521,7 +521,7 @@ const AlbumDetails = (props) => {
                 <>
                 <h1>Rate Songs</h1>
                 {songArrayFinal.map((item, key) => (
-                     <Box sx={{ width: 250 }}>
+                     <Box key={key} sx={{ width: 250 }}>
                          <Grid container spacing={2} alignItems="center">
                                  <Grid item xs>
                                      <Typography id="song-input" gutterBottom>

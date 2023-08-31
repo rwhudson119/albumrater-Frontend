@@ -36,11 +36,11 @@ const NewAlbum = (props) => {
         <header className="App-header">
             <h2>{params.album}</h2>
             {results.map((item, key) => (
-                <>
+                <div key={key}>
                     <p> {item.title} {item.artist.name}</p> 
 
                     <a href={`/addalbum/${item.id}`}><img src= {item.cover} alt= ""/> </a>
-                </>
+                </div>
             ))}
         </header>
         <Foot />
