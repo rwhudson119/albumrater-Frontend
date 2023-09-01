@@ -41,7 +41,7 @@ const AlbumDetails = (props) => {
 
     const [songArrayFinal, setSongArrayFinal] = useState([]);
     const [artist, setArtist] = useState("");
-    //const [country, setCountry] = useState("");
+    const [country, setCountry] = useState("");
     const [title, setTitle] = useState("");
     const [releaseDate, setReleaseDate] = useState("");
     const [genre, setGenre] = useState("");
@@ -158,9 +158,9 @@ const AlbumDetails = (props) => {
     const handleInputChangeArtist = (event) => {
         setArtist(event.target.value);
     };
-    /*const handleInputChangeCountry = (event) => {
+    const handleInputChangeCountry = (event) => {
         setCountry(event.target.value);
-    };*/
+    };
     const handleInputChangeGenre = (event) => {
         setGenre(event.target.value);
     };

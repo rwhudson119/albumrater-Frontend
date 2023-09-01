@@ -14,8 +14,6 @@ import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import NavBar from './navBar';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
-import Switch from '@mui/material/Switch'
-import FormControlLabel from '@mui/material/FormControlLabel'
 
 import Foot from './footer';
 
@@ -48,7 +46,7 @@ const AddAlbum = (props) => {
     const [results, setResults] = useState(null);
     const [artist, setArtist] = useState("");
 
-    const [country] = useState("");
+    const [country, setCountry] = useState("");
 
     const [title, setTitle] = useState("");
     const [releaseDate, setReleaseDate] = useState("");
@@ -77,6 +75,9 @@ const AddAlbum = (props) => {
     var songScoresArr = [];
     var songDurationArr = [];
     
+    function toggleSongs() {
+        setDisplaySongs(wasSongs => !wasSongs);
+    }
   
     const handleSliderChangeArtwork = (event, newValue) => {
         setArtwork(newValue);
@@ -244,145 +245,10 @@ const AddAlbum = (props) => {
 
     };
 
-    const handleSliderChangeFlow = (event, newValue) => {
-        setFlow(newValue);
-    };
-    
-    const handleInputChangeFlow = (event) => {
-        setFlow(event.target.value === '' ? '' : Number(event.target.value));
-    };
-
-    const handleSliderChangeLyrics = (event, newValue) => {
-        setLyrics(newValue);
-    };
-    
-    const handleInputChangeLyrics = (event) => {
-        setLyrics(event.target.value === '' ? '' : Number(event.target.value));
-    };
-
-    const handleSliderChangeHowCaptivating = (event, newValue) => {
-        setHowCaptivating(newValue);
-    };
-    
-    const handleInputChangeHowCaptivating = (event) => {
-        setHowCaptivating(event.target.value === '' ? '' : Number(event.target.value));
-    };
-
-    const handleSliderChangeTimelessness = (event, newValue) => {
-        setTimelessness(newValue);
-    };
-    
-    const handleInputChangeTimelessness = (event) => {
-        setTimelessness(event.target.value === '' ? '' : Number(event.target.value));
-    };
-
-    const handleSliderChangeDelivery = (event, newValue) => {
-        setDelivery(newValue);
-    };
-
-    const handleInputChangeDelivery = (event) => {
-        setDelivery(event.target.value === '' ? '' : Number(event.target.value));
-    };
-
-    const handleSliderChangeMusic = (event, newValue) => {
-        setMusic(newValue);
-    };
-
-    const handleInputChangeMusic = (event) => {
-        setMusic(event.target.value === '' ? '' : Number(event.target.value));
-    };
-
-        const handleInputChangeNotes = (event) => {
-        setNotes(event.target.value);
-    };
-    const handleInputChangeTitle = (event) => {
-        setTitle(event.target.value);
-    };
-    const handleInputChangeArtist = (event) => {
-        setArtist(event.target.value);
-    };
-
     const handleInputChangeCountry = (event) => {
         setCountry(event.target.value);
     };
 
-
-    const handleInputChangeGenre = (event) => {
-        setGenre(event.target.value);
-    };
-    const handleInputChangeRelease_Date = (event) => {
-        setReleaseDate(event.target.value);
-    };
-
-
-    const handleBlurArtwork = () => {
-        if (artwork < 0) {
-            setArtwork(0);
-        } else if (artwork > 100) {
-            setArtwork(100);
-        }
-    };
-
-    const handleBlurExpectation = () => {
-        if (expectation < 0) {
-            setExpectation(0);
-        } else if (expectation > 100) {
-            setExpectation(100);
-        }
-    };
-
-
-    const handleBlurOriginality = () => {
-        if (originality < 0) {
-            setOriginality(0);
-        } else if (originality > 100) {
-            setOriginality(100);
-        }
-    };
-    const handleBlurFlow = () => {
-        if (flow < 0) {
-            setFlow(0);
-        } else if (flow > 100) {
-            setFlow(100);
-        }
-    };
-    const handleBlurLyrics = () => {
-        if (lyrics < 0) {
-            setLyrics(0);
-        } else if (lyrics > 100) {
-            setLyrics(100);
-        }
-    };
-    const handleBlurHowCaptivating = () => {
-        if (howCaptivating < 0) {
-            setHowCaptivating(0);
-        } else if (howCaptivating > 100) {
-            setHowCaptivating(100);
-        }
-    };
-    const handleBlurTimelessness = () => {
-        if (timelessness < 0) {
-            setTimelessness(0);
-        } else if (timelessness > 100) {
-            setTimelessness(100);
-        }
-    };
-
-    const handleBlurDelivery = () => {
-        if (delivery < 0) {
-            setDelivery(0);
-        } else if (delivery > 100) {
-            setDelivery(100);
-        }
-    };
-
-    const handleBlurMusic = () => {
-        if (music < 0) {
-            setMusic(0);
-        } else if (music > 100) {
-            setMusic(100);
-        }
-    };
 
 
         const handleBlurSongs = () => {

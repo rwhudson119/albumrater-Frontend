@@ -64,7 +64,9 @@ const HomePage = (props) => {
     var artistScore = {}
     var genreScore = {}
 
-    
+    function toggle() {
+        setDisplaySongs(wasSongs => !wasSongs);
+    }
 
 
 
@@ -261,14 +263,6 @@ const HomePage = (props) => {
             return bTrend - aTrend;
         })
         );
-    };
-
-    const getInQueueList = () => {
-        var newInQueueList = albums.filter(function(item)
-        {
-         return item.in_queue === "yes";
-        });
-        setInQueueList(newInQueueList)
     };
 
 
@@ -537,7 +531,6 @@ const HomePage = (props) => {
           };
           
           sortArrayTopAlbums();
-          getInQueueList();
           sortArrayRecentlyRated();
           sortArrayTopSongs();
           sortSongArray(sortTypeSong);
@@ -659,8 +652,7 @@ const HomePage = (props) => {
                     {!displaySongs && (
                         <>
                             <div className="sort_by">
-                                <FormControl sx={{ m: 1, minWidth: 150 }}>
-           <FormControl sx={{ m: 1, minWidth: 100}}>
+                                <FormControl sx={{ m: 1, minWidth: 100}}>
                                 <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
                                 <Select value={sortType}  variant="filled"
                                     onChange={(e) => setSortType(e.target.value)} color="primary">
