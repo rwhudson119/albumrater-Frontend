@@ -443,7 +443,7 @@ const AddAlbum = (props) => {
                         </Grid>
                     </div>
                     <div className="alterDetails">
-                        <Button onClick={toggle}>Done</Button>
+                        <Button onClick={toggle}>Abandon</Button>
 
                     </div>
                 </div>

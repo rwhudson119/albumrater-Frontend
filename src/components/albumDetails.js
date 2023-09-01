@@ -264,10 +264,13 @@ const AlbumDetails = (props) => {
     const handleUpdate = (e) => {
         e.preventDefault();
         const totalScore = (originality + flow + lyrics + howCaptivating + timelessness + delivery + music)/7
-
-        axios.post("/rating/add",
-            {date: time, total_score: totalScore, notes: notes} ).then((res) => {
-        });
+        try{
+            axios.post("/rating/add",
+                {date: time, total_score: totalScore, notes: notes} ).then((res) => {
+            });
+        }catch(err){
+            console.log("ERROR:  time:" + time + " total score:" + totalScore + " notes:" + notes)
+        }
 
         console.log("songs: " + songArrayFinal)
 
@@ -339,7 +342,7 @@ const AlbumDetails = (props) => {
                 },
             }).then((res) => {
                 var ratingDataTest = ratingData
-                ratingDataTest.push({name: rating.split(' ')[0], score: res.data.total_score})
+                ratingDataTest.push({name: rating.split(' ')[0], score: res.data.total_score.toFixed(2)})
                 setRatingData(ratingDataTest)
 
             })
@@ -496,7 +499,7 @@ const AlbumDetails = (props) => {
                         </Grid>
                     </div>
                     <div className="boxTitle">
-                        <Button onClick={toggle}>Done</Button>
+                        <Button onClick={toggle}>Abandon</Button>
 
                     </div>
                 </div>
@@ -828,76 +831,6 @@ const AlbumDetails = (props) => {
                     </div>
                 </div>
 
-                <div className="Delivery">
-                    <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
-                        Delivery
-                    </Typography>
-                    <div className="statBox">
-                    <Box sx={{ width: 250 }}>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs={9}>
-                            <Slider
-                                value={typeof delivery === 'number' ? delivery : 50}
-                                onChange={handleSliderChangeDelivery}
-                                aria-labelledby="input-slider"
-                            />
-                            </Grid>
-                            <Grid item xs={3}>
-                            <Input
-                                value={delivery}
-                                size="small"
-                                onChange={handleInputChangeDelivery}
-                                onBlur={handleBlurDelivery}
-                                inputProps={{
-                                    style: { color: "white" },
-                                    step: 5,
-                                    min: 0,
-                                    max: 100,
-                                    type: 'number',
-                                    'aria-labelledby': 'input-slider',
-                                }}
-                            />
-                            </Grid>
-                        </Grid>
-                    </Box>
-                    </div>
-                </div>
-
-                <div className="Music">
-                    <Typography id="input-slider" gutterBottom component={'span'} variant={'body2'}>
-                    Music
-                    </Typography>
-                    <div className="statBox">
-                    <Box sx={{ width: 250 }}>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs={9}>
-                            <Slider
-                                value={typeof music === 'number' ? music : 50}
-                                onChange={handleSliderChangeMusic}
-                                aria-labelledby="input-slider"
-                            />
-                            </Grid>
-                            <Grid item xs={3}>
-                            <Input
-                                value={music}
-                                size="small"
-                                onChange={handleInputChangeMusic}
-                                onBlur={handleBlurMusic}
-                                inputProps={{
-                                    style: { color: "white" },
-                                    step: 5,
-                                    min: 0,
-                                    max: 100,
-                                    type: 'number',
-                                    'aria-labelledby': 'input-slider',
-                                }}
-                            />
-                            </Grid>
-                        </Grid>
-                    </Box>
-                    </div>
-                </div>
-
                 <p>Current Total: {((originality + flow + lyrics + howCaptivating + timelessness + delivery + music)/7).toFixed(2)} </p>
                 {averageRating !== 0 && (
                     <p>Average Rating {averageRating.toFixed(2)}</p>
@@ -926,7 +859,7 @@ const AlbumDetails = (props) => {
                     <LineChart width={500} height={300} data={ratingData}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" tick={{fontSize: "15px"}} padding={{ left: 10, right: 10 }}/>
-                        <YAxis yAxisId="left" domain={[0, 100]} tick={{fontSize: "18px"}}/>
+                        <YAxis yAxisId="left" domain={[0, 100]} tick={{fontSize: "18px"}} />
                         <Line yAxisId="left" type="Cardinal" dataKey= "score" stroke="#1976d2" strokeWidth="3px" label={<CustomizedLabel />}/>
                     </LineChart>
                 </>
