@@ -11,6 +11,9 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Button from '@mui/material/Button';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+
 import NavBar from './navBar';
 import Foot from './footer';
 //import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -36,6 +39,7 @@ const HomePage = (props) => {
     const [sortTypeSong, setSortTypeSong] = useState('');
 
     const [displaySongs, setDisplaySongs] = useState(false);
+    const [displayQueue, setDisplayQueue] = useState(false);
     const [displayStats, setDisplayStats] = useState(false);
 
     const [displayedAlbums, setDisplayedAlbums] = useState([]);
@@ -50,6 +54,7 @@ const HomePage = (props) => {
     const [topArtist, setTopArtist] = useState('');
     const [topGenre, setTopGenre] = useState('');
     const [topAlbums, setTopAlbums] = useState([]);
+
     const [topSongs, setTopSongs] = useState([]);
     const [recentlyRated, setRecentlyRated] = useState([]);
     const [averageDiff, setAverageDiff] = useState({});
@@ -58,6 +63,7 @@ const HomePage = (props) => {
     var trends = []
     var artistScore = {}
     var genreScore = {}
+
     
 
 
@@ -143,6 +149,7 @@ const HomePage = (props) => {
                 <img src={topArtistPhoto} alt= ""></img>
                 <Typography gutterBottom>
                     {topArtist}
+
                 </Typography>
             </div>
         </div>
@@ -173,6 +180,7 @@ const HomePage = (props) => {
                 </Typography>
                 <Typography gutterBottom>
                     Average Rating:    {(+averageDiff.averageScore).toFixed(2)}
+
                 </Typography>
                 
             </div>
@@ -202,8 +210,12 @@ const HomePage = (props) => {
     //functions ----------------------------------------------------------------------
 
     //hidden info
-    function toggle() {
+    function toggleSongs() {
         setDisplaySongs(wasSongs => !wasSongs);
+    }
+
+    function toggleQueued() {
+        setDisplayQueue(wasQueue => !wasQueue);
     }
 
     //Functions for search feature
@@ -245,10 +257,20 @@ const HomePage = (props) => {
         setTopAlbums([...albums].sort((a, b) => {
             var aTrend = (a.originality + a.flow + a.lyrics + a.how_captivating + a.timelessness)/5
             var bTrend = (b.originality + b.flow + b.lyrics + b.how_captivating + b.timelessness)/5
+
             return bTrend - aTrend;
         })
         );
     };
+
+    const getInQueueList = () => {
+        var newInQueueList = albums.filter(function(item)
+        {
+         return item.in_queue === "yes";
+        });
+        setInQueueList(newInQueueList)
+    };
+
 
     const sortArrayTrend = (trendsTemp) => {
         var TUDTst, TUDTst2;
@@ -272,6 +294,7 @@ const HomePage = (props) => {
         
         }catch{
             console.log("setTrend err")
+
             setTrendingUpData([])
             setTrendingDownData([])
         }
@@ -281,6 +304,7 @@ const HomePage = (props) => {
 
     const sortArrayRecentlyRated = () => {
         var recentlyRatedTemp = [...albums].sort((a, b) => {
+
             var a_date, b_date
             if(a.in_queue === "yes"){
                 a_date = 0
@@ -298,7 +322,7 @@ const HomePage = (props) => {
                 var [b_hours, b_minutes, b_seconds] = b_noSec[1].split(':');
                 b_date = new Date(+b_year, b_month - 1, +b_day, +b_hours, +b_minutes, +b_seconds);
             }
-            
+
             return b_date - a_date;
         });
         setRecentlyRated(recentlyRatedTemp);
@@ -323,6 +347,7 @@ const HomePage = (props) => {
         var total = (gAlbums.originality + gAlbums.flow + gAlbums.lyrics + gAlbums.how_captivating + gAlbums.timelessness)/5
         if(artistScore[gAlbums.artist] === undefined){
             artistScore[gAlbums.artist] = total
+
         }else{
             artistScore[gAlbums.artist] = artistScore[gAlbums.artist] + total
         }
@@ -334,6 +359,7 @@ const HomePage = (props) => {
         var totalScore = (singularAlbum.originality + singularAlbum.flow + singularAlbum.lyrics + singularAlbum.how_captivating + singularAlbum.timelessness)/5
         if(genreScore[singularAlbum.genre] === undefined){
             genreScore[singularAlbum.genre] = totalScore
+
         }else{
             genreScore[singularAlbum.genre] = genreScore[singularAlbum.genre] + totalScore
         }
@@ -349,6 +375,7 @@ const HomePage = (props) => {
             setAlbums(res.data);
             setSortType('title')
             res.data.map((item) => {
+
                 GetRankStats(item)
                 getArtistRank(item)
                 getGenreRank(item)
@@ -372,6 +399,7 @@ const HomePage = (props) => {
         try{
         albums.map((item) => {
             var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness)/5)
+
             if(item.profile === params.profile){
                 profileVal = totalScore
             }else{
@@ -385,6 +413,7 @@ const HomePage = (props) => {
         }else{
             if(albums.length - 1 > 0){
                 return scores
+
             }else{
                 return 0
             }
@@ -403,11 +432,13 @@ const HomePage = (props) => {
                 max = score
                 itemKey = key
                 profileScore = result.profileVal
+
             }
             return 0
         })
 
         var testobj = { album: everyAlbum[itemKey][0].title, averageScore: max, profScore: profileScore, albumImage: everyAlbum[itemKey][0].cover_photo}
+
 
         setAverageDiff(testobj);
     }
@@ -417,6 +448,7 @@ const HomePage = (props) => {
             var albumsSingular = _.groupBy(res.data, function(alb){ return alb.title});
             var albumsSingVal = Object.values(albumsSingular);
             albumsSingular = {}
+
             UseVariationStats(albumsSingVal);
         });
     }
@@ -464,6 +496,8 @@ const HomePage = (props) => {
                 how_captivating: 'how_captivating',
                 originality: 'originality',
                 timelessness: 'timelessness',
+                delivery: 'delivery',
+                music: 'music',
                 total_score: 'total_score',
             };
             var sortProperty = types[type];
@@ -473,14 +507,16 @@ const HomePage = (props) => {
                 }else if(sortProperty === 'total_score'){
                     var aTrend1 = (a.originality + a.flow + a.lyrics + a.how_captivating + a.timelessness)/5
                     var bTrend1 = (b.originality + b.flow + b.lyrics + b.how_captivating + b.timelessness)/5
+
                     return bTrend1 - aTrend1;
                 }else {
                     return b[sortProperty] - a[sortProperty];
                 }
             }))
+
           };
           sortArray(sortType);
-    }, [sortType]) 
+    }, [sortType, displayQueue]) 
 
     useEffect(() => {
         const sortSongArray = type => {
@@ -497,9 +533,11 @@ const HomePage = (props) => {
                     return b[sortProperty] - a[sortProperty];
                 }
             }))
+
           };
           
           sortArrayTopAlbums();
+          getInQueueList();
           sortArrayRecentlyRated();
           sortArrayTopSongs();
           sortSongArray(sortTypeSong);
@@ -558,7 +596,7 @@ const HomePage = (props) => {
                 </div>
 
                 <h1 className="topRated">
-                Top Rated
+                    Top Rated
                 </h1>
 
                 <div className="top_Albums">
@@ -574,10 +612,11 @@ const HomePage = (props) => {
                         
                     </div>
                 ))}
+
                 </div>
 
                 <h1 className="topRated">
-                Recently Rated
+                    Recently Rated
                 </h1>
 
                 <div className="top_Albums">
@@ -592,6 +631,7 @@ const HomePage = (props) => {
                         
                     </div>
                 ))}
+
                 </div>
 
                 <h1 className="topRated">
@@ -620,6 +660,7 @@ const HomePage = (props) => {
                         <>
                             <div className="sort_by">
                                 <FormControl sx={{ m: 1, minWidth: 150 }}>
+           <FormControl sx={{ m: 1, minWidth: 100}}>
                                 <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
                                 <Select value={sortType}  variant="filled"
                                     onChange={(e) => setSortType(e.target.value)} color="primary">
@@ -734,6 +775,7 @@ const HomePage = (props) => {
                             ))}
                         </div></>
                     )}
+
 
             </header>
 

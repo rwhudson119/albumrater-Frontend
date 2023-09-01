@@ -10,12 +10,15 @@ import MuiInput from '@mui/material/Input';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import NavBar from './navBar';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import Switch from '@mui/material/Switch'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
 import Foot from './footer';
+
 
 
 const Input = styled(MuiInput)`
@@ -28,6 +31,7 @@ const AddAlbum = (props) => {
     let params = useParams()
     const time = new Date().toLocaleString()
 
+
     const [displayDetails, setDisplayDetails] = useState(false);
     const [toQueue, setToQueue] = useState(true);
       
@@ -38,17 +42,14 @@ const AddAlbum = (props) => {
         setToQueue(wasQueue => !wasQueue);
     }
 
-    
     const [displaySongs, setDisplaySongs] = useState(false);
-      
-    function toggleSongs() {
-        setDisplaySongs(wasSongs => !wasSongs);
-    }
 
 
     const [results, setResults] = useState(null);
     const [artist, setArtist] = useState("");
+
     const [country] = useState("");
+
     const [title, setTitle] = useState("");
     const [releaseDate, setReleaseDate] = useState("");
     const [coverPhoto, setCoverPhoto] = useState("");
@@ -63,18 +64,20 @@ const AddAlbum = (props) => {
     const [delivery, setDelivery] = useState(50);
     const [expectation, setExpectation] = useState(50);
     const [notes, setNotes] = useState("");
+
     const [songScores, setSongScores] = useState([]);
     //const [songDuration, setSongDuration] = useState([]);
     //const [totalDuration, setTotalDuration] = useState(null);
+
 
 
     const profile = localStorage.profile
     const navigate  = useNavigate ();
     var arr = [];
     var songScoresArr = [];
+    var songDurationArr = [];
     
-
-    
+  
     const handleSliderChangeArtwork = (event, newValue) => {
         setArtwork(newValue);
     };
@@ -238,10 +241,151 @@ const AddAlbum = (props) => {
         } else if (music > 100) {
             setMusic(100);
         }
+
+    };
+
+    const handleSliderChangeFlow = (event, newValue) => {
+        setFlow(newValue);
+    };
+    
+    const handleInputChangeFlow = (event) => {
+        setFlow(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+    const handleSliderChangeLyrics = (event, newValue) => {
+        setLyrics(newValue);
+    };
+    
+    const handleInputChangeLyrics = (event) => {
+        setLyrics(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+    const handleSliderChangeHowCaptivating = (event, newValue) => {
+        setHowCaptivating(newValue);
+    };
+    
+    const handleInputChangeHowCaptivating = (event) => {
+        setHowCaptivating(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+    const handleSliderChangeTimelessness = (event, newValue) => {
+        setTimelessness(newValue);
+    };
+    
+    const handleInputChangeTimelessness = (event) => {
+        setTimelessness(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+    const handleSliderChangeDelivery = (event, newValue) => {
+        setDelivery(newValue);
+    };
+
+    const handleInputChangeDelivery = (event) => {
+        setDelivery(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+    const handleSliderChangeMusic = (event, newValue) => {
+        setMusic(newValue);
+    };
+
+    const handleInputChangeMusic = (event) => {
+        setMusic(event.target.value === '' ? '' : Number(event.target.value));
+    };
+
+        const handleInputChangeNotes = (event) => {
+        setNotes(event.target.value);
+    };
+    const handleInputChangeTitle = (event) => {
+        setTitle(event.target.value);
+    };
+    const handleInputChangeArtist = (event) => {
+        setArtist(event.target.value);
+    };
+
+    const handleInputChangeCountry = (event) => {
+        setCountry(event.target.value);
     };
 
 
-          const handleBlurSongs = () => {
+    const handleInputChangeGenre = (event) => {
+        setGenre(event.target.value);
+    };
+    const handleInputChangeRelease_Date = (event) => {
+        setReleaseDate(event.target.value);
+    };
+
+
+    const handleBlurArtwork = () => {
+        if (artwork < 0) {
+            setArtwork(0);
+        } else if (artwork > 100) {
+            setArtwork(100);
+        }
+    };
+
+    const handleBlurExpectation = () => {
+        if (expectation < 0) {
+            setExpectation(0);
+        } else if (expectation > 100) {
+            setExpectation(100);
+        }
+    };
+
+
+    const handleBlurOriginality = () => {
+        if (originality < 0) {
+            setOriginality(0);
+        } else if (originality > 100) {
+            setOriginality(100);
+        }
+    };
+    const handleBlurFlow = () => {
+        if (flow < 0) {
+            setFlow(0);
+        } else if (flow > 100) {
+            setFlow(100);
+        }
+    };
+    const handleBlurLyrics = () => {
+        if (lyrics < 0) {
+            setLyrics(0);
+        } else if (lyrics > 100) {
+            setLyrics(100);
+        }
+    };
+    const handleBlurHowCaptivating = () => {
+        if (howCaptivating < 0) {
+            setHowCaptivating(0);
+        } else if (howCaptivating > 100) {
+            setHowCaptivating(100);
+        }
+    };
+    const handleBlurTimelessness = () => {
+        if (timelessness < 0) {
+            setTimelessness(0);
+        } else if (timelessness > 100) {
+            setTimelessness(100);
+        }
+    };
+
+    const handleBlurDelivery = () => {
+        if (delivery < 0) {
+            setDelivery(0);
+        } else if (delivery > 100) {
+            setDelivery(100);
+        }
+    };
+
+    const handleBlurMusic = () => {
+        if (music < 0) {
+            setMusic(0);
+        } else if (music > 100) {
+            setMusic(100);
+        }
+    };
+
+
+        const handleBlurSongs = () => {
             songScoresArr.map((item, key) => {
                 if(item > 10){
                     songScoresArr[key] = "10"
@@ -250,17 +394,31 @@ const AddAlbum = (props) => {
                 }
                 return 0
             })
+
             setSongScores(songScoresArr)
-          }
+        }
+
+        /*
+        const setSongsDuration = (results, songDurationArr) => {
+            var totalDur = 0
+            results.tracks.data.map((item, key) => {
+                songDurationArr[key] = item.duration
+                totalDur = totalDur + item.duration
+                return 0
+            })
+            setSongDuration(songDurationArr)
+            setTotalDuration(totalDur)
+        }*/
 
 
 
         const handleUpdate = (e) => {
-            console.log("title   " + title + "  profile   " + profile + "  artist   " + artist + "  country   " + country + "  genre   " + genre + "  releaseDate   " + releaseDate + "  coverPhoto   " + coverPhoto + "  art   " + artwork + "  expectation   " + expectation + "  originality   " + originality + "  flow   " + flow + "  lyrics   " + lyrics + "  howCaptivating   " + howCaptivating + "  timelessness   " + timelessness + "  Delivery   " + delivery + "  Music   " + music + "  notes  " + notes)
+            //console.log("title   " + title + "  profile   " + profile + "  artist   " + artist + "  country   " + country + "  genre   " + genre + "  releaseDate   " + releaseDate + "  coverPhoto   " + coverPhoto + "  art   " + artwork + "  expectation   " + expectation + "  originality   " + originality + "  flow   " + flow + "  lyrics   " + lyrics + "  howCaptivating   " + howCaptivating + "  timelessness   " + timelessness + "  Delivery   " + delivery + "  Music   " + music + "  notes  " + notes)
             e.preventDefault();
             const totalScore = (originality + flow + lyrics + howCaptivating + timelessness + delivery + music)/7
 
-            //Post album rating
+
+                //Post album rating
 
             if(toQueue === true){
                 axios.post("/album/add", 
@@ -273,6 +431,7 @@ const AddAlbum = (props) => {
                 axios.post("/rating/add",
                     {date: time, total_score: totalScore, notes: notes} ).then((res) => {
                     console.log(res)
+
                 });
 
                 //add tracks to database
@@ -300,13 +459,14 @@ const AddAlbum = (props) => {
                     console.log(res)
                     navigate(`/homepage/${profile}`);
                 });
+
         return 0
     }
 
 
 
     useEffect(() => {
-    
+      
         const GetAlbum = async () => {
             axios.get(`/deezer/albumid/${params.albumId}`).then((res) => {
                 setResults(res.data)
@@ -317,7 +477,7 @@ const AddAlbum = (props) => {
                 setCoverPhoto(res.data.cover_big)
                 setSongScores(songScoresArr)
                 if((title === "" || artist === "" || genre === ""|| releaseDate === "") === ""){
-                toggle()
+                  toggle()
                 }
                 console.log(res.data)
             });
@@ -387,6 +547,7 @@ const AddAlbum = (props) => {
                     <p> {results.genres.data[0].name}</p>
                     <div className="alterDetails">
                         <Button onClick={toggle}><SettingsSuggestIcon /></Button>
+
                     </div>
                 </div>
             )}
@@ -397,26 +558,27 @@ const AddAlbum = (props) => {
                 <div className="changeDetails">
                     <div className="change_details_items">
                         <Grid container spacing={2} alignItems="center">
-                            <TextField id="standard-basic" label="Title" variant="standard" onChange={handleInputChangeTitle} defaultValue={results.title}/>
+                            <TextField id="standard-basic" label="Title" variant="standard" onChange={handleInputChangeTitle} defaultValue={title}/>
                         </Grid>
                     </div>
                     <div className="change_details_items">
                         <Grid container spacing={2} alignItems="center">    
-                            <TextField id="standard-basic" label="Artist" variant="standard" onChange={handleInputChangeArtist} defaultValue={results.artist.name} />
+                            <TextField id="standard-basic" label="Artist" variant="standard" onChange={handleInputChangeArtist} defaultValue={artist} />
                         </Grid>
                     </div>
                     <div className="change_details_items">
                         <Grid container spacing={2} alignItems="center">
-                            <TextField id="standard-basic" label="Release Date" variant="standard" onChange={handleInputChangeRelease_Date} defaultValue={results.release_date}/>
+                            <TextField id="standard-basic" label="Country" variant="standard" onChange={handleInputChangeCountry} defaultValue={country}/>
                         </Grid>
                     </div>
                     <div className="change_details_items">
                         <Grid container spacing={2} alignItems="center">
-                            <TextField id="standard-basic" label="Genre" variant="standard" onChange={handleInputChangeGenre} defaultValue={results.genres.data[0].name}/>
+                            <TextField id="standard-basic" label="Release Date" variant="standard" onChange={handleInputChangeRelease_Date} defaultValue={releaseDate}/>
                         </Grid>
                     </div>
                     <div className="alterDetails">
                         <Button onClick={toggle}>Done</Button>
+
                     </div>
                 </div>
                 
@@ -495,6 +657,7 @@ const AddAlbum = (props) => {
                         <Button onClick={toggleSongs}><p>Back to Album</p></Button>
                     </div>
                 </>
+
                 )}
 
 
@@ -748,6 +911,7 @@ const AddAlbum = (props) => {
                 </>
             )}
             <Button variant="text" onClick = {handleUpdate}>Submit Rating</Button>
+
         </header>
         <Foot />
     </div>

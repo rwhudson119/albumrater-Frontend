@@ -39,6 +39,7 @@ const NewAlbum = (props) => {
                 <div key={key}>
                     <p> {item.title} {item.artist.name}</p> 
 
+
                     <a href={`/addalbum/${item.id}`}><img src= {item.cover} alt= ""/> </a>
                 </div>
             ))}

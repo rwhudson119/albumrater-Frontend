@@ -21,12 +21,14 @@ function Footer() {
                         <Grid item xs = {4.5}>
                         <Typography gutterBottom className="footer_title">
                             Album rater
+
                         </Typography>
                         </Grid><Grid item xs = {3}>
                             <img src={logo} className="footer_logo" alt="logo" />
                         </Grid><Grid item xs = {4.5}>
                         <Typography gutterBottom className="footer_name">
                             Robert Hudson
+
                         </Typography>
                             
                         </Grid></Grid></Box>
