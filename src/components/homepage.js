@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import React from "react";
 import axios from "../services/backendApi.js";
 import { useParams } from 'react-router-dom';
@@ -10,6 +10,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
+import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
@@ -22,6 +23,7 @@ import 'pure-react-carousel/dist/react-carousel.es.css';
 import _ from 'underscore';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import SearchIcon from '@mui/icons-material/Search';
 
 
 
@@ -31,11 +33,9 @@ const HomePage = (props) => {
     //definitions --------------------------------------------------------------------
 
     const [albums, setAlbums] = useState([]);
-    const [albumData, setAlbumData] = useState([]);
     const [sortType, setSortType] = useState('');
 
     const [songs, setSongs] = useState([]);
-    const [songData, setSongData] = useState([]);
     const [sortTypeSong, setSortTypeSong] = useState('');
 
     const [displaySongs, setDisplaySongs] = useState(false);
@@ -43,49 +43,27 @@ const HomePage = (props) => {
     const [displayStats, setDisplayStats] = useState(false);
 
     const [displayedAlbums, setDisplayedAlbums] = useState([]);
+    const [displayedSongs, setDisplayedSongs] = useState([]);
 
     //stats
 
     const [trendingUpData, setTrendingUpData] = useState([]);
     const [trendingDownData, setTrendingDownData] = useState([]);
-    const [trends, setTrends] = useState([]);
-    //const [artistStat, setArtistStat] = useState('');
+    //const [trends, setTrends] = useState([]);
     const [topArtistPhoto, setTopArtistPhoto] = useState('');
-    const [artistScore, setArtistScore] = useState([]);
-    const [genreScore, setGenreScore] = useState([]);
+    const [topArtist, setTopArtist] = useState('');
+    const [topGenre, setTopGenre] = useState('');
     const [topAlbums, setTopAlbums] = useState([]);
-    const [inQueueList, setInQueueList] = useState([]);
-    //const [topGenreStat, setTopGenreStat] = useState('');
+
     const [topSongs, setTopSongs] = useState([]);
     const [recentlyRated, setRecentlyRated] = useState([]);
     const [averageDiff, setAverageDiff] = useState({});
 
 
+    var trends = []
+    var artistScore = {}
+    var genreScore = {}
 
-    var artistScoreTemp = []
-    var genreScoreTemp = []
-
-
-
-    const CheckScore = (score) => {
-        if(score === undefined){
-            return 0
-        }
-        return score
-    }
-
-
-
-    const GetTotalScore = (albumParent) => {
-        var originality = CheckScore(albumParent.originality)
-        var flow = CheckScore(albumParent.flow)
-        var lyrics = CheckScore(albumParent.lyrics)
-        var how_captivating = CheckScore(albumParent.how_captivating)
-        var timelessness = CheckScore(albumParent.timelessness)
-        var delivery = CheckScore(albumParent.delivery)
-        var music = CheckScore(albumParent.music)
-        return (originality + flow + lyrics + how_captivating + timelessness + delivery + music)/7
-    }
     
 
 
@@ -168,28 +146,22 @@ const HomePage = (props) => {
         <div className="data_title">
             <p>Top Artist</p>
         <div className="top-artist">
-            {artistScore.slice(0, 1).map((item, key) => (
-            <div key={key}>
                 <img src={topArtistPhoto} alt= ""></img>
-                <Typography gutterBottom component={'span'} variant={'body2'}>
-                    {artistScore[getMax(artistScore)].name}
+                <Typography gutterBottom>
+                    {topArtist}
+
                 </Typography>
             </div>
-            ))
-        }
-        </div></div>
+        </div>
       )
 
       const StatPanelTG = () => (
         <div className="data_title">
             <p>Top Genre</p>
         <div className="top-genre">
-            {genreScore.slice(0, 1).map((item, key) => (
-            <div key={key}>
-                <p>{genreScore[getMax(genreScore)].genre}</p>
-            </div>
-            ))
-        }
+            <Typography gutterBottom>
+                    {topGenre}
+            </Typography>
         </div></div>
       )
 
@@ -200,12 +172,15 @@ const HomePage = (props) => {
             {
             <div>
                 <img src={averageDiff.albumImage} alt= ""></img>
-                <p>{averageDiff.album}</p>
-                <Typography gutterBottom component={'span'} variant={'body2'}>
-                    <p>You rated it: {(+averageDiff.profScore).toFixed(2)} </p>
+                <p>
+                    {averageDiff.album}
+                </p>
+                <Typography gutterBottom>
+                    You rated it: {averageDiff.profScore}
                 </Typography>
-                <Typography gutterBottom component={'span'} variant={'body2'}>
-                    <p>Average Rating:    {(+averageDiff.averageScore).toFixed(2)} </p>
+                <Typography gutterBottom>
+                    Average Rating:    {(+averageDiff.averageScore).toFixed(2)}
+
                 </Typography>
                 
             </div>
@@ -213,18 +188,16 @@ const HomePage = (props) => {
         }
         </div></div>
       )
-
-
-      
-    const getMax = (array) => {
-        var max = 0
-        array.map((item, key) => {
-            if(item.score > array[max].score){
-                max = key
+    const getMaxProp = (object) => {
+        var bool = 0
+        var max_name
+        for (const property in object) {
+            if(object[property] > object[max_name] || bool === 0){
+                bool = 1
+                max_name = property
             }
-            return 0;
-        })
-        return max;
+        }
+        return max_name
     }
 
 
@@ -249,8 +222,13 @@ const HomePage = (props) => {
 
     const onChangeSearch = (e) => {
         var search = e.target.value;
-        setDisplayedAlbums(albumData)
-        setDisplayedAlbums(albumData.filter(obj => {
+        setDisplayedAlbums(albums.filter(obj => {
+            return obj.title.toLowerCase().includes(search.toLowerCase()) || obj.artist.toLowerCase().includes(search.toLowerCase())
+        }))
+    }
+    const onChangeSearchSongs = (e) => {
+        var search = e.target.value;
+        setDisplayedSongs(songs.filter(obj => {
             return obj.title.toLowerCase().includes(search.toLowerCase()) || obj.artist.toLowerCase().includes(search.toLowerCase())
         }))
     }
@@ -264,10 +242,8 @@ const HomePage = (props) => {
                 bTrend = -1
             } else{
                 bTrend = b.score
-                
             } if(a.score === undefined){
                 aTrend = -1
-                
             } else{
                 aTrend = a.score
             }
@@ -278,14 +254,13 @@ const HomePage = (props) => {
 
     const sortArrayTopAlbums = () => {
 
-        const topAlbumsTemp = [...albums].sort((a, b) => {
-
-            var aTrend = GetTotalScore(a)
-            var bTrend = GetTotalScore(b)
+        setTopAlbums([...albums].sort((a, b) => {
+            var aTrend = (a.originality + a.flow + a.lyrics + a.how_captivating + a.timelessness)/5
+            var bTrend = (b.originality + b.flow + b.lyrics + b.how_captivating + b.timelessness)/5
 
             return bTrend - aTrend;
-        });
-        setTopAlbums(topAlbumsTemp);
+        })
+        );
     };
 
     const getInQueueList = () => {
@@ -298,48 +273,38 @@ const HomePage = (props) => {
 
 
     const sortArrayTrend = (trendsTemp) => {
-        var TUDTst;
+        var TUDTst, TUDTst2;
 
-        const trendingUpTemp = [...trendsTemp].sort((a, b) => {
+        var trendingUpTemp = [...trendsTemp].sort((a, b) => {
             return b.trendScore- a.trendScore;
         });
         try{
-            if(trendingUpTemp[0] !== undefined && trendingUpTemp[1] !== undefined && trendingUpTemp[2] !== undefined){
-                var trendingUpDataTest1 = {album: trendingUpTemp[0].album, change: trendingUpTemp[0].trendScore}
-                var trendingUpDataTest2 = {album: trendingUpTemp[1].album, change: trendingUpTemp[1].trendScore}
-                var trendingUpDataTest3 = {album: trendingUpTemp[2].album, change: trendingUpTemp[2].trendScore}
-                TUDTst = [trendingUpDataTest1,trendingUpDataTest2,trendingUpDataTest3]
+            var trendingUpDataTest1 = {album: trendingUpTemp[0].album, change: trendingUpTemp[0].trendScore}
+            var trendingUpDataTest2 = {album: trendingUpTemp[1].album, change: trendingUpTemp[1].trendScore}
+            var trendingUpDataTest3 = {album: trendingUpTemp[2].album, change: trendingUpTemp[2].trendScore}
+            var trendingDownDataTest1 = {album: trendingUpTemp[trendsTemp.length - 1].album, change: trendingUpTemp[trendingUpTemp.length - 1].trendScore}
+            var trendingDownDataTest2 = {album: trendingUpTemp[trendsTemp.length - 2].album, change: trendingUpTemp[trendingUpTemp.length - 2].trendScore}
+            var trendingDownDataTest3 = {album: trendingUpTemp[trendsTemp.length - 3].album, change: trendingUpTemp[trendingUpTemp.length - 3].trendScore}
+            TUDTst = [trendingUpDataTest1,trendingUpDataTest2,trendingUpDataTest3]
+            TUDTst2 = [trendingDownDataTest1,trendingDownDataTest2,trendingDownDataTest3]
 
-                setTrendingUpData(TUDTst);
-            }
+            setTrendingUpData(TUDTst);
+            setTrendingDownData(TUDTst2);
+            setDisplayStats(true)
         
         }catch{
-            console.log("setTrendUp err")
+            console.log("setTrend err")
+
             setTrendingUpData([])
+            setTrendingDownData([])
         }
-
-        const trendingDownTemp = [...trendsTemp].sort((a, b) => {
-            return a.trendScore - b.trendScore;
-        });
-        
-        try{
-            if(trendingDownTemp[0] !== undefined && trendingDownTemp[1] !== undefined && trendingDownTemp[2] !== undefined){
-                var trendingDownDataTest1 = {album: trendingDownTemp[0].album, change: trendingDownTemp[0].trendScore}
-                var trendingDownDataTest2 = {album: trendingDownTemp[1].album, change: trendingDownTemp[1].trendScore}
-                var trendingDownDataTest3 = {album: trendingDownTemp[2].album, change: trendingDownTemp[2].trendScore}
-                TUDTst = [trendingDownDataTest1,trendingDownDataTest2,trendingDownDataTest3]
-
-                setTrendingDownData(TUDTst);
-
-                setDisplayStats(true)
-            }
-        }catch{
-            console.log("trenddown err")
-        }
+        trendingUpTemp = []
     };
 
+
     const sortArrayRecentlyRated = () => {
-        const recentlyRatedTemp = [...albums].sort((a, b) => {
+        var recentlyRatedTemp = [...albums].sort((a, b) => {
+
             var a_date, b_date
             if(a.in_queue === "yes"){
                 a_date = 0
@@ -357,61 +322,48 @@ const HomePage = (props) => {
                 var [b_hours, b_minutes, b_seconds] = b_noSec[1].split(':');
                 b_date = new Date(+b_year, b_month - 1, +b_day, +b_hours, +b_minutes, +b_seconds);
             }
+
             return b_date - a_date;
         });
         setRecentlyRated(recentlyRatedTemp);
+        recentlyRatedTemp = []
     };
 
-        const GetTopArtist = () => {
-            try{
-            artistScore.slice(0, 1).map((item, key) => (
-                axios.get(`/deezer/artist/${artistScore[getMax(artistScore)].name}`).then(res => {
-                    setTopArtistPhoto(res.data.data[0].picture_big)
-                }
-            ))
+    const GetTopArtist = () => {
+        try{
+            var top_Artist_Name = getMaxProp(artistScore)
+            setTopArtist(top_Artist_Name)
+            artistScore = {}
+            axios.get(`/deezer/artist/${top_Artist_Name}`).then(res => {
+                setTopArtistPhoto(res.data.data[0].picture_big)
+            }
         )}catch{
             console.log("unable to find artist")
         }
     }
 
-
-
-
-
-
     
-    const getArtistRank = (singularAlbum) => {
-        var bool = -1
-        artistScoreTemp.map((item, key) => {
-            if(item.name === singularAlbum.artist){
-                bool = key
-            }
-            return 0;
-        })
-        const totalScore = GetTotalScore(singularAlbum)
-        if(bool > -1){
-            artistScoreTemp[bool].score = artistScoreTemp[bool].score + totalScore
+    const getArtistRank = (gAlbums) => {
+        var total = (gAlbums.originality + gAlbums.flow + gAlbums.lyrics + gAlbums.how_captivating + gAlbums.timelessness)/5
+        if(artistScore[gAlbums.artist] === undefined){
+            artistScore[gAlbums.artist] = total
+
         }else{
-            artistScoreTemp.push({name: singularAlbum.artist, score: totalScore})
+            artistScore[gAlbums.artist] = artistScore[gAlbums.artist] + total
         }
-        setArtistScore(artistScoreTemp)
-    }
+        }
+
+
 
     const getGenreRank = (singularAlbum) => {
-        var bool = -1
-        genreScoreTemp.map((item, key) => {
-            if(item.genre === singularAlbum.genre){
-                bool = key
-            }
-            return 0;
-        })
-        const totalScore = GetTotalScore(singularAlbum)
-        if(bool > -1){
-            genreScoreTemp[bool].score = genreScoreTemp[bool].score + totalScore
+        var totalScore = (singularAlbum.originality + singularAlbum.flow + singularAlbum.lyrics + singularAlbum.how_captivating + singularAlbum.timelessness)/5
+        if(genreScore[singularAlbum.genre] === undefined){
+            genreScore[singularAlbum.genre] = totalScore
+
         }else{
-            genreScoreTemp.push({genre: singularAlbum.genre, score: totalScore})
+            genreScore[singularAlbum.genre] = genreScore[singularAlbum.genre] + totalScore
         }
-        setGenreScore(genreScoreTemp)
+        setTopGenre(getMaxProp(genreScore))
         return 0;
     }
 
@@ -422,13 +374,15 @@ const HomePage = (props) => {
         axios.get(`/album/${params.profile}`).then(res => {
             setAlbums(res.data);
             setSortType('title')
-            res.data.map((item, key) => {
+            res.data.map((item) => {
+
                 GetRankStats(item)
                 getArtistRank(item)
                 getGenreRank(item)
                 return 0;
             })
-            //sortArtistRank()
+            GetTopArtist(topArtist);
+            trends = []
         });
         return 0;
     }
@@ -443,66 +397,57 @@ const HomePage = (props) => {
     const GetAverageDiff = (albums) => {
         var sumScore = 0, profileVal = -1;
         try{
-        albums.map((item, key) => {
-            var totalScore = GetTotalScore(item)
+        albums.map((item) => {
+            var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness)/5)
+
             if(item.profile === params.profile){
                 profileVal = totalScore
             }else{
                 sumScore = sumScore + totalScore
-            }
-            return 0;
+            } return 0;
         })
+        var scores = {profileVal: profileVal, averageDiff: Math.abs(sumScore/(albums.length - 1) - profileVal)}
         
         if(profileVal === -1){
             return 0;
         }else{
             if(albums.length - 1 > 0){
-                return (sumScore/(albums.length - 1)) - profileVal
+                return scores
+
             }else{
-            return 0
+                return 0
             }
-            
-        }
-        
-        }catch{
+        }}catch{
             console.log("nope" + params.profile);
         }
         return 0;
     }
 
     const UseVariationStats = (everyAlbum) => {
-        //return an object with the average rating and the profile rating so i can display it easier
-        const diffSort = everyAlbum.sort((a,b) => { return Math.abs(GetAverageDiff(b)) - Math.abs(GetAverageDiff(a))});
-        
-        var averageScore = 0, profileScore = -1;
-        diffSort[0].map((item, key) => {
-            var totalScore = GetTotalScore(item)
-            if(item.profile === params.profile){
-                profileScore = totalScore
-            }else{
-                averageScore = averageScore + totalScore
+        var max= 0, itemKey, profileScore = -1
+        everyAlbum.map((item, key) => {
+            var result = GetAverageDiff(item)
+            var score = result.averageDiff
+            if(score > max){
+                max = score
+                itemKey = key
+                profileScore = result.profileVal
+
             }
-            return 0;
+            return 0
         })
 
-        var testobj = { album: diffSort[0][0].title, averageScore: averageScore, profScore: profileScore, albumImage: diffSort[0][0].cover_photo}
+        var testobj = { album: everyAlbum[itemKey][0].title, averageScore: max, profScore: profileScore, albumImage: everyAlbum[itemKey][0].cover_photo}
+
 
         setAverageDiff(testobj);
     }
 
-    const GetVariationStats = (albums) => {        
+    const GetVariationStats = () => {        
         axios.get(`/album/`).then(res => {
-            
-
-            const albumsSingularFilt = res.data.filter(function(item)
-            {
-            return item.in_queue !== "yes";
-            });
-
-            const albumsSingular = _.groupBy(albumsSingularFilt, function(alb){ return alb.title})
-            
-
-            const albumsSingVal = Object.values(albumsSingular);
+            var albumsSingular = _.groupBy(res.data, function(alb){ return alb.title});
+            var albumsSingVal = Object.values(albumsSingular);
+            albumsSingular = {}
 
             UseVariationStats(albumsSingVal);
         });
@@ -512,7 +457,6 @@ const HomePage = (props) => {
         var rating1 = 0, rating2 = 0
 
         if((singularAlbum.ratings.length) > 1){
-
             axios.get(`/rating/date/${urlencode(singularAlbum.ratings[singularAlbum.ratings.length - 1])}`).then(res => {
                 rating1 = res.data.total_score  
                 axios.get(`/rating/date/${urlencode(singularAlbum.ratings[singularAlbum.ratings.length - 2])}`).then(res2 => {
@@ -520,20 +464,19 @@ const HomePage = (props) => {
                     var arrayTemp = trends
                     arrayTemp.push({album: singularAlbum, trendScore: (rating1 - rating2)})
                     
-                    setTrends(arrayTemp)
+                    trends = arrayTemp
                     sortArrayTrend(arrayTemp)
-                    
-                    
-                })
-            })
+                }, () => {
+                    console.log("Cant find album rating")
+                });
+            }, () => {
+                console.log("Cant find album rating")
+            });
         }else{
             setTrendingUpData([])
             setTrendingDownData([])
         }
-
-        
     }
-
 
     //UseEffect ----------------------------------------------------------------------------
 
@@ -557,34 +500,20 @@ const HomePage = (props) => {
                 music: 'music',
                 total_score: 'total_score',
             };
-            const sortProperty = types[type];
-            const sorted = [...albums].sort((a, b) => {
-                if(sortProperty === 'title'){
-                    return a.title.localeCompare(b.title);
-                }
-                else if(sortProperty === 'artist') {
-                    return a.artist.localeCompare(b.artist);
+            var sortProperty = types[type];
+            setDisplayedAlbums([...albums].sort((a, b) => {
+                if(sortProperty === 'title' || sortProperty === 'artist'){
+                    return a[sortProperty].localeCompare(b[sortProperty]);
                 }else if(sortProperty === 'total_score'){
-                    var aTrend1 = GetTotalScore(a)
-                    var bTrend1 = GetTotalScore(b)
-        
+                    var aTrend1 = (a.originality + a.flow + a.lyrics + a.how_captivating + a.timelessness)/5
+                    var bTrend1 = (b.originality + b.flow + b.lyrics + b.how_captivating + b.timelessness)/5
+
                     return bTrend1 - aTrend1;
                 }else {
                     return b[sortProperty] - a[sortProperty];
                 }
-            });
-            if(!displayQueue){
-                var newSorted = sorted.filter(function(item)
-                {
-                return item.in_queue !== "yes";
-                })
-                setAlbumData(newSorted);
-                setDisplayedAlbums(newSorted);
-            }else{
-                setAlbumData(sorted);
-                setDisplayedAlbums(sorted);
-            }
-            
+            }))
+
           };
           sortArray(sortType);
     }, [sortType, displayQueue]) 
@@ -596,27 +525,23 @@ const HomePage = (props) => {
                 artist: 'artist',
                 score: 'score',
             };
-            const sortProperty = types[type];
-            const sorted = [...songs].sort((a, b) => {
-                if(sortProperty === 'title'){
-                    return a.title.localeCompare(b.title);
-                }
-                else if(sortProperty === 'artist') {
-                    return a.artist.localeCompare(b.artist);
+            var sortProperty = types[type];
+            setDisplayedSongs([...songs].sort((a, b) => {
+                if(sortProperty === 'title' || sortProperty === 'artist'){
+                    return a[sortProperty].localeCompare(b[sortProperty]);
                 }else {
                     return b[sortProperty] - a[sortProperty];
                 }
-            });
-            
-            setSongData(sorted);
+            }))
+
           };
+          
           sortArrayTopAlbums();
           getInQueueList();
           sortArrayRecentlyRated();
           sortArrayTopSongs();
           sortSongArray(sortTypeSong);
-          GetTopArtist();
-          GetVariationStats(albums);
+          GetVariationStats();
 
     }, [sortTypeSong]) 
 
@@ -632,16 +557,16 @@ const HomePage = (props) => {
 
                 <div className="album-stats-entire">
                     <Carousel slide={false}>
-                        {artistScore[0] &&
+                        {topArtistPhoto !== '' &&
                         <Carousel.Item>
                         <div className="stats-buttonless">
                         <StatPanelTA /></div>
                         </Carousel.Item>
-                        }{!artistScore[0] &&
+                        }{topArtistPhoto === '' &&
                         <div className="stats-buttonless">
                         <p>Rate some Albums to view your stats</p></div>
                         }
-                        {genreScore[0] &&
+                        {topGenre &&
                         <Carousel.Item>
                         <div className="stats-buttonless">
                         <StatPanelTG /></div>
@@ -676,17 +601,18 @@ const HomePage = (props) => {
 
                 <div className="top_Albums">
                 
-                    {topAlbums.slice(0, 10).map((item, key) => (
-                        <div className="top_Album_Individual">
-                            <a href={`/albumdetails/${item._id}`}>
-                                <img src= {item.cover_photo} alt= ""/>
-                                <p>{key + 1}</p><br></br>
-                                <p>{item.title}</p><br></br>
-                                <p>{GetTotalScore(item).toFixed(2)}/100</p><br></br>
-                            </a>
-                            
-                        </div>
-                    ))}
+                {topAlbums.slice(0, 10).map((item, key) => (
+                    <div className="top_Album_Individual" key={key}>
+                        <a href={`/albumdetails/${item._id}`}>
+                              <img src= {item.cover_photo} alt= ""/>
+                            <p>{key + 1}</p><br></br>
+                            <p>{item.title}</p><br></br>
+                            <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p><br></br>
+                        </a>
+                        
+                    </div>
+                ))}
+
                 </div>
 
                 <h1 className="topRated">
@@ -695,61 +621,46 @@ const HomePage = (props) => {
 
                 <div className="top_Albums">
                 
-                    {recentlyRated.slice(0, 10).map((item, key) => (
-                        <div className="top_Album_Individual">
-                            <a href={`/albumdetails/${item._id}`}>
-                                <img src= {item.cover_photo} alt= ""/>
-                                <p>{item.title}</p><br></br>
-                                <p>{GetTotalScore(item).toFixed(2)}/100</p><br></br>
-                            </a>
-                            
-                        </div>
-                    ))}
+                {recentlyRated.slice(0, 10).map((item, key) => (
+                    <div key={key} className="top_Album_Individual">
+                        <a href={`/albumdetails/${item._id}`}>
+                              <img src= {item.cover_photo} alt= ""/>
+                            <p>{item.title}</p><br></br>
+                            <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p><br></br>
+                        </a>
+                        
+                    </div>
+                ))}
+
                 </div>
 
-                <h1 className="inQueue">
-                    Your Queue
+                <h1 className="topRated">
+                In Queue
                 </h1>
 
                 <div className="top_Albums">
                 
-                    {inQueueList.map((item, key) => (
-                        <div className="top_Album_Individual">
-                            <a href={`/albumdetails/${item._id}`}>
-                                <img src= {item.cover_photo} alt= ""/>
-                                <p>{item.title}</p><br></br>
-                                <p>{item.expectation}/100</p><br></br>
-                            </a>
-                            
-                        </div>
-                    ))}
+                {recentlyRated.filter(obj => {
+                    return obj.in_queue === "yes"
+                }).slice(0, 10).map((item, key) => (
+                    <div key={key} className="top_Album_Individual">
+                        <a href={`/albumdetails/${item._id}`}>
+                              <img src= {item.cover_photo} alt= ""/>
+                            <p>{item.title}</p><br></br>
+                            <p>{item.expectation}/100</p><br></br>
+                        </a>
+                        
+                    </div>
+                ))}
                 </div>
                     
                             
                 
-                {!displaySongs && (
-                    <>
-                        <div className="toggle_box">
-                            <Grid container spacing={2} alignItems="center">
-                                <Grid item xs>
-                                    <h2>Albums</h2>
-                                </Grid><Grid item xs>
-                                    <h2 onClick={toggleSongs}>Songs</h2>
-                        </Grid></Grid></div>
-
-
-                        <Grid container spacing={2} alignItems="center" maxWidth={400}>
-                            <Grid item xs={8}>
-                                <TextField 
-                                id="standard-basic" 
-                                sx={{ label: { color: 'white' }}} 
-                                label="Search Rated" 
-                                variant="outlined"
-                                onChange={onChangeSearch}/>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <div className="testselect">
-                            <FormControl sx={{ m: 1, minWidth: 100}}>
+                    {!displaySongs && (
+                        <>
+                            <div className="sort_by">
+                                <FormControl sx={{ m: 1, minWidth: 150 }}>
+           <FormControl sx={{ m: 1, minWidth: 100}}>
                                 <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
                                 <Select value={sortType}  variant="filled"
                                     onChange={(e) => setSortType(e.target.value)} color="primary">
@@ -760,84 +671,111 @@ const HomePage = (props) => {
                                     <MenuItem  value="how_captivating">How Captivating</MenuItem >
                                     <MenuItem  value="originality">Originality</MenuItem >
                                     <MenuItem  value="timelessness">Timelessness</MenuItem >
-                                    <MenuItem  value="delivery">Delivery</MenuItem >
-                                    <MenuItem  value="music">Music</MenuItem >
                                     <MenuItem  value="total_score">Total</MenuItem >
-                            </Select></FormControl>
-                            </div>
-                        </Grid></Grid>
-                        <FormControlLabel control={<Checkbox onChange={toggleQueued} />} label="Show Queued" />
 
-                        <div className="album-list-entire">
+                            </Select></FormControl></div>
 
-                        {displayedAlbums.map((item, key) => (
-                            <div className="album_display">
-                                <a href={`/albumdetails/${item._id}`}>
-                                    <div className="album-display-box">
-                                        <Grid container spacing={3} alignItems="center">
-                                            <Grid item xs>
-                                                <div className="album_display_image">
-                                                    <img src= {item.cover_photo} alt= ""/>
-                                                </div>
-                                            </Grid><Grid item xs>
-                                                <p>{item.title}</p>
-                                                <p>{item.artist}</p>
-                                                <div className="scores">
-                                                    <p>Flow: {item.flow} Lyrics: {item.lyrics}</p>
-                                                    <p>How Captivating: {item.how_captivating}   Originality: {item.originality}</p>
-                                                    <p>Timelessness: {item.timelessness} Delivery: {item.delivery} Music: {item.music}</p>
-                                                </div>
-                                            </Grid><Grid item xs>
-                                                <p>{GetTotalScore(item).toFixed(2)}/100</p>
-                                    </Grid></Grid></div>
-                                </a>
-                            </div>
-                        ))}
-                    </div></>
-                )}
+                            <div className="toggle_box">
+                                <Grid container spacing={2} alignItems="center">
+                                    <Grid item xs>
+                                        <Button disabled><h2>Albums</h2></Button>
+                                    </Grid><Grid item xs>
+                                        <Button onClick={toggle}><h2>Songs</h2></Button>
+                            </Grid></Grid></div>
+                            <TextField 
+                            id="standard-basic" 
+                            sx={{ label: { color: 'white' }}} 
+                            label={
+                                <Fragment>
+                                <SearchIcon className="myIcon" fontSize="small" />
+                                &nbsp; Search Rated
+                            </Fragment>}
+                            variant="outlined"
+                            onChange={onChangeSearch}/>
 
-                {displaySongs && (
-                    <>
+                            <div className="album-list-entire">
 
-                        <div className="toggle_box">
-                            <Grid container spacing={2} alignItems="center">
-                                <Grid item xs>
-                                    <h2 onClick={toggleSongs}>Albums</h2>
-                            </Grid><Grid item xs>
-                                <h2> Songs</h2>
-                        </Grid></Grid></div>
-                        <FormControl sx={{ m: 1, minWidth: 150 }}>
-                            <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
-                            <Select value={sortTypeSong}  variant="filled"
-                                onChange={(e) => setSortTypeSong(e.target.value)} color="primary">
-                                <MenuItem value="title">Title</MenuItem>
-                                <MenuItem value="artist">Artist</MenuItem>
-                                <MenuItem value="score">Score</MenuItem>
-                        </Select></FormControl>
-
-                        <div className="album-list-entire">
-
-                        {songData.map((item, key) => (
-                            <a href={`/songdetails/${item.id}`}>
-                                <div className="album_display">
-                                    
-                                    <div className="album-display-box">
-                                        <Grid container spacing={2} alignItems="center">
-                                            <Grid item xs={8}>
-                                                <div className="songInfo">
+                            {displayedAlbums.map((item, key) => (
+                                <div key={key} className="album_display">
+                                    <a href={`/albumdetails/${item._id}`}>
+                                        <div className="album-display-box">
+                                            <Grid container spacing={3} alignItems="center">
+                                                <Grid item xs>
+                                                    <div className="album_display_image">
+                                                        <img src= {item.cover_photo} alt= ""/>
+                                                    </div>
+                                                </Grid><Grid item xs>
                                                     <p>{item.title}</p>
-                                                    <p1>{item.artist}</p1> 
-                                                </div>                                   
-                                            </Grid><Grid item xs={4}>
-                                                <div className="scores">
-                                                    <h1>{item.score}</h1>
-                                                </div>
-                                    </Grid></Grid></div>
+                                                    <p>{item.artist}</p>
+                                                </Grid><Grid item xs>
+                                                    {sortType !== 'title' && sortType !==  'artist' && sortType !==  'total' && (
+                                                        <p>{sortType}:  {item[sortType]}</p>
+
+                                                    )}
+                                                        <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p>
+                                                      
+                                        </Grid></Grid></div>
+                                    </a>
                                 </div>
-                            </a>
-                        ))}
-                    </div></>
-                )}
+                            ))}
+                        </div></>
+                    )}
+
+                    {displaySongs && (
+                        <>
+                            <div className="sort_by">
+                                <FormControl sx={{ m: 1, minWidth: 150 }}>
+                                <InputLabel id="simple-select" color="primary">Sort by</InputLabel>
+                                <Select value={sortTypeSong}  variant="filled"
+                                    onChange={(e) => setSortTypeSong(e.target.value)} color="primary">
+                                        <MenuItem value="title">Title</MenuItem>
+                                        <MenuItem value="artist">Artist</MenuItem>
+                                        <MenuItem value="score">Score</MenuItem>
+                                </Select></FormControl></div>
+
+                            <div className="toggle_box">
+                                <Grid container spacing={2} alignItems="center">
+                                    <Grid item xs>
+                                    <Button onClick={toggle} ><h2>Albums</h2></Button>
+                                </Grid><Grid item xs>
+                                <Button disabled><h2> Songs</h2></Button>
+                            </Grid></Grid></div>
+
+                            <TextField 
+                            id="standard-basic" 
+                            sx={{ label: { color: 'white' }}} 
+                            label={
+                                <Fragment>
+                                <SearchIcon className="myIcon" fontSize="small" />
+                                &nbsp; Search Rated
+                            </Fragment>}
+                            variant="outlined"
+                            onChange={onChangeSearchSongs}/>
+
+                            <div className="album-list-entire">
+
+                            {displayedSongs.map((item, key) => (
+                                <a href={`/songdetails/${item._id}`} key={key}>
+                                    <div className="album_display" key={item._id}>
+                                        
+                                        <div className="album-display-box">
+                                            <Grid container spacing={2} alignItems="center">
+                                                <Grid item xs={8}>
+                                                    <div className="songInfo">
+                                                        <p>{item.title}</p>
+                                                        <p>{item.artist}</p> 
+                                                    </div>                                   
+                                                </Grid><Grid item xs={4}>
+                                                    <div className="scores">
+                                                        <h1>{item.score}</h1>
+                                                    </div>
+                                        </Grid></Grid></div>
+                                    </div>
+                                </a>
+                            ))}
+                        </div></>
+                    )}
+
 
             </header>
 

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import React from "react";
 import logo from '../album_logo.png';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
+import SearchIcon from '@mui/icons-material/Search';
 
 
 
@@ -67,6 +68,8 @@ const theme = createTheme({
             <nav className="nav-bar">
                 
                 <h1 className = "nav-logo"><a href={`/homepage/${profile}`}><img src={logo} className="nav-logo-2" alt="logo" /></a></h1>
+                
+                
                 <TextField 
                 id="standard-basic" 
                 onKeyPress={(ev) => {
@@ -78,7 +81,12 @@ const theme = createTheme({
                   }
                 }}
                 sx={{ label: { color: 'white' }}} 
-                label="Add Album" 
+                label={
+                  <Fragment>
+                    <SearchIcon className="myIcon" fontSize="small" />
+                    &nbsp; Add Album
+                  </Fragment>
+                }
                 variant="outlined" 
                 onChange={onChangeSearch}/>
                 

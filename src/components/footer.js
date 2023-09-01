@@ -19,14 +19,16 @@ function Footer() {
                 <Box className="foot_box">
                     <Grid container spacing={3} alignItems="center">
                         <Grid item xs = {4.5}>
-                        <Typography gutterBottom component={'span'} variant={'body2'}>
-                            <p className="footer_title"> Album rater</p>
+                        <Typography gutterBottom className="footer_title">
+                            Album rater
+
                         </Typography>
                         </Grid><Grid item xs = {3}>
                             <img src={logo} className="footer_logo" alt="logo" />
                         </Grid><Grid item xs = {4.5}>
-                        <Typography gutterBottom component={'span'} variant={'body2'}>
-                            <p className="footer_name"> Robert Hudson</p>
+                        <Typography gutterBottom className="footer_name">
+                            Robert Hudson
+
                         </Typography>
                             
                         </Grid></Grid></Box>
