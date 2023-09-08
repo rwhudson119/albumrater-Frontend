@@ -182,7 +182,6 @@ const HomePage = (props) => {
                 </Typography>
                 <Typography gutterBottom>
                     Average Rating:    {(+averageDiff.averageScore).toFixed(2)}
-
                 </Typography>
                 
             </div>
@@ -388,29 +387,33 @@ const HomePage = (props) => {
         });
     }
     
-    const GetAverageDiff = (albums) => {
-        var sumScore = 0, profileVal = -1;
+    const GetAverageDiff = (albumRatings) => {
+        var sumScore = 0, profileVal = -1, otherRaters = 0;
         try{
-        albums.map((item) => {
-            var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness)/5)
+            //Get average Score
+            albumRatings.map((item) => {
+                var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness)/5)
 
-            if(item.profile === params.profile){
-                profileVal = totalScore
+                if(item.profile === params.profile){
+                    profileVal = totalScore
+                }else{
+                    sumScore = sumScore + totalScore
+                    otherRaters = otherRaters + 1
+                } return 0;
+            })
+            var scores = {profileVal: profileVal, averageDiff: Math.abs(sumScore/(albumRatings.length - 1) - profileVal)}
+            
+            if(profileVal === -1){
+                return 0;
+            }if(otherRaters === 0){
+                return 0;
             }else{
-                sumScore = sumScore + totalScore
-            } return 0;
-        })
-        var scores = {profileVal: profileVal, averageDiff: Math.abs(sumScore/(albums.length - 1) - profileVal)}
-        
-        if(profileVal === -1){
-            return 0;
-        }else{
-            if(albums.length - 1 > 0){
-                return scores
+                if(albumRatings.length - 1 > 0){
+                    return scores
 
-            }else{
-                return 0
-            }
+                }else{
+                    return 0
+                }
         }}catch{
             console.log("nope" + params.profile);
         }
@@ -422,13 +425,17 @@ const HomePage = (props) => {
         everyAlbum.map((item, key) => {
             var result = GetAverageDiff(item)
             var score = result.averageDiff
+            
             if(score > max){
                 max = score
                 itemKey = key
                 profileScore = result.profileVal
 
+                console.log(everyAlbum[itemKey][0].title)
+                console.log(max)
             }
             return 0
+            
         })
 
         var testobj = { album: everyAlbum[itemKey][0].title, averageScore: max, profScore: profileScore, albumImage: everyAlbum[itemKey][0].cover_photo}
