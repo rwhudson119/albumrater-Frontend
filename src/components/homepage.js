@@ -11,8 +11,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Button from '@mui/material/Button';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 
 import NavBar from './navBar';
 import Foot from './footer';
@@ -39,7 +37,7 @@ const HomePage = (props) => {
     const [sortTypeSong, setSortTypeSong] = useState('');
 
     const [displaySongs, setDisplaySongs] = useState(false);
-    const [displayQueue, setDisplayQueue] = useState(false);
+    const [displayQueue] = useState(false);
     const [displayStats, setDisplayStats] = useState(false);
 
     const [displayedAlbums, setDisplayedAlbums] = useState([]);
@@ -209,15 +207,6 @@ const HomePage = (props) => {
     localStorage.profile = profile
 
     //functions ----------------------------------------------------------------------
-
-    //hidden info
-    function toggleSongs() {
-        setDisplaySongs(wasSongs => !wasSongs);
-    }
-
-    function toggleQueued() {
-        setDisplayQueue(wasQueue => !wasQueue);
-    }
 
     //Functions for search feature
 

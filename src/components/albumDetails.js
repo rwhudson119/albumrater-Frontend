@@ -69,10 +69,6 @@ const AlbumDetails = (props) => {
     const navigate  = useNavigate ();
     var songArray = []
 
-    function toggleDetails() {
-        setDisplayDetails(wasDetails => !wasDetails);
-    }
-
     function toggleSongs() {
         setDisplaySongs(wasSongs => !wasSongs);
     }

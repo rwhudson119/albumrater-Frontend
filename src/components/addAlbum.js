@@ -73,7 +73,6 @@ const AddAlbum = (props) => {
     const navigate  = useNavigate ();
     var arr = [];
     var songScoresArr = [];
-    var songDurationArr = [];
     
     function toggleSongs() {
         setDisplaySongs(wasSongs => !wasSongs);
@@ -167,9 +166,6 @@ const AddAlbum = (props) => {
     };*/
 
 
-    const handleInputChangeGenre = (event) => {
-        setGenre(event.target.value);
-    };
     const handleInputChangeRelease_Date = (event) => {
         setReleaseDate(event.target.value);
     };
