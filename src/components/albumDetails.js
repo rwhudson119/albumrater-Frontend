@@ -165,11 +165,40 @@ const AlbumDetails = (props) => {
     };
 
     const getAverageRating = (allUserAlbum) => {
+        console.log("PINECONEEE")
         var totalRat = 0
         
-        allUserAlbum.map((item, key) => (
-            totalRat = totalRat + (item.originality + item.flow + item.lyrics + item.how_captivating + item.timelessness + item.delivery + item.music)/7
-        ));
+        allUserAlbum.map((item, key) => {
+            console.log("test")
+            var currentScore = 0
+            var currentVars = 0
+            if(item.originality){
+                currentScore = currentScore + item.originality 
+                currentVars ++
+            }
+            if(item.flow){
+                currentScore = currentScore + item.flow 
+                currentVars ++
+            }if(item.lyrics){
+                currentScore = currentScore + item.lyrics
+                currentVars ++
+            }if(item.how_captivating){
+                currentScore = currentScore + item.how_captivating
+                currentVars ++
+            }if(item.timelessness){
+                currentScore = currentScore + item.timelessness
+                currentVars ++
+            }if(item.delivery){
+                currentScore = currentScore + item.delivery
+                currentVars ++
+            }
+            if(item.music){
+                currentScore = currentScore + item.music
+                currentVars ++
+            }
+            totalRat = totalRat + currentScore/currentVars
+            return 0
+        });
         setAverageRating(totalRat/allUserAlbum.length);
     };
 
@@ -354,6 +383,23 @@ const AlbumDetails = (props) => {
             });
             setRatingData(ratingDataSorted)
         }
+
+        const setAlbumData = async (albumData) => {
+            if(albumData.artwork){ setArtwork(albumData.artwork)}
+            if(albumData.expectation){ setExpectation(albumData.expectation)}
+            if(albumData.originality){ setOriginality(albumData.originality)}
+            if(albumData.flow){ setFlow(albumData.flow)}
+            if(albumData.expectation){ setLyrics(albumData.lyrics)}
+            if(albumData.how_captivating){ setHowCaptivating(albumData.how_captivating)}
+            if(albumData.timelessness){ setTimelessness(albumData.timelessness)}
+            if(albumData.delivery){ setDelivery(albumData.delivery)}
+            if(albumData.music){ setMusic(albumData.music)}
+            if(albumData.country){ setCountry(albumData.country)}
+            if(albumData.genre){ setGenre(albumData.genre)}
+            if(albumData.notes){ setNotes(albumData.notes)}
+            if(albumData.release_date){ setReleaseDate(albumData.release_date)}
+            if(albumData.songs){ getSongData(albumData.songs)}
+        }
         
 
 
@@ -367,25 +413,26 @@ const AlbumDetails = (props) => {
             }).then((res) => {
                 getAllRatings(res.data.ratings)
                 setAlbum(res.data);
-                setArtwork(res.data.artwork)
+                setAlbumData(res.data)
+                /*setArtwork(res.data.artwork)
                 setExpectation(res.data.expectation)
                 setOriginality(res.data.originality)
                 setFlow(res.data.flow)
                 setLyrics(res.data.lyrics)
                 setHowCaptivating(res.data.how_captivating)
                 setTimelessness(res.data.timelessness)
-                setDelivery(res.data.delivery)
+                if(res.data.delivery){ setDelivery(res.data.delivery)}
                 setArtwork(res.data.artwork)
                 setExpectation(res.data.expectation)
 
-                setMusic(res.data.music)
+                if(res.data.music){  setMusic(res.data.music)} */
                 setTitle(res.data.title)
                 setArtist(res.data.artist)
-                setCountry(res.data.country)
+               /* setCountry(res.data.country)
                 setGenre(res.data.genre)
                 setNotes(res.data.notes)
                 setReleaseDate(res.data.release_date)
-                getSongData(res.data.songs)
+                getSongData(res.data.songs) */
                 getAllAlbumData(res.data.title)
                 
             });
