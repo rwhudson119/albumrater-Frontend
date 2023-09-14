@@ -381,7 +381,6 @@ const HomePage = (props) => {
     }
 
     const beenRated = (albumRatings) => {
-        console.log("RUNNINGGGGG")
         var returnVal = 0
         albumRatings.map((item) => {
             if(item.profile === params.profile){
@@ -401,7 +400,7 @@ const HomePage = (props) => {
         const mostRatedAlbs = []
         everyAlbum.map((item) => {
             if(beenRated(item)){
-                console.log("Have not rated: " + item[0].title)
+                //console.log("Have not rated: " + item[0].title)
                 mostRatedAlbs.push(item)
             }
             return 0;
@@ -424,6 +423,8 @@ const HomePage = (props) => {
                 if(item.profile === params.profile){
                     profileVal = totalScore
                 }else{
+                    //console.log(" NEW SCORE JUST DROPPED for " + item.title)
+                    //console.log(totalScore)
                     sumScore = sumScore + totalScore
                     otherRaters = otherRaters + 1
                 } return 0;
@@ -459,13 +460,13 @@ const HomePage = (props) => {
                 profileScore = result.profileVal
 
                 console.log(everyAlbum[itemKey][0].title)
-                console.log(max)
+                console.log(max + profileScore)
             }
             return 0
             
         })
 
-        var testobj = { album: everyAlbum[itemKey][0].title, averageScore: max, profScore: profileScore, albumImage: everyAlbum[itemKey][0].cover_photo}
+        var testobj = { album: everyAlbum[itemKey][0].title, averageScore: (max + profileScore), profScore: profileScore, albumImage: everyAlbum[itemKey][0].cover_photo}
 
         setMostRatedAlbums(GetMostRated(everyAlbum));
         
