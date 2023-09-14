@@ -44,7 +44,7 @@ const HomePage = (props) => {
     const [displayedSongs, setDisplayedSongs] = useState([]);
 
     //stats
-
+    const [mostRatedAlbums, setMostRatedAlbums] = useState([]);
     const [trendingUpData, setTrendingUpData] = useState([]);
     const [trendingDownData, setTrendingDownData] = useState([]);
     //const [trends, setTrends] = useState([]);
@@ -55,6 +55,7 @@ const HomePage = (props) => {
 
     const [topSongs, setTopSongs] = useState([]);
     const [recentlyRated, setRecentlyRated] = useState([]);
+    const [albumQueue, setAlbumQueue] = useState([]);
     const [averageDiff, setAverageDiff] = useState({});
 
 
@@ -308,6 +309,9 @@ const HomePage = (props) => {
             return b_date - a_date;
         });
         setRecentlyRated(recentlyRatedTemp);
+        setAlbumQueue(recentlyRatedTemp.filter(obj => {
+            return obj.in_queue === "yes"
+        }))
         recentlyRatedTemp = []
     };
 
@@ -375,6 +379,40 @@ const HomePage = (props) => {
         setSortTypeSong('title')
         });
     }
+
+    const beenRated = (albumRatings) => {
+        console.log("RUNNINGGGGG")
+        var returnVal = 0
+        albumRatings.map((item) => {
+            if(item.profile === params.profile){
+                returnVal = 1
+            }
+            return 0;
+        });
+        if(returnVal === 1){
+            return false
+        }else{
+            return true
+        }
+    }
+
+    const GetMostRated = (everyAlbum) =>{
+
+        const mostRatedAlbs = []
+        everyAlbum.map((item) => {
+            if(beenRated(item)){
+                console.log("Have not rated: " + item[0].title)
+                mostRatedAlbs.push(item)
+            }
+            return 0;
+        });
+        mostRatedAlbs.sort((a, b) => b.length - a.length)
+        return mostRatedAlbs
+    }
+
+
+
+
     
     const GetAverageDiff = (albumRatings) => {
         var sumScore = 0, profileVal = -1, otherRaters = 0;
@@ -429,7 +467,8 @@ const HomePage = (props) => {
 
         var testobj = { album: everyAlbum[itemKey][0].title, averageScore: max, profScore: profileScore, albumImage: everyAlbum[itemKey][0].cover_photo}
 
-
+        setMostRatedAlbums(GetMostRated(everyAlbum));
+        
         setAverageDiff(testobj);
     }
 
@@ -603,6 +642,9 @@ const HomePage = (props) => {
                 ))}
 
                 </div>
+                
+                {(recentlyRated[0]) && (
+                        <>
 
                 <h1 className="topRated">
                     Recently Rated
@@ -610,7 +652,9 @@ const HomePage = (props) => {
 
                 <div className="top_Albums">
                 
-                {recentlyRated.slice(0, 10).map((item, key) => (
+                {recentlyRated.filter(obj => {
+                    return obj.in_queue !== "yes"
+                }).slice(0, 10).map((item, key) => (
                     <div key={key} className="top_Album_Individual">
                         <a href={`/albumdetails/${item._id}`}>
                               <img src= {item.cover_photo} alt= ""/>
@@ -621,17 +665,18 @@ const HomePage = (props) => {
                     </div>
                 ))}
 
-                </div>
+                </div></>)}
 
+                {(albumQueue[0]) && (
+                        <>
+                     
                 <h1 className="topRated">
                 In Queue
                 </h1>
 
                 <div className="top_Albums">
                 
-                {recentlyRated.filter(obj => {
-                    return obj.in_queue === "yes"
-                }).slice(0, 10).map((item, key) => (
+                {albumQueue.slice(0, 10).map((item, key) => (
                     <div key={key} className="top_Album_Individual">
                         <a href={`/albumdetails/${item._id}`}>
                               <img src= {item.cover_photo} alt= ""/>
@@ -641,7 +686,26 @@ const HomePage = (props) => {
                         
                     </div>
                 ))}
-                </div>
+                </div> </>)}
+
+               
+
+                    <h1 className="topRated">
+                    Most Rated Albums
+                    </h1>
+
+                    <div className="top_Albums">
+                    
+                        {mostRatedAlbums.slice(0, 10).map((item, key) => (
+                            <div key={key} className="top_Album_Individual">
+                                <a href={`/albumdetails/${item._id}`}>
+                                    <img src= {item[0].cover_photo} alt= ""/>
+                                    <p>{item[0].title}</p><br></br>
+                                </a>
+                                
+                            </div>
+                        ))}
+                    </div>
                     
                             
                 
