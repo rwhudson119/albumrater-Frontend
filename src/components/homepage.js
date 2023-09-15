@@ -434,7 +434,7 @@ const HomePage = (props) => {
             currentScore = currentScore + album.music
             currentVars ++
         }
-        return currentScore/currentVars
+        return (currentScore/currentVars).toFixed(2)
     }
 
 
@@ -794,7 +794,11 @@ const HomePage = (props) => {
                                                         <p>{sortType}:  {item[sortType]}</p>
 
                                                     )}
-                                                        <p>{(item.flow + item.lyrics + item.how_captivating + item.originality + item.timelessness) / 5}/100</p>
+                                                    {item.in_queue === "yes" && (
+                                                        <p>Rate Now</p>
+                                                    )}{item.in_queue !== "yes" && (
+                                                        <p>{GetScoresSafely(item)}/100</p>
+                                                    )}
                                                       
                                         </Grid></Grid></div>
                                     </a>

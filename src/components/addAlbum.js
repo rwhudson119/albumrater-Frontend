@@ -308,20 +308,19 @@ const AddAlbum = (props) => {
                     return 0;
                 });
 
+                 //formulate tracks into array
+
+                results.tracks.data.map((item, key) => (
+                    arr.push(item.id)
+                ))
+                const ratings = [time]
+                axios.post("/album/add", 
+                    {title: title, profile: profile, artist: artist, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, artwork: artwork, expectation: expectation, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, delivery: delivery, music: music, notes: notes, ratings: ratings, in_queue: "no", songs: arr} ).then((res) => {
+                        console.log(res)
+                        navigate(`/homepage/${profile}`);
+                    });
+
             }
-
-            //formulate tracks into array
-
-            results.tracks.data.map((item, key) => (
-                arr.push(item.id)
-            ))
-            const ratings = [time]
-            axios.post("/album/add", 
-                {title: title, profile: profile, artist: artist, genre: genre, release_date: releaseDate, cover_photo: coverPhoto, artwork: artwork, expectation: expectation, originality: originality, flow: flow, lyrics: lyrics, how_captivating: howCaptivating, timelessness: timelessness, delivery: delivery, music: music, notes: notes, ratings: ratings, in_queue: "no", songs: arr} ).then((res) => {
-                    console.log(res)
-                    navigate(`/homepage/${profile}`);
-                });
-
         return 0
     }
 

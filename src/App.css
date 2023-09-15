@@ -148,6 +148,17 @@ a:visited {
   height: 290px;
 }
 
+.existingResults {
+  padding-bottom: 7%;
+  padding-top: 3%;
+}
+
+.alreadyRatedImage {
+  height: 20vmin;
+  width: auto;
+  padding-bottom: 5%;
+}
+
 
 .albums-songs-toggle-box {
   width: 900;
