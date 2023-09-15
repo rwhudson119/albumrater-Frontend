@@ -165,11 +165,9 @@ const AlbumDetails = (props) => {
     };
 
     const getAverageRating = (allUserAlbum) => {
-        console.log("PINECONEEE")
         var totalRat = 0
         
         allUserAlbum.map((item, key) => {
-            console.log("test")
             var currentScore = 0
             var currentVars = 0
             if(item.originality){
@@ -414,25 +412,8 @@ const AlbumDetails = (props) => {
                 getAllRatings(res.data.ratings)
                 setAlbum(res.data);
                 setAlbumData(res.data)
-                /*setArtwork(res.data.artwork)
-                setExpectation(res.data.expectation)
-                setOriginality(res.data.originality)
-                setFlow(res.data.flow)
-                setLyrics(res.data.lyrics)
-                setHowCaptivating(res.data.how_captivating)
-                setTimelessness(res.data.timelessness)
-                if(res.data.delivery){ setDelivery(res.data.delivery)}
-                setArtwork(res.data.artwork)
-                setExpectation(res.data.expectation)
-
-                if(res.data.music){  setMusic(res.data.music)} */
                 setTitle(res.data.title)
                 setArtist(res.data.artist)
-               /* setCountry(res.data.country)
-                setGenre(res.data.genre)
-                setNotes(res.data.notes)
-                setReleaseDate(res.data.release_date)
-                getSongData(res.data.songs) */
                 getAllAlbumData(res.data.title)
                 
             });

@@ -409,7 +409,33 @@ const HomePage = (props) => {
         return mostRatedAlbs
     }
 
-
+    const GetScoresSafely = (album) => {
+        var currentScore = 0
+        var currentVars = 0
+        if(album.originality){
+            currentScore = currentScore + album.originality 
+            currentVars ++
+        }if(album.flow){
+            currentScore = currentScore + album.flow 
+            currentVars ++
+        }if(album.lyrics){
+            currentScore = currentScore + album.lyrics
+            currentVars ++
+        }if(album.how_captivating){
+            currentScore = currentScore + album.how_captivating
+            currentVars ++
+        }if(album.timelessness){
+            currentScore = currentScore + album.timelessness
+            currentVars ++
+        }if(album.delivery){
+            currentScore = currentScore + album.delivery
+            currentVars ++
+        }if(album.music){
+            currentScore = currentScore + album.music
+            currentVars ++
+        }
+        return currentScore/currentVars
+    }
 
 
     
@@ -418,7 +444,7 @@ const HomePage = (props) => {
         try{
             //Get average Score
             albumRatings.map((item) => {
-                var totalScore = ((item.how_captivating + item.flow + item.lyrics + item.originality + item.timelessness)/5)
+                var totalScore = GetScoresSafely(item)
 
                 if(item.profile === params.profile){
                     profileVal = totalScore
@@ -535,8 +561,11 @@ const HomePage = (props) => {
                 if(sortProperty === 'title' || sortProperty === 'artist'){
                     return a[sortProperty].localeCompare(b[sortProperty]);
                 }else if(sortProperty === 'total_score'){
-                    var aTrend1 = (a.originality + a.flow + a.lyrics + a.how_captivating + a.timelessness)/5
-                    var bTrend1 = (b.originality + b.flow + b.lyrics + b.how_captivating + b.timelessness)/5
+                    //this is where i get the scores
+                    var aTrend1 = GetScoresSafely(a)
+                    // (a.originality + a.flow + a.lyrics + a.how_captivating + a.timelessness)/5
+                    var bTrend1 = GetScoresSafely(b)
+                    //(b.originality + b.flow + b.lyrics + b.how_captivating + b.timelessness)/5
 
                     return bTrend1 - aTrend1;
                 }else {
@@ -699,7 +728,7 @@ const HomePage = (props) => {
                     
                         {mostRatedAlbums.slice(0, 10).map((item, key) => (
                             <div key={key} className="top_Album_Individual">
-                                <a href={`/albumdetails/${item._id}`}>
+                                <a href={`/addalbum/${item[0]._id}`}>
                                     <img src= {item[0].cover_photo} alt= ""/>
                                     <p>{item[0].title}</p><br></br>
                                 </a>

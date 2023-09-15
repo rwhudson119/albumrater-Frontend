@@ -328,9 +328,27 @@ const AddAlbum = (props) => {
 
 
     useEffect(() => {
+        const getExistingAlbum = async () => {
+            await axios({
+                method: 'get',
+                url: `/album/oneAlbum/${params.albumId}`,
+                headers: {
+                  'Access-Control-Allow-Origin': '*',
+                },
+            }).then((res) => {
+                setTitle(res.data.title)
+                setArtist(res.data.artist)
+                setGenre(res.data.genre)
+                setReleaseDate(res.data.release_date)
+                setCoverPhoto(res.data.cover_photo)
+                console.log(res.data.cover_photo)
+                
+            });
+        };
       
         const GetAlbum = async () => {
             axios.get(`/deezer/albumid/${params.albumId}`).then((res) => {
+                try{
                 setResults(res.data)
                 setTitle(res.data.title)
                 setArtist(res.data.artist.name)
@@ -338,6 +356,15 @@ const AddAlbum = (props) => {
                 setReleaseDate(res.data.release_date)
                 setCoverPhoto(res.data.cover_big)
                 setSongScores(songScoresArr)
+                }catch{
+                    console.log("bad album get request")
+                    try{
+                        //see if it is an existing album ID
+                        getExistingAlbum()
+                    }catch{
+                        toggle()
+                    }
+                }
                 if((title === "" || artist === "" || genre === ""|| releaseDate === "") === ""){
                   toggle()
                 }
@@ -365,7 +392,7 @@ const AddAlbum = (props) => {
     <div className="App">
         <NavBar />
         <header className="App-header">
-            <img className="album_deets_image" src= {results.cover} alt= ""/>
+            <img className="album_deets_image" src= {coverPhoto} alt= ""/>
 
             <div className="Artwork">
                     <Typography id="input-slider" gutterBottom>
@@ -403,10 +430,10 @@ const AddAlbum = (props) => {
 
             {!displayDetails && (
                 <div className="albumInfo">
-                    <p> {results.title}</p>
-                    <p> {results.artist.name}</p>
-                    <p> {results.release_date}</p>
-                    <p> {results.genres.data[0].name}</p>
+                    <p> {title}</p>
+                    <p> {artist}</p>
+                    <p> {releaseDate}</p>
+                    <p> {genre}</p>
                     <div className="alterDetails">
                         <Button onClick={toggle}><SettingsSuggestIcon /></Button>
 
